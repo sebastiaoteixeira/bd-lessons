@@ -19,18 +19,32 @@ Identify the entities, attributes, and relationships of the database.
 ```
 Entidades: parametro#1, parametro#2, ...
 
-Produtos: código, nome, preço, iva
-Armazém:
-Encomenda: número, data de realização
-Fornecedor: nome, número fiscal, endereço, número de fax, condição de pagamento, código interno do tipo de fornecedor
+Produto: codigo, nome, preco, iva
+PK: codigo
+
+Item: quantidade
+PK: codigoProduto+numeroEncomenda
+
+Encomenda: numero, data de realização
+PK: numero
+
+Fornecedor: nome, numero fiscal, endereco, fax, codigo
+PK: codigo
+FK: numero fiscal, endereco, fax
+
+Condicao de pagamento: codigo, numero de dias
+PK: codigo
+
+Tipo de fornecedor: codigo
+PK: codigo
 
 
-Relacionamentos: entidade A - entidade B (parametros, )
-
-armazena: armazém - produtos (numero de unidades do produto)
-é entregue: encomenda - fornecedor
-contém: encomenda - produtos
-
+Relacionamentos: entidade A - entidade B (atributos, )
+contem: item - produtos
+entregue: encomenda - fornecedor
+contem: encomenda - produtos
+tem: fornecedor - condicao de pagamento
+tem: fornecedor - tipo de fornecedor
 ```
 
 #### *b)* Caracterize as relações quanto ao grau, cardinalidade e obrigatoriedade de participação das instâncias das entidades no relacionamento.
@@ -39,10 +53,10 @@ Specify the relationships regarding the degree, cardinality and instances mandat
 ```
 Notação E/R (min, max)
 
-armazém (0,N) - (1,1) produto		-> Grau 2
-encomenda (1,1) - (0,N) encomenda	-> Grau 2
-encomenda (0,N) - (1,1) produto		-> Grau 2
-
+item (1,1) - (1,1) produto		-> Grau 2
+encomenda (1,1) - (0,N) fornecedor	-> Grau 2
+encomenda (1,N) - (1,1) item		-> Grau 2
+fornecedor (1,1) - (0,N) tipo de fornecedor -> Grau 2
 ```
 
 #### *c)* Desenvolva o desenho conceptual da base de dados com recurso a um diagrama entidade-relacionamento. Numa primeira fase, utilize lápis e papel para realizar o trabalho. Uma vez concluído o desenho em papel, transponha o diagrama para um formato eletrónico utilizando uma ferramenta gráfica como, por exemplo, o Microsoft Visio ou o Visual Paradigm.
