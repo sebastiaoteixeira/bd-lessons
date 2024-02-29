@@ -1,0 +1,70 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\USER\\OneDrive - Universidade de Aveiro\\BD\\BD p8g9\\Aula01\\WinFormsApp1\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{F3921279-76AF-40FA-A6FD-235946E1D06C}|WinFormsApp1\\WinFormsApp1.csproj|c:\\users\\user\\onedrive - universidade de aveiro\\bd\\bd p8g9\\aula01\\winformsapp1\\winformsapp1\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{F3921279-76AF-40FA-A6FD-235946E1D06C}|WinFormsApp1\\WinFormsApp1.csproj|solutionrelative:winformsapp1\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F3921279-76AF-40FA-A6FD-235946E1D06C}|WinFormsApp1\\WinFormsApp1.csproj|c:\\users\\user\\onedrive - universidade de aveiro\\bd\\bd p8g9\\aula01\\winformsapp1\\winformsapp1\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F3921279-76AF-40FA-A6FD-235946E1D06C}|WinFormsApp1\\WinFormsApp1.csproj|solutionrelative:winformsapp1\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F3921279-76AF-40FA-A6FD-235946E1D06C}|WinFormsApp1\\WinFormsApp1.csproj|c:\\users\\user\\onedrive - universidade de aveiro\\bd\\bd p8g9\\aula01\\winformsapp1\\winformsapp1\\form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F3921279-76AF-40FA-A6FD-235946E1D06C}|WinFormsApp1\\WinFormsApp1.csproj|solutionrelative:winformsapp1\\form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Form1.Designer.cs",
+              "DocumentMoniker": "C:\\Users\\USER\\OneDrive - Universidade de Aveiro\\BD\\BD p8g9\\Aula01\\WinFormsApp1\\WinFormsApp1\\Form1.Designer.cs",
+              "RelativeDocumentMoniker": "WinFormsApp1\\Form1.Designer.cs",
+              "ToolTip": "C:\\Users\\USER\\OneDrive - Universidade de Aveiro\\BD\\BD p8g9\\Aula01\\WinFormsApp1\\WinFormsApp1\\Form1.Designer.cs",
+              "RelativeToolTip": "WinFormsApp1\\Form1.Designer.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAqwBMAAAAkAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-28T23:40:42.007Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Form1.cs",
+              "DocumentMoniker": "C:\\Users\\USER\\OneDrive - Universidade de Aveiro\\BD\\BD p8g9\\Aula01\\WinFormsApp1\\WinFormsApp1\\Form1.cs",
+              "RelativeDocumentMoniker": "WinFormsApp1\\Form1.cs",
+              "ToolTip": "C:\\Users\\USER\\OneDrive - Universidade de Aveiro\\BD\\BD p8g9\\Aula01\\WinFormsApp1\\WinFormsApp1\\Form1.cs",
+              "RelativeToolTip": "WinFormsApp1\\Form1.cs",
+              "ViewState": "AQIAAB4AAAAAAAAAAAAmwB8AAAALAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-28T23:37:02.032Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Form1.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\USER\\OneDrive - Universidade de Aveiro\\BD\\BD p8g9\\Aula01\\WinFormsApp1\\WinFormsApp1\\Form1.cs",
+              "RelativeDocumentMoniker": "WinFormsApp1\\Form1.cs",
+              "ToolTip": "C:\\Users\\USER\\OneDrive - Universidade de Aveiro\\BD\\BD p8g9\\Aula01\\WinFormsApp1\\WinFormsApp1\\Form1.cs [Design]",
+              "RelativeToolTip": "WinFormsApp1\\Form1.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-28T23:25:06.449Z",
+              "EditorCaption": " [Design]"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
