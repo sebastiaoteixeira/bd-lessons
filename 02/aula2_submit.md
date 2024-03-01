@@ -53,10 +53,11 @@ Specify the relationships regarding the degree, cardinality and instances mandat
 ```
 Notação E/R (min, max)
 
-item (1,1) - (1,1) produto		-> Grau 2
-encomenda (1,1) - (0,N) fornecedor	-> Grau 2
-encomenda (1,N) - (1,1) item		-> Grau 2
-fornecedor (1,1) - (0,N) tipo de fornecedor -> Grau 2
+item (1,1) - (1,1) produto			-> Grau 2
+encomenda (1,1) - (0,N) fornecedor		-> Grau 2
+encomenda (1,N) - (1,1) item			-> Grau 2
+fornecedor (1,1) - (0,N) condicao de pagamento	-> Grau 2
+fornecedor (1,1) - (0,N) tipo de fornecedor 	-> Grau 2
 ```
 
 #### *c)* Desenvolva o desenho conceptual da base de dados com recurso a um diagrama entidade-relacionamento. Numa primeira fase, utilize lápis e papel para realizar o trabalho. Uma vez concluído o desenho em papel, transponha o diagrama para um formato eletrónico utilizando uma ferramenta gráfica como, por exemplo, o Microsoft Visio ou o Visual Paradigm.
