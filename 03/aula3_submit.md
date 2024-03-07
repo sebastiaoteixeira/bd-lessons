@@ -6,21 +6,64 @@
 ### *a)*
 
 ```
-cliente: NIF (PK), num_carta (CK), endereço, nome
-balcao: numero (PK), endereco, nome
-veiculo: matricula (PK), marca, ano, tipo_veiculo-codigo (FK)
-tipo_veiculo: codigo (PK), arcondicionado , designacao
-aluguer: numero (PK), date, duracao, cliente-nif (FK), veiculo-matricula (FK), balcao-numero (FK)
-similaridade: TVcodigo1 (PK) (FK), TVcodigo2 (PK) (FK)
-ligeiro: id (PK), TVcodigo (FK), numlugares, portas, combustível
-pesado: id (PK), TVcodigo (FK), peso, passageiros
+cliente: NIF (PK) (CK), num_carta (CK), endereço, nome
+balcao: numero (PK) (CK), endereco, nome
+veiculo: matricula (PK) (CK), marca, ano, tipo_veiculo-codigo (FK)
+tipo_veiculo: codigo (PK) (CK), arcondicionado , designacao
+aluguer: numero (PK) (CK), date, duracao, cliente-nif (FK), veiculo-matricula (FK), balcao-numero (FK)
+similaridade: TVcodigo1 (PK) (CK) (FK), TVcodigo2 (PK) (CK) (FK)
+ligeiro: id (PK) (CK), TVcodigo (FK), numlugares, portas, combustível
+pesado: id (PK) (CK), TVcodigo (FK), peso, passageiros
 ```
 
 
 ### *b)* 
 
 ```
-... Write here your answer ...
+cliente:
+PK: NIF
+CK: NIF, num_carta
+FK:
+
+balcao:
+PK: numero
+CK: numero
+FK:
+
+veiculo:
+PK: matricula
+CK: matricula
+FK: tipo_veiculo-codigo
+
+tipo_veiculo:
+PK: codigo
+CK: codigo
+FK:
+
+aluguer:
+PK: numero
+CK: numero
+FK: cliente-nif, veiculo-matricula, balcao-numero
+
+similaridade:
+PK: TVcodigo1 + TVcodigo2
+CK: TVcodigo1 + TVcodigo2
+FK: TVcodigo1, TVcodigo2
+
+ligeiro:
+PK: id
+CK: id
+FK: TVcodigo
+
+pesado:
+PK: id
+CK: id
+FK: TVcodigo
+
+
+
+
+
 ```
 
 
