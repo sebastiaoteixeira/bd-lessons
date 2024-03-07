@@ -6,7 +6,14 @@
 ### *a)*
 
 ```
-... Write here your answer ...
+cliente: NIF (PK), num_carta (CK), endereço, nome
+balcao: numero (PK), endereco, nome
+veiculo: matricula (PK), marca, ano, tipo_veiculo-codigo (FK)
+tipo_veiculo: codigo (PK), arcondicionado , designacao
+aluguer: numero (PK), date, duracao, cliente-nif (FK), veiculo-matricula (FK), balcao-numero (FK)
+similaridade: TVcodigo1 (PK) (FK), TVcodigo2 (PK) (FK)
+ligeiro: id (PK), TVcodigo (FK), numlugares, portas, combustível
+pesado: id (PK), TVcodigo (FK), peso, passageiros
 ```
 
 
