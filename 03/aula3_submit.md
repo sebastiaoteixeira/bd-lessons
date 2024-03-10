@@ -22,43 +22,43 @@ pesado: id (PK) (CK), TVcodigo (FK), peso, passageiros
 ```
 cliente:
 PK: NIF
-CK: NIF, num_carta
-FK:
+CKs: NIF, num_carta
+FKs:
 
 balcao:
 PK: numero
-CK: numero
-FK:
+CKs: numero
+FKs:
 
 veiculo:
 PK: matricula
-CK: matricula
-FK: tipo_veiculo-codigo
+CKs: matricula
+FKs: tipo_veiculo-codigo
 
 tipo_veiculo:
 PK: codigo
-CK: codigo
-FK:
+CKs: codigo
+FKs:
 
 aluguer:
 PK: numero
-CK: numero
-FK: cliente-nif, veiculo-matricula, balcao-numero
+CKs: numero
+FKs: cliente-nif, veiculo-matricula, balcao-numero
 
 similaridade:
 PK: TVcodigo1 + TVcodigo2
-CK: TVcodigo1 + TVcodigo2
-FK: TVcodigo1, TVcodigo2
+CKs: TVcodigo1 + TVcodigo2
+FKs: TVcodigo1, TVcodigo2
 
 ligeiro:
 PK: id
-CK: id
-FK: TVcodigo
+CKs: id
+FKs: TVcodigo
 
 pesado:
 PK: id
-CK: id
-FK: TVcodigo
+CKs: id
+FKs: TVcodigo
 
 
 
@@ -77,14 +77,44 @@ FK: TVcodigo
 ### *a)*
 
 ```
-... Write here your answer ...
+airport: _code, city, state, name
+flight: _number, airline, weekdays
+flightLeg: ..FLIGHTNUMBER, __LEG_No, ..airportdep_code, ..airportarr_code, sch_deptime, scharrtime
+
+legInstance: _(flightLeg(flightnumber,leg_no), __Date), Airplane_Id,  no_ofavaiableseats; airport_depcode, airportarrcode, deptime, arrtime
+seat: (Leg_instance(até Date), _Seat_no, costumerName, Cphone
+Airplane: _AirplaneId, Totalseats, airplanetype_Typename
+
+AirplaneType: Typename, Maxseats, company
+CanLand: _Airport_Airport_code, _AirplaneType Typename
+Fare: _Flight_Number, _Code, Amount, Restrictions
 ```
 
 
 ### *b)* 
 
 ```
-... Write here your answer ...
+airport:
+PK: code
+CKs: code
+FKs:
+
+flight:
+PK: number
+CKs: number
+FKs:
+
+flightLeg:
+PK: FlightNumber + LegNo
+CKs: FlightNumber + LegNo
+FKs: FlightNumber, airportdepCode, airportarrCode, sch_deptime, sch_arrtime
+
+
+
+seat:
+PK: flightLeg_FlightNumber + flightLeg_LegNo + Date
+CKs: flightLeg_FlightNumber + flightLeg_LegNo + Date
+FKs: 
 ```
 
 
