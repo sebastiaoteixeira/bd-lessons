@@ -59,11 +59,6 @@ pesado:
 PK: id
 CKs: id
 FKs: TVcodigo
-
-
-
-
-
 ```
 
 
