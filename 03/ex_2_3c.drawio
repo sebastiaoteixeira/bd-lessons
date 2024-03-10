@@ -1,0 +1,63 @@
+<mxfile host="app.diagrams.net" modified="2024-03-10T04:54:48.947Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" etag="4-eOKMFXt2kjf5_Ewuql" version="24.0.4" type="device">
+  <diagram name="Page-1" id="sv4eKT52F1IlTcsq5dl7">
+    <mxGraphModel dx="1434" dy="754" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="SOxTvH4YZH4HP-QPCvsQ-2" value="conferencia" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="670" y="50" width="70" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="SOxTvH4YZH4HP-QPCvsQ-7" value="ArtigoCientifico" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="100" width="90" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="SOxTvH4YZH4HP-QPCvsQ-8" value="numRegisto" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=4" vertex="1" parent="1">
+          <mxGeometry x="80" y="120" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="SOxTvH4YZH4HP-QPCvsQ-9" value="titulo" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="160" y="120" width="50" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="SOxTvH4YZH4HP-QPCvsQ-12" value="Autor" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="280" y="100" width="70" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="SOxTvH4YZH4HP-QPCvsQ-13" value="instituicao" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=0" vertex="1" parent="1">
+          <mxGeometry x="420" y="120" width="70" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="SOxTvH4YZH4HP-QPCvsQ-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="SOxTvH4YZH4HP-QPCvsQ-14" target="SOxTvH4YZH4HP-QPCvsQ-8">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="545" y="180" />
+              <mxPoint x="120" y="180" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SOxTvH4YZH4HP-QPCvsQ-14" value="ArtigoCientifico-numRegisto" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="490" y="120" width="110" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="SOxTvH4YZH4HP-QPCvsQ-19" value="enderecoEmail" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=4" vertex="1" parent="1">
+          <mxGeometry x="280" y="120" width="90" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="SOxTvH4YZH4HP-QPCvsQ-20" value="nome" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=0" vertex="1" parent="1">
+          <mxGeometry x="370" y="120" width="50" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="SOxTvH4YZH4HP-QPCvsQ-21" value="Participante" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="300" width="70" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="SOxTvH4YZH4HP-QPCvsQ-22" value="enderecoEmail" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=4" vertex="1" parent="1">
+          <mxGeometry x="80" y="320" width="90" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="SOxTvH4YZH4HP-QPCvsQ-23" value="morada" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="220" y="320" width="60" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="SOxTvH4YZH4HP-QPCvsQ-24" value="instituicao" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="280" y="320" width="70" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="SOxTvH4YZH4HP-QPCvsQ-25" value="dataInscricao" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="350" y="320" width="90" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="SOxTvH4YZH4HP-QPCvsQ-26" value="nome" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="170" y="320" width="50" height="40" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
