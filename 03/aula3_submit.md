@@ -77,17 +77,15 @@ FKs: TVcodigo
 ### *a)*
 
 ```
-airport: _code, city, state, name
-flight: _number, airline, weekdays
-flightLeg: ..FLIGHTNUMBER, __LEG_No, ..airportdep_code, ..airportarr_code, sch_deptime, scharrtime
-
-legInstance: _(flightLeg(flightnumber,leg_no), __Date), Airplane_Id,  no_ofavaiableseats; airport_depcode, airportarrcode, deptime, arrtime
-seat: (Leg_instance(até Date), _Seat_no, costumerName, Cphone
-Airplane: _AirplaneId, Totalseats, airplanetype_Typename
-
-AirplaneType: Typename, Maxseats, company
-CanLand: _Airport_Airport_code, _AirplaneType Typename
-Fare: _Flight_Number, _Code, Amount, Restrictions
+airport: code, city, state, name
+flight: number, airline, weekdays
+flightLeg: flight_Number, LegNo, airportdep_code, airportarr_code, sch_deptime, scharrtime
+legInstance: flightLeg_flightnumber, flightLeg_legNo, Date, airplane_Id,  noOfAvaiableSeats, airportdep_code, airportarr_code, deptime, arrtime
+seat: legInstance_flightLeg_flightNumber, seatNo, costumerName, Cphone
+airplane: AirplaneId, Totalseats, airplanetype_Typename
+airplaneType: Typename, Maxseats, company
+canLand: airport_code, airplaneType_Typename
+fare: flight_Number, code, Amount, Restrictions
 ```
 
 
@@ -107,14 +105,37 @@ FKs:
 flightLeg:
 PK: FlightNumber + LegNo
 CKs: FlightNumber + LegNo
-FKs: FlightNumber, airportdepCode, airportarrCode, sch_deptime, sch_arrtime
+FKs: FlightNumber, airportdep_code, airportarr_code, sch_deptime, sch_arrtime
 
-
+legInstance:
+PK: flightLeg_flightNumber + flightLeg_legNo + Date
+CKs: flightLeg_flightNumber + flightLeg_legNo + Date
+FKs: flightLeg_flightNumber, flightLeg_legNo, airplane_Id
 
 seat:
-PK: flightLeg_FlightNumber + flightLeg_LegNo + Date
-CKs: flightLeg_FlightNumber + flightLeg_LegNo + Date
-FKs: 
+PK: legInstance_flightLeg_FlightNumber + legInstance_flightLeg_LegNo + legInstance_Date + seatNo
+CKs: legInstance_flightLeg_FlightNumber + legInstance_flightLeg_LegNo + legInstance_Date + seatNo
+FKs: legInstance_flightLeg_FlightNumber, legInstance_flightLeg_LegNo, legInstance_Date
+
+airplane:
+PK: airplaneId
+CKs: airplaneId
+FKs: airplaneType_Typename
+
+airplaneType:
+PK: Typename
+CKs: Typename
+FKs:
+
+canLand:
+PK: airport_Code + airplaneType_Typename
+CKs: airport_Code + airplaneType_Typename
+FKs: airport_Code, airplaneType_Typename
+
+fare:
+PK: flight_Number + code
+CKs: flight_Number + code
+FKs: flight_Number
 ```
 
 
