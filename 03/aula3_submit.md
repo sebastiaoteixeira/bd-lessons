@@ -81,8 +81,8 @@ airport: code, city, state, name
 flight: number, airline, weekdays
 flightLeg: flight_Number, LegNo, airportdep_code, airportarr_code, sch_deptime, scharrtime
 legInstance: flightLeg_flightnumber, flightLeg_legNo, Date, airplane_Id,  noOfAvaiableSeats, airportdep_code, airportarr_code, deptime, arrtime
-seat: legInstance_flightLeg_flightNumber, seatNo, costumerName, Cphone
-airplane: AirplaneId, Totalseats, airplanetype_Typename
+seat: legInstance_flightLeg_flightNumber, legInstance_flightLeg_LegNo, legInstance_Date, seatNo, costumerName, Cphone
+airplane: AirplaneId, Totalseats, airplaneType_Typename
 airplaneType: Typename, Maxseats, company
 canLand: airport_code, airplaneType_Typename
 fare: flight_Number, code, Amount, Restrictions
@@ -94,7 +94,7 @@ fare: flight_Number, code, Amount, Restrictions
 ```
 airport:
 PK: code
-CKs: code
+CKs: code, name + state + city
 FKs:
 
 flight:
