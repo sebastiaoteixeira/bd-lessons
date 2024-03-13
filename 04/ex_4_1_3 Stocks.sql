@@ -2,7 +2,7 @@ CREATE TABLE Produto (
     codigo INT PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
     preco DECIMAL(10, 2) NOT NULL,
-    iva DECIMAL(5, 2)
+    iva DECIMAL(5, 2) NOT NULL DEFAULT 0 CHECK (iva >= 0 AND iva <= 100)
 );
 
 CREATE TABLE TipoFornecedor (
