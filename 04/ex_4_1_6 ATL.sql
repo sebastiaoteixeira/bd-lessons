@@ -33,6 +33,13 @@ CREATE TABLE ATL_Classe (
     id INT PRIMARY KEY
 );
 
+CREATE TABLE ATL_Pessoa (
+    cc VARCHAR(255) PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    morada VARCHAR(255) NOT NULL,
+    dataNascimento DATE NOT NULL
+);
+
 CREATE TABLE ATL_Professor (
     numFuncionario INT PRIMARY KEY,
     cc_Pessoa VARCHAR(255) UNIQUE,
@@ -88,13 +95,15 @@ CREATE TABLE ATL_Turma_Atividade (
 CREATE TABLE ATL_Aluno (
     cc_Pessoa VARCHAR(255) PRIMARY KEY,
     turma_id INT,
-    FOREIGN KEY (turma_id) REFERENCES ATL_Turma(id)
+    FOREIGN KEY (turma_id) REFERENCES ATL_Turma(id),
+	FOREIGN KEY (cc_Pessoa) REFERENCES ATL_Pessoa(cc)
 );
 
 CREATE TABLE ATL_EncarregadoEducacao (
     cc_Pessoa VARCHAR(255) PRIMARY KEY,
     telefone VARCHAR(255) UNIQUE,
-    email VARCHAR(255) UNIQUE
+    email VARCHAR(255) UNIQUE,
+	FOREIGN KEY (cc_Pessoa) REFERENCES ATL_Pessoa(cc)
 );
 
 CREATE TABLE ATL_PessoasAutorizadas (
@@ -102,14 +111,8 @@ CREATE TABLE ATL_PessoasAutorizadas (
     telefone VARCHAR(255) UNIQUE,
     email VARCHAR(255) UNIQUE,
     cc_Pessoa_Aluno VARCHAR(255),
+	FOREIGN KEY (cc_Pessoa) REFERENCES ATL_Pessoa(cc),
     FOREIGN KEY (cc_Pessoa_Aluno) REFERENCES ATL_Aluno(cc_Pessoa)
-);
-
-CREATE TABLE ATL_Pessoa (
-    cc VARCHAR(255) PRIMARY KEY,
-    nome VARCHAR(255) NOT NULL,
-    morada VARCHAR(255) NOT NULL,
-    dataNascimento DATE NOT NULL
 );
 
 CREATE TABLE ATL_Aluno_Atividade (
