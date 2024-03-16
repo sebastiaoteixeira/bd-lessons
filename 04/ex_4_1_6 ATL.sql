@@ -93,8 +93,10 @@ CREATE TABLE ATL_Turma_Atividade (
 );
 
 CREATE TABLE ATL_Aluno (
-    cc_Pessoa VARCHAR(255) PRIMARY KEY,
+    cc_Pessoa VARCHAR(255),
     turma_id INT,
+    PRIMARY KEY (cc_Pessoa),
+    FOREIGN KEY (cc_Pessoa) REFERENCES ATL_Pessoa(cc),
     FOREIGN KEY (turma_id) REFERENCES ATL_Turma(id)
 );
 
