@@ -99,16 +99,19 @@ CREATE TABLE ATL_Aluno (
 );
 
 CREATE TABLE ATL_EncarregadoEducacao (
-    cc_Pessoa VARCHAR(255) PRIMARY KEY,
+    cc_Pessoa VARCHAR(255),
     telefone VARCHAR(255) UNIQUE,
-    email VARCHAR(255) UNIQUE
+    email VARCHAR(255) UNIQUE,
+    PRIMARY KEY (cc_Pessoa),
+    FOREIGN KEY (cc_Pessoa) REFERENCES ATL_Pessoa(cc)
 );
 
 CREATE TABLE ATL_PessoasAutorizadas (
-    cc_Pessoa VARCHAR(255) PRIMARY KEY,
+    cc_Pessoa VARCHAR(255),
     telefone VARCHAR(255) UNIQUE,
     email VARCHAR(255) UNIQUE,
     cc_Pessoa_Aluno VARCHAR(255),
+    PRIMARY KEY (cc_Pessoa, cc_Pessoa_Aluno),
     FOREIGN KEY (cc_Pessoa_Aluno) REFERENCES ATL_Aluno(cc_Pessoa)
 );
 
