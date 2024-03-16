@@ -33,6 +33,13 @@ CREATE TABLE ATL_Classe (
     id INT PRIMARY KEY
 );
 
+CREATE TABLE ATL_Pessoa (
+    cc VARCHAR(255) PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    morada VARCHAR(255) NOT NULL,
+    dataNascimento DATE NOT NULL
+);
+
 CREATE TABLE ATL_Professor (
     numFuncionario INT PRIMARY KEY,
     cc_Pessoa VARCHAR(255) UNIQUE,
@@ -103,13 +110,6 @@ CREATE TABLE ATL_PessoasAutorizadas (
     email VARCHAR(255) UNIQUE,
     cc_Pessoa_Aluno VARCHAR(255),
     FOREIGN KEY (cc_Pessoa_Aluno) REFERENCES ATL_Aluno(cc_Pessoa)
-);
-
-CREATE TABLE ATL_Pessoa (
-    cc VARCHAR(255) PRIMARY KEY,
-    nome VARCHAR(255) NOT NULL,
-    morada VARCHAR(255) NOT NULL,
-    dataNascimento DATE NOT NULL
 );
 
 CREATE TABLE ATL_Aluno_Atividade (
