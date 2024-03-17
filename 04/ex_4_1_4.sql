@@ -34,9 +34,9 @@ CREATE TABLE Prescicao_Medicamentos_Farmaceutica (
 );
 
 CREATE TABLE Prescicao_Medicamentos_FarmacoFarmaceutica (
-    Farmaceutica_registoNacional VARCHAR(255) NOT NULL UNIQUE,
+    Farmaceutica_registoNacional VARCHAR(255) NOT NULL,
     Farmaco_formula VARCHAR(255) NOT NULL,
-    PRIMARY KEY (Farmaceutica_registoNacional, Farmaco_formula),
+    CONSTRAINT PK_FarmacoFarmaceutica PRIMARY KEY (Farmaceutica_registoNacional, Farmaco_formula),
     FOREIGN KEY (Farmaceutica_registoNacional) REFERENCES Prescicao_Medicamentos_Farmaceutica(registoNacional),
     FOREIGN KEY (Farmaco_formula) REFERENCES Prescicao_Medicamentos_Farmaco(formula)
 );
@@ -49,7 +49,7 @@ CREATE TABLE Prescicao_Medicamentos_Farmacia (
 );
 
 CREATE TABLE Prescicao_Medicamentos_FarmacoFarmacia (
-    Farmacia_nif VARCHAR(255) NOT NULL UNIQUE,
+    Farmacia_nif VARCHAR(255) NOT NULL,
     Farmaco_formula VARCHAR(255) NOT NULL,
     PRIMARY KEY (Farmacia_nif, Farmaco_formula),
     FOREIGN KEY (Farmacia_nif) REFERENCES Prescicao_Medicamentos_Farmacia(nif),
@@ -85,7 +85,7 @@ CREATE TABLE Prescicao_Medicamentos_Prescricao (
 );
 
 CREATE TABLE Prescicao_Medicamentos_PrescricaoFarmaco (
-    Farmaco_formula VARCHAR(255) NOT NULL UNIQUE,
+    Farmaco_formula VARCHAR(255) NOT NULL,
     Prescricao_numero INT NOT NULL,
     PRIMARY KEY (Farmaco_formula, Prescricao_numero),
     FOREIGN KEY (Farmaco_formula) REFERENCES Prescicao_Medicamentos_Farmaco(formula),
