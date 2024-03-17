@@ -1,1 +1,6 @@
 *.zip
+
+# Ignore backup files
+*.lck
+*.bak*
+*.tmp
