@@ -2,8 +2,6 @@ IF OBJECT_ID('ATL_Relationship', 'U') IS NOT NULL
     DROP TABLE dbo.ATL_Relationship
 IF OBJECT_ID('ATL_Aluno_Atividade', 'U') IS NOT NULL
     DROP TABLE dbo.ATL_Aluno_Atividade
-IF OBJECT_ID('ATL_Pessoa', 'U') IS NOT NULL
-    DROP TABLE dbo.ATL_Pessoa
 IF OBJECT_ID('ATL_PessoasAutorizadas', 'U') IS NOT NULL
     DROP TABLE dbo.ATL_PessoasAutorizadas
 IF OBJECT_ID('ATL_EncarregadoEducacao', 'U') IS NOT NULL
@@ -26,6 +24,8 @@ IF OBJECT_ID('ATL_Turma', 'U') IS NOT NULL
     DROP TABLE dbo.ATL_Turma
 IF OBJECT_ID('ATL_Professor', 'U') IS NOT NULL
     DROP TABLE dbo.ATL_Professor
+IF OBJECT_ID('ATL_Pessoa', 'U') IS NOT NULL
+    DROP TABLE dbo.ATL_Pessoa
 IF OBJECT_ID('ATL_Classe', 'U') IS NOT NULL
     DROP TABLE dbo.ATL_Classe
 
@@ -93,25 +93,28 @@ CREATE TABLE ATL_Turma_Atividade (
 );
 
 CREATE TABLE ATL_Aluno (
-    cc_Pessoa VARCHAR(255) PRIMARY KEY,
+    cc_Pessoa VARCHAR(255),
     turma_id INT,
-    FOREIGN KEY (turma_id) REFERENCES ATL_Turma(id),
-	FOREIGN KEY (cc_Pessoa) REFERENCES ATL_Pessoa(cc)
+    PRIMARY KEY (cc_Pessoa),
+    FOREIGN KEY (cc_Pessoa) REFERENCES ATL_Pessoa(cc),
+    FOREIGN KEY (turma_id) REFERENCES ATL_Turma(id)
 );
 
 CREATE TABLE ATL_EncarregadoEducacao (
-    cc_Pessoa VARCHAR(255) PRIMARY KEY,
+    cc_Pessoa VARCHAR(255),
     telefone VARCHAR(255) UNIQUE,
     email VARCHAR(255) UNIQUE,
-	FOREIGN KEY (cc_Pessoa) REFERENCES ATL_Pessoa(cc)
+    PRIMARY KEY (cc_Pessoa),
+    FOREIGN KEY (cc_Pessoa) REFERENCES ATL_Pessoa(cc)
 );
 
 CREATE TABLE ATL_PessoasAutorizadas (
-    cc_Pessoa VARCHAR(255) PRIMARY KEY,
+    cc_Pessoa VARCHAR(255),
     telefone VARCHAR(255) UNIQUE,
     email VARCHAR(255) UNIQUE,
     cc_Pessoa_Aluno VARCHAR(255),
-	FOREIGN KEY (cc_Pessoa) REFERENCES ATL_Pessoa(cc),
+    PRIMARY KEY (cc_Pessoa, cc_Pessoa_Aluno),
+    FOREIGN KEY (cc_Pessoa) REFERENCES ATL_Pessoa(cc),
     FOREIGN KEY (cc_Pessoa_Aluno) REFERENCES ATL_Aluno(cc_Pessoa)
 );
 
