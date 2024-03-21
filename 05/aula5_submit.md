@@ -20,7 +20,13 @@
 ### *b)* 
 
 ```
-... Write here your answer ...
+π employee.Fname, employee.Minit, employee.Lname
+σ Chefe.Fname = 'Carlos' ∧ Chefe.Minit = 'D' ∧ Chefe.Lname = 'Gomes'
+(
+	employee ⨝ employee.Super_ssn = Chefe.Ssn
+	ρ Chefe
+	employee
+)
 ```
 
 
@@ -39,7 +45,12 @@
 ### *d)* 
 
 ```
-... Write here your answer ...
+π employee.Fname, employee.Minit, employee.Lname
+σ Hours > 20 ∧ employee.Dno = 3 ∧ project.Pname = 'Aveiro Digital' 
+(
+	employee ⨝ employee.Ssn = works_on.Essn works_on
+	⨝ works_on.Pno = project.Pnumber project
+)
 ```
 
 
@@ -74,7 +85,11 @@
 ### *g)* 
 
 ```
-... Write here your answer ...
+π employee.Fname, employee.Minit, employee.Lname, numDependents
+(
+	γ dependent.Essn; count(dependent.Dependent_name) -> numDependents (dependent)
+	⨝ dependent.Essn = employee.Ssn employee
+)
 ```
 
 
@@ -98,7 +113,15 @@
 ### *i)* 
 
 ```
-... Write here your answer ...
+π employee.Fname, employee.Minit, employee.Lname, employee.Address
+σ project.Plocation = 'Aveiro' ∧ dept_location.Dlocation ≠ 'Aveiro'
+(
+	employee
+	⨝ employee.Dno = department.Dnumber department
+	⨝ department.Dnumber = dept_location.Dnumber dept_location
+	⨝ employee.Ssn = works_on.Essn works_on
+	⨝ works_on.Pno = project.Pnumber project
+)
 ```
 
 
@@ -127,7 +150,10 @@
 ### *c)* 
 
 ```
-... Write here your answer ...
+γ avg(quantidade) -> average
+(
+	γ item.numEnc; count(item.codProd) -> quantidade item
+)
 ```
 
 
