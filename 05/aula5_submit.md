@@ -6,8 +6,14 @@
 ### *a)*
 
 ```
-Write here your answer e.g:
-(π Pname, Pnumber (project) ⨝ Pno=Pnumber (works_on)) ⨝.... 
+π employee.Ssn,employee.Fname,project.Pname
+(
+    works_on
+        ⨝ works_on.Pno=project.Pnumber
+    project
+        ⨝ works_on.Essn=employee.Ssn 
+    employee
+)
 ```
 
 
@@ -21,7 +27,12 @@ Write here your answer e.g:
 ### *c)* 
 
 ```
-... Write here your answer ...
+γ project.Pname; sum(Hours) -> workedHours
+(
+    project 
+        ⨝ works_on.Pno=project.Pnumber
+    works_on
+)
 ```
 
 
@@ -35,14 +46,28 @@ Write here your answer e.g:
 ### *e)* 
 
 ```
-... Write here your answer ...
+σ works_on.Essn=null
+(
+    employee 
+        ⟕employee.Ssn=works_on.Essn 
+    works_on
+)
 ```
 
 
 ### *f)* 
 
 ```
-... Write here your answer ...
+γ department.Dnumber,department.Dname; avg(Hours) -> averageHours
+(
+	σ employee.Sex='F'
+	(
+		employee
+		⨝department.Dnumber=employee.Dno
+		department
+	)
+	⨝employee.Ssn=works_on.Essn works_on
+)
 ```
 
 
@@ -56,7 +81,17 @@ Write here your answer e.g:
 ### *h)* 
 
 ```
-... Write here your answer ...
+π employee.Fname,employee.Minit,employee.Lname
+σ dependent.Essn=null
+(
+	(
+		employee
+		⨝employee.Ssn=department.Mgr_ssn
+		department
+	)
+	⟕employee.Ssn=dependent.Essn
+	dependent
+)
 ```
 
 
@@ -72,13 +107,20 @@ Write here your answer e.g:
 ### *a)*
 
 ```
-... Write here your answer ...
+π fornecedor.nif,fornecedor.nome
+σ encomenda.numero=null
+(
+	fornecedor
+	⟕fornecedor.nif=encomenda.fornecedor
+	encomenda
+)
 ```
 
 ### *b)* 
 
 ```
-... Write here your answer ...
+γ produto.codigo,produto.nome; avg(produto.unidades) -> averageUnidades (produto)
+
 ```
 
 
