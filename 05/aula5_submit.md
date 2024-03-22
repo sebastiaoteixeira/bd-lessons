@@ -179,7 +179,12 @@
 ### *a)*
 
 ```
-... Write here your answer ...
+π paciente.nome
+σ prescricao.numPresc=null
+(
+	paciente
+	⟕ paciente.numUtente = prescricao.numUtente prescricao
+)
 ```
 
 ### *b)* 
