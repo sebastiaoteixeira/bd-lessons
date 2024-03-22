@@ -60,7 +60,7 @@
 σ works_on.Essn=null
 (
     employee 
-        ⟕employee.Ssn=works_on.Essn 
+        ⟕ employee.Ssn=works_on.Essn 
     works_on
 )
 ```
@@ -74,10 +74,10 @@
 	σ employee.Sex='F'
 	(
 		employee
-		⨝department.Dnumber=employee.Dno
+		⨝ department.Dnumber=employee.Dno
 		department
 	)
-	⨝employee.Ssn=works_on.Essn works_on
+	⨝ employee.Ssn=works_on.Essn works_on
 )
 ```
 
@@ -101,7 +101,7 @@
 (
 	(
 		employee
-		⨝employee.Ssn=department.Mgr_ssn
+		⨝ employee.Ssn=department.Mgr_ssn
 		department
 	)
 	⟕ employee.Ssn=dependent.Essn
@@ -134,7 +134,7 @@
 σ encomenda.numero=null
 (
 	fornecedor
-	⟕fornecedor.nif=encomenda.fornecedor
+	⟕ fornecedor.nif=encomenda.fornecedor
 	encomenda
 )
 ```
@@ -143,7 +143,6 @@
 
 ```
 γ produto.codigo,produto.nome; avg(produto.unidades) -> averageUnidades (produto)
-
 ```
 
 
