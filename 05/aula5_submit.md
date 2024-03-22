@@ -104,7 +104,7 @@
 		⨝employee.Ssn=department.Mgr_ssn
 		department
 	)
-	⟕employee.Ssn=dependent.Essn
+	⟕ employee.Ssn=dependent.Essn
 	dependent
 )
 ```
@@ -160,7 +160,17 @@
 ### *d)* 
 
 ```
-... Write here your answer ...
+π fornecedor.nome, produto.nome, quantidade
+(
+	γ item.codProd, encomenda.fornecedor; sum(item.unidades) -> quantidade
+	(
+		item
+		⨝ item.numEnc=encomenda.numero encomenda
+		
+	)
+	⨝ item.codProd=produto.codigo produto
+	⨝ encomenda.fornecedor=fornecedor.nif fornecedor
+)
 ```
 
 
