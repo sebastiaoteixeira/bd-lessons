@@ -189,21 +189,41 @@
 ### *b)* 
 
 ```
-... Write here your answer ...
+γ medico.especialidade; count(medico.especialidade) -> numPrescricoes
+(
+	medico
+	⨝ medico.numSNS=prescricao.numMedico
+	prescricao
+)
 ```
 
 
 ### *c)* 
 
 ```
-... Write here your answer ...
+γ prescricao.farmacia; count(prescricao.farmacia) -> numPrescricoes
+(
+	σ prescricao.farmacia≠null
+	(
+		medico
+		⨝ medico.numSNS=prescricao.numMedico
+		prescricao
+	)
+)
 ```
 
 
 ### *d)* 
 
 ```
-... Write here your answer ...
+π farmaco.nome,farmaco.formula
+(
+	farmaco
+	⨝ farmaceutica.numReg=farmaco.numRegFarm
+	(
+		farmaceutica - (σ farmaceutica.numReg=906 (farmaceutica))
+	)
+)
 ```
 
 ### *e)* 
