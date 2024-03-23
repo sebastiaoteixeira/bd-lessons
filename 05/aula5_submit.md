@@ -245,5 +245,7 @@
 ### *f)* 
 
 ```
-... Write here your answer ...
+σ medicos ≥ 2
+γ prescricao.numUtente; count(prescricao.numMedico) -> medicos prescricao
+⋊ paciente
 ```
