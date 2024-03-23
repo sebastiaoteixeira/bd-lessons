@@ -229,7 +229,17 @@
 ### *e)* 
 
 ```
-... Write here your answer ...
+π farmacia.nome, farmaceutica.nome, vendas
+(
+	γ farmacia.nome, farmaco.numRegFarm; count(farmaco.nome) -> vendas
+	(
+		farmaco
+		⨝ presc_farmaco.numRegFarm = farmaco.numRegFarm ∧ presc_farmaco.nomeFarmaco = farmaco.nome presc_farmaco
+		⨝ prescricao.numPresc = presc_farmaco.numPresc prescricao
+		⨝ prescricao.farmacia = farmacia.nome farmacia
+	)
+	⨝ farmaco.numRegFarm = farmaceutica.numReg farmaceutica
+)
 ```
 
 ### *f)* 
