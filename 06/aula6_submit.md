@@ -37,7 +37,9 @@ ORDER BY au_fname,au_lname;
 ### *f)* Todas as editoras (publishers) que tenham ‘Bo’ em qualquer parte do nome; 
 
 ```
-... Write here your answer ...
+SELECT *
+FROM publishers
+WHERE publishers.pub_name LIKE '%Bo%';
 ```
 
 ### *g)* Nome das editoras que têm pelo menos uma publicação do tipo ‘Business’; 
