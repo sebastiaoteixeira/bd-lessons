@@ -168,13 +168,26 @@ ON sales_info.title_id = titles.title_id
 ### *o)* Obter uma lista que incluía o número de vendas de um título (ytd_sales), o seu nome, a faturação total, o valor da faturação relativa aos autores e o valor da faturação relativa à editora;
 
 ```
-... Write here your answer ...
+SELECT title, ytd_sales, faturacao_total, (faturacao_total * royalty / 100 + advance) AS faturacao_autor, (faturacao_total * (100 - royalty) / 100 - advance) AS faturacao_editora
+FROM (
+    SELECT titles.title, titles.ytd_sales, titles.price, (titles.price * titles.ytd_sales) AS faturacao_total, titles.advance, titles.royalty
+    FROM titles
+) AS subquery
 ```
 
 ### *p)* Obter uma lista que incluía o número de vendas de um título (ytd_sales), o seu nome, o nome de cada autor, o valor da faturação de cada autor e o valor da faturação relativa à editora;
 
-```
-... Write here your answer ...
+SELECT title_sales, title, author_name, (faturacao_autores * royalty_autor / 100) AS faturacao_autor, faturacao_editora
+FROM (
+    SELECT title, CONCAT(authors.au_fname,' ',authors.au_lname) AS author_name, title_sales, titleauthor.royaltyper AS royalty_autor, (faturacao_total * royalty / 100 + advance) AS faturacao_autores, (faturacao_total * (100 - royalty) / 100 - advance) AS faturacao_editora
+    FROM (
+        SELECT titles.title_id, titles.title, titles.ytd_sales as title_sales, titles.price, (titles.price * titles.ytd_sales) AS faturacao_total, titles.advance, titles.royalty
+        FROM titles
+    ) AS subquery
+    JOIN titleauthor ON subquery.title_id = titleauthor.title_id
+    JOIN authors ON titleauthor.au_id = authors.au_id
+) AS subquery2
+ORDER BY title
 ```
 
 ### *q)* Lista de lojas que venderam pelo menos um exemplar de todos os livros;
