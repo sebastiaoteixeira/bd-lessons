@@ -5,33 +5,40 @@
 ### *a)* Todos os tuplos da tabela autores (authors);
 
 ```
-SELECT * FROM authors;
+SELECT * 
+    FROM authors;
 ```
 
 ### *b)* O primeiro nome, o último nome e o telefone dos autores;
 
 ```
-SELECT au_fname,au_lname,phone FROM authors;
+SELECT authors.au_fname, authors.au_lname, authors.phone
+    FROM authors;
 ```
 
 ### *c)* Consulta definida em b) mas ordenada pelo primeiro nome (ascendente) e depois o último nome (ascendente); 
 
 ```
-SELECT au_fname,au_lname,phone FROM authors;
-ORDER BY au_fname,au_lname;
+SELECT authors.au_fname, authors.au_lname, authors.phone
+    FROM authors
+ORDER BY authors.au_fname, authors.au_lname;
 ```
 
 ### *d)* Consulta definida em c) mas renomeando os atributos para (first_name, last_name, telephone); 
 
 ```
-SELECT au_fname,au_lname,phone AS first_name,last_name,telephone FROM authors;
-ORDER BY au_fname,au_lname;
+SELECT authors.au_fname AS first_name, authors.au_lname AS last_name, authors.phone AS telephone
+    FROM authors
+ORDER BY authors.au_fname, authors.au_lname;
 ```
 
 ### *e)* Consulta definida em d) mas só os autores da Califórnia (CA) cujo último nome é diferente de ‘Ringer’; 
 
 ```
-... Write here your answer ...
+SELECT authors.au_fname AS first_name, authors.au_lname AS last_name, authors.phone AS telephone
+    FROM authors
+WHERE authors.state = 'CA' AND authors.au_lname != 'Ringer'
+ORDER BY authors.au_fname, authors.au_lname;
 ```
 
 ### *f)* Todas as editoras (publishers) que tenham ‘Bo’ em qualquer parte do nome; 
@@ -53,7 +60,13 @@ WHERE publishers.pub_name LIKE '%Bo%';
 ### *h)* Número total de vendas de cada editora; 
 
 ```
-... Write here your answer ...
+SELECT publishers.pub_name, SUM(sales.qty) AS total_sales
+FROM publishers
+JOIN titles
+ON publishers.pub_id = titles.pub_id
+JOIN sales
+ON titles.title_id = sales.title_id
+GROUP BY publishers.pub_name;
 ```
 
 ### *i)* Número total de vendas de cada editora agrupado por título; 
@@ -71,7 +84,13 @@ GROUP BY publishers.pub_name, titles.title
 ### *j)* Nome dos títulos vendidos pela loja ‘Bookbeat’; 
 
 ```
-... Write here your answer ...
+SELECT stores.stor_name AS store, titles.title
+FROM sales
+JOIN stores
+ON sales.stor_id = stores.stor_id
+JOIN titles
+ON sales.title_id = titles.title_id
+WHERE stores.stor_name = 'Bookbeat';
 ```
 
 ### *k)* Nome de autores que tenham publicações de tipos diferentes; 
@@ -94,13 +113,36 @@ WHERE type_count > 1;
 ### *l)* Para os títulos, obter o preço médio e o número total de vendas agrupado por tipo (type) e editora (pub_id);
 
 ```
-... Write here your answer ...
+SELECT pub_name, sales_info.type, total_sales, average_price
+FROM publishers
+JOIN (
+    SELECT titles.pub_id, titles.type, SUM(sales.qty) AS total_sales, AVG(titles.price) AS average_price
+    FROM sales
+    JOIN titles
+    ON titles.title_id = sales.title_id
+    GROUP BY titles.type, titles.pub_id
+) AS sales_info
+ON publishers.pub_id = sales_info.pub_id
+ORDER BY sales_info.type, pub_name;
 ```
 
 ### *m)* Obter o(s) tipo(s) de título(s) para o(s) qual(is) o máximo de dinheiro “à cabeça” (advance) é uma vez e meia superior à média do grupo (tipo);
 
 ```
-... Write here your answer ...
+SELECT titles.title, titles.advance, type_avg_advances.avg_advance
+FROM titles
+JOIN (
+    SELECT titles.type, AVG(same_type_titles.advance) AS avg_advance
+    FROM titles
+    JOIN (
+        SELECT titles.type AS this_type, titles.advance AS advance
+        FROM titles
+    ) AS same_type_titles
+    ON titles.type = same_type_titles.this_type
+    GROUP BY titles.type
+) AS type_avg_advances
+ON titles.type = type_avg_advances.type
+WHERE titles.advance > 1.5 * type_avg_advances.avg_advance;
 ```
 
 ### *n)* Obter, para cada título, nome dos autores e valor arrecadado por estes com a sua venda;
