@@ -148,7 +148,21 @@ WHERE titles.advance > 1.5 * type_avg_advances.avg_advance;
 ### *n)* Obter, para cada título, nome dos autores e valor arrecadado por estes com a sua venda;
 
 ```
-... Write here your answer ...
+SELECT authors.au_lname, authors.au_fname, titles.title, sales_info.total
+FROM authors
+JOIN
+(
+    SELECT titleauthor.au_id, titles.title_id, SUM(sales.qty) AS total
+    FROM titles
+    JOIN titleauthor
+    ON titles.title_id = titleauthor.title_id
+    JOIN sales
+    ON titles.title_id = sales.title_id
+    GROUP BY titleauthor.au_id, titles.title_id
+) AS sales_info
+ON authors.au_id = sales_info.au_id
+JOIN titles
+ON sales_info.title_id = titles.title_id
 ```
 
 ### *o)* Obter uma lista que incluía o número de vendas de um título (ytd_sales), o seu nome, a faturação total, o valor da faturação relativa aos autores e o valor da faturação relativa à editora;
