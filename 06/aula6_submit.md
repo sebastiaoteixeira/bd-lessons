@@ -5,25 +5,27 @@
 ### *a)* Todos os tuplos da tabela autores (authors);
 
 ```
-... Write here your answer ...
+SELECT * FROM authors;
 ```
 
 ### *b)* O primeiro nome, o último nome e o telefone dos autores;
 
 ```
-... Write here your answer ...
+SELECT au_fname,au_lname,phone FROM authors;
 ```
 
 ### *c)* Consulta definida em b) mas ordenada pelo primeiro nome (ascendente) e depois o último nome (ascendente); 
 
 ```
-... Write here your answer ...
+SELECT au_fname,au_lname,phone FROM authors;
+ORDER BY au_fname,au_lname;
 ```
 
 ### *d)* Consulta definida em c) mas renomeando os atributos para (first_name, last_name, telephone); 
 
 ```
-... Write here your answer ...
+SELECT au_fname,au_lname,phone AS first_name,last_name,telephone FROM authors;
+ORDER BY au_fname,au_lname;
 ```
 
 ### *e)* Consulta definida em d) mas só os autores da Califórnia (CA) cujo último nome é diferente de ‘Ringer’; 
