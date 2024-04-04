@@ -45,7 +45,9 @@ WHERE publishers.pub_name LIKE '%Bo%';
 ### *g)* Nome das editoras que têm pelo menos uma publicação do tipo ‘Business’; 
 
 ```
-... Write here your answer ...
+SELECT *
+FROM publishers
+WHERE publishers.pub_name LIKE '%Bo%';
 ```
 
 ### *h)* Número total de vendas de cada editora; 
@@ -57,7 +59,13 @@ WHERE publishers.pub_name LIKE '%Bo%';
 ### *i)* Número total de vendas de cada editora agrupado por título; 
 
 ```
-... Write here your answer ...
+SELECT publishers.pub_name, titles.title, SUM(sales.qty) AS total_sales
+FROM publishers
+JOIN titles
+ON publishers.pub_id = titles.pub_id
+JOIN sales
+ON titles.title_id = sales.title_id
+GROUP BY publishers.pub_name, titles.title
 ```
 
 ### *j)* Nome dos títulos vendidos pela loja ‘Bookbeat’; 
@@ -69,7 +77,18 @@ WHERE publishers.pub_name LIKE '%Bo%';
 ### *k)* Nome de autores que tenham publicações de tipos diferentes; 
 
 ```
-... Write here your answer ...
+SELECT authors.au_id, authors.au_lname, authors.au_fname
+FROM authors
+JOIN
+(
+    SELECT titleauthor.au_id AS au_id, COUNT(titles.type) AS type_count
+    FROM titles
+    JOIN titleauthor
+    ON titles.title_id = titleauthor.title_id
+    GROUP BY titleauthor.au_id
+) AS title_count
+ON authors.au_id = title_count.au_id
+WHERE type_count > 1;
 ```
 
 ### *l)* Para os títulos, obter o preço médio e o número total de vendas agrupado por tipo (type) e editora (pub_id);
