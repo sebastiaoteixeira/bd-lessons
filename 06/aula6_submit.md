@@ -289,55 +289,95 @@ ORDER BY publishers.pub_name, stores.stor_name
 ##### *a)*
 
 ```
-... Write here your answer ...
+SELECT employee.Ssn, employee.Fname, project.Pname
+FROM works_on
+JOIN project ON works_on.Pno = project.Pnumber
+JOIN employee ON works_on.Essn = employee.Ssn;
 ```
 
 ##### *b)* 
 
 ```
-... Write here your answer ...
+SELECT employee.Fname, employee.Minit, employee.Lname
+FROM employee
+INNER JOIN employee AS Chefe ON employee.Super_ssn = Chefe.Ssn
+WHERE Chefe.Fname = 'Carlos' AND Chefe.Minit = 'D' AND Chefe.Lname = 'Gomes';
 ```
 
 ##### *c)* 
 
 ```
-... Write here your answer ...
+SELECT project.Pname, SUM(works_on.Hours) AS workedHours
+FROM project
+JOIN works_on ON works_on.Pno = project.Pnumber
+GROUP BY project.Pname;
 ```
 
 ##### *d)* 
 
 ```
-... Write here your answer ...
+SELECT employee.Fname, employee.Minit, employee.Lname
+FROM employee
+JOIN works_on ON employee.Ssn = works_on.Essn
+JOIN project ON works_on.Pno = project.Pnumber
+WHERE works_on.Hours > 20
+AND employee.Dno = 3
+AND project.Pname = 'Aveiro Digital';
 ```
 
 ##### *e)* 
 
 ```
-... Write here your answer ...
+SELECT employee.Fname, employee.Minit, employee.Lname
+FROM employee
+LEFT JOIN works_on ON employee.Ssn = works_on.Essn
+WHERE works_on.Essn IS NULL;
 ```
 
 ##### *f)* 
 
 ```
-... Write here your answer ...
+SELECT department.Dnumber, department.Dname, AVG(works_on.Hours) AS averageHours 
+FROM employee 
+JOIN department ON department.Dnumber = employee.Dno 
+JOIN works_on ON employee.Ssn = works_on.Essn 
+WHERE employee.Sex = 'F' 
+GROUP BY department.Dnumber, department.Dname;
 ```
 
 ##### *g)* 
 
 ```
-... Write here your answer ...
+SELECT employee.Fname, employee.Minit, employee.Lname, depCounts.numDependents
+FROM employee
+LEFT JOIN (
+    SELECT dependent.Essn, COUNT(dependent.Dependent_name) AS numDependents
+    FROM dependent
+    GROUP BY dependent.Essn
+) AS depCounts ON employee.Ssn = depCounts.Essn
+WHERE depCounts.numDependents IS NOT null;
 ```
 
 ##### *h)* 
 
 ```
-... Write here your answer ...
+SELECT DISTINCT employee.Fname, employee.Minit, employee.Lname
+FROM employee
+JOIN department ON employee.Ssn = department.Mgr_ssn
+LEFT JOIN dependent ON employee.Ssn = dependent.Essn
+WHERE dependent.Essn IS NULL;
 ```
 
 ##### *i)* 
 
 ```
-... Write here your answer ...
+SELECT employee.Fname, employee.Minit, employee.Lname, employee.Address
+FROM employee
+JOIN works_on ON employee.Ssn = works_on.Essn
+JOIN project ON works_on.Pno = project.Pnumber AND project.Plocation = 'Aveiro'
+JOIN department ON employee.Dno = department.Dnumber
+JOIN dept_location ON department.Dnumber = dept_location.Dnumber
+WHERE dept_location.Dlocation != 'Aveiro';
 ```
 
 ### 5.2

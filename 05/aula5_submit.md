@@ -57,6 +57,7 @@
 ### *e)* 
 
 ```
+π employee.Fname, employee.Minit, employee.Lname
 σ works_on.Essn=null
 (
     employee 
