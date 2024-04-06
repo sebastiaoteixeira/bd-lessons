@@ -63,8 +63,8 @@ CREATE TABLE Prescricao_prescricao
 
 CREATE TABLE Prescricao_presc_farmaco
 (
-    numPresc INT PRIMARY KEY,
-    numRegFarm INT PRIMARY KEY,
+    numPresc INT,
+    numRegFarm INT,
     nomeFarmaco VARCHAR(255),
     PRIMARY KEY (numPresc, numRegFarm),
     FOREIGN KEY (numPresc) REFERENCES Prescricao_prescricao(numPresc),
