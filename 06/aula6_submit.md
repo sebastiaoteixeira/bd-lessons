@@ -193,7 +193,28 @@ ORDER BY title
 ### *q)* Lista de lojas que venderam pelo menos um exemplar de todos os livros;
 
 ```
-... Write here your answer ...
+SELECT stores.stor_name
+FROM stores
+WHERE stores.stor_id NOT IN
+(
+    SELECT stores_sales.stor_id
+    FROM 
+    (
+        SELECT sales.stor_id, titles.title_id
+        FROM sales, titles
+        
+    ) AS all_stor_title_pairs
+    LEFT JOIN
+    (
+        SELECT stores.stor_id, sales.title_id
+        FROM sales
+        JOIN stores
+        ON stores.stor_id=sales.stor_id
+        WHERE qty > 0
+    ) AS stores_sales
+    ON all_stor_title_pairs.title_id=stores_sales.title_id AND all_stor_title_pairs.stor_id=stores_sales.stor_id
+    WHERE stores_sales.stor_id IS NULL
+)
 ```
 
 ### *r)* Lista de lojas que venderam mais livros do que a média de todas as lojas;
