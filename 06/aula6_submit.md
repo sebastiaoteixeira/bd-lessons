@@ -199,19 +199,55 @@ ORDER BY title
 ### *r)* Lista de lojas que venderam mais livros do que a média de todas as lojas;
 
 ```
-... Write here your answer ...
+SELECT store_sales_subquery.store_name, store_sales_subquery.store_sales
+FROM (
+    SELECT stores.stor_name AS store_name, SUM(sales.qty) AS store_sales
+    FROM stores
+    JOIN sales
+    ON stores.stor_id = sales.stor_id
+    GROUP BY stores.stor_id, stores.stor_name
+) AS store_sales_subquery
+JOIN (
+    SELECT AVG(store_sales) AS avg_sales
+    FROM (
+        SELECT stores.stor_name AS store_name, SUM(sales.qty) AS store_sales
+        FROM stores
+        JOIN sales
+        ON stores.stor_id = sales.stor_id
+        GROUP BY stores.stor_id, stores.stor_name
+    ) AS inner_subquery
+) AS avg_sales_subquery
+ON store_sales_subquery.store_sales > avg_sales_subquery.avg_sales
 ```
 
 ### *s)* Nome dos títulos que nunca foram vendidos na loja “Bookbeat”;
 
 ```
-... Write here your answer ...
+SELECT title
+FROM titles
+WHERE title_id NOT IN (
+    SELECT sales.title_id
+    FROM sales
+    JOIN stores
+    ON sales.stor_id = stores.stor_id
+    WHERE stores.stor_name = 'Bookbeat'
+)
 ```
 
 ### *t)* Para cada editora, a lista de todas as lojas que nunca venderam títulos dessa editora; 
 
 ```
-... Write here your answer ...
+SELECT publishers.pub_name, stores.stor_name
+FROM publishers
+CROSS JOIN stores
+WHERE NOT EXISTS (
+    SELECT *
+    FROM sales
+    JOIN titles
+    ON sales.title_id = titles.title_id
+    WHERE titles.pub_id = publishers.pub_id AND sales.stor_id = stores.stor_id
+)
+ORDER BY publishers.pub_name, stores.stor_name
 ```
 
 ## Problema 6.2
