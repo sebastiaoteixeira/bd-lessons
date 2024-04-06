@@ -177,6 +177,7 @@ FROM (
 
 ### *p)* Obter uma lista que incluía o número de vendas de um título (ytd_sales), o seu nome, o nome de cada autor, o valor da faturação de cada autor e o valor da faturação relativa à editora;
 
+```
 SELECT title_sales, title, author_name, (faturacao_autores * royalty_autor / 100) AS faturacao_autor, faturacao_editora
 FROM (
     SELECT title, CONCAT(authors.au_fname,' ',authors.au_lname) AS author_name, title_sales, titleauthor.royaltyper AS royalty_autor, (faturacao_total * royalty / 100 + advance) AS faturacao_autores, (faturacao_total * (100 - royalty) / 100 - advance) AS faturacao_editora
