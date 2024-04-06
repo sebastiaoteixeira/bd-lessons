@@ -6,7 +6,6 @@ DROP TABLE IF EXISTS emp_DEPT_LOCATIONS;
 DROP TABLE IF EXISTS emp_EMPLOYEE;
 DROP TABLE IF EXISTS emp_DEPARTMENT;
 
--- 1. Department table (independent table)
 CREATE TABLE emp_DEPARTMENT (
   Dname VARCHAR(255) NOT NULL,
   Dnumber INT NOT NULL PRIMARY KEY,
@@ -14,7 +13,6 @@ CREATE TABLE emp_DEPARTMENT (
   Mgrstartdate DATE
 );
 
--- 2. Employee table (references Department.Dnumber)
 CREATE TABLE emp_EMPLOYEE (
   Fname VARCHAR(255) NOT NULL,
   Minit CHAR(1),
@@ -24,12 +22,11 @@ CREATE TABLE emp_EMPLOYEE (
   Address VARCHAR(255),
   Sex CHAR(1),
   Salary DECIMAL(10,2),
-  Superssn INT,
+  Super_ssn INT,
   Dno INT NOT NULL,
   FOREIGN KEY (Dno) REFERENCES emp_DEPARTMENT(Dnumber)
 );
 
--- 3. Department Locations table (referenced by Department.Dnumber)
 CREATE TABLE emp_DEPT_LOCATIONS (
   Dnumber INT NOT NULL,
   Dlocation VARCHAR(255) NOT NULL,
@@ -37,7 +34,6 @@ CREATE TABLE emp_DEPT_LOCATIONS (
   FOREIGN KEY (Dnumber) REFERENCES emp_DEPARTMENT(Dnumber)
 );
 
--- 4. Project table (referenced by Department.Dnumber)
 CREATE TABLE emp_PROJECT (
   Pname VARCHAR(255) NOT NULL,
   Pnumber INT NOT NULL PRIMARY KEY,
@@ -46,7 +42,6 @@ CREATE TABLE emp_PROJECT (
   FOREIGN KEY (Dnum) REFERENCES emp_DEPARTMENT(Dnumber)
 );
 
--- 5. Works On table (references Employee.Ssn and Project.Pnumber)
 CREATE TABLE emp_WORKS_ON (
   Essn INT NOT NULL,
   Pno INT NOT NULL,
@@ -56,7 +51,6 @@ CREATE TABLE emp_WORKS_ON (
   FOREIGN KEY (Pno) REFERENCES emp_PROJECT(Pnumber)
 );
 
--- 6. Dependent table (references Employee.Ssn)
 CREATE TABLE emp_DEPENDENT (
   Essn INT NOT NULL,
   Dependent_name VARCHAR(255) NOT NULL,
