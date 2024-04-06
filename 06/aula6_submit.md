@@ -395,20 +395,30 @@ WHERE dept_location.Dlocation != 'Aveiro';
 ##### *a)*
 
 ```
-... Write here your answer ...
+SELECT fornecedor.nif, fornecedor.nome
+FROM fornecedor
+LEFT JOIN encomenda ON fornecedor.nif = encomenda.fornecedor
+WHERE encomenda.numero IS NULL;
 ```
 
 ##### *b)* 
 
 ```
-... Write here your answer ...
+SELECT produto.codigo, produto.nome, AVG(produto.unidades) AS averageUnidades
+FROM produto
+GROUP BY produto.codigo, produto.nome;
 ```
 
 
 ##### *c)* 
 
 ```
-... Write here your answer ...
+SELECT AVG(quantidade) AS average
+FROM (
+    SELECT item.numEnc, COUNT(item.codProd) AS quantidade
+    FROM item
+    GROUP BY item.numEnc
+) AS quantityPerNumEnc;
 ```
 
 
