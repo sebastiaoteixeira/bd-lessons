@@ -425,7 +425,12 @@ FROM (
 ##### *d)* 
 
 ```
-... Write here your answer ...
+SELECT fornecedor.nome, produto.nome, SUM(item.unidades) AS quantidade
+FROM item
+JOIN encomenda ON item.numEnc = encomenda.numero
+JOIN produto ON item.codProd = produto.codigo
+JOIN fornecedor ON encomenda.fornecedor = fornecedor.nif
+GROUP BY fornecedor.nome, produto.nome;
 ```
 
 ### 5.3
@@ -443,37 +448,63 @@ FROM (
 ##### *a)*
 
 ```
-... Write here your answer ...
+SELECT paciente.nome
+FROM paciente
+LEFT JOIN prescricao ON paciente.numUtente = prescricao.numUtente
+WHERE prescricao.numPresc IS NULL;
 ```
 
 ##### *b)* 
 
 ```
-... Write here your answer ...
+SELECT medico.especialidade, COUNT(prescricao.numPresc) AS numPrescricoes
+FROM medico
+JOIN prescricao ON medico.numSNS = prescricao.numMedico
+GROUP BY medico.especialidade;
 ```
 
 
 ##### *c)* 
 
 ```
-... Write here your answer ...
+SELECT prescricao.farmacia, COUNT(prescricao.farmacia) AS numPrescricoes
+FROM medico
+JOIN prescricao ON medico.numSNS = prescricao.numMedico
+WHERE prescricao.farmacia IS NOT NULL
+GROUP BY prescricao.farmacia;
 ```
 
 
 ##### *d)* 
 
 ```
-... Write here your answer ...
+SELECT farmaco.nome, farmaco.formula
+FROM farmaco
+JOIN farmaceutica ON farmaco.numRegFarm = farmaceutica.numReg
+WHERE farmaceutica.numReg != 906;
 ```
 
 ##### *e)* 
 
 ```
-... Write here your answer ...
+SELECT farmacia.nome, farmaceutica.nome, COUNT(farmaco.nome) AS vendas
+FROM farmaco
+JOIN presc_farmaco ON presc_farmaco.numRegFarm = farmaco.numRegFarm AND presc_farmaco.nomeFarmaco = farmaco.nome
+JOIN prescricao ON prescricao.numPresc = presc_farmaco.numPresc
+JOIN farmacia ON prescricao.farmacia = farmacia.nome
+JOIN farmaceutica ON farmaco.numRegFarm = farmaceutica.numReg
+GROUP BY farmacia.nome, farmaco.numRegFarm, farmaceutica.nome;
 ```
 
 ##### *f)* 
 
 ```
-... Write here your answer ...
+SELECT DISTINCT paciente.*
+FROM paciente
+JOIN (
+    SELECT prescricao.numUtente, COUNT(prescricao.numMedico) AS medicos
+    FROM prescricao
+    GROUP BY prescricao.numUtente
+) AS subquery ON paciente.numUtente = subquery.numUtente
+WHERE subquery.medicos >= 2;
 ```
