@@ -1,62 +1,61 @@
--- Drop tables if they already exist (order doesn't matter here)
-DROP TABLE IF EXISTS emp_DEPENDENT;
-DROP TABLE IF EXISTS emp_WORKS_ON;
-DROP TABLE IF EXISTS emp_PROJECT;
-DROP TABLE IF EXISTS emp_DEPT_LOCATIONS;
-DROP TABLE IF EXISTS emp_EMPLOYEE;
-DROP TABLE IF EXISTS emp_DEPARTMENT;
+DROP TABLE IF EXISTS Company_dependent;
+DROP TABLE IF EXISTS Company_works_on;
+DROP TABLE IF EXISTS Company_project;
+DROP TABLE IF EXISTS Company_dept_locations;
+DROP TABLE IF EXISTS Company_employee;
+DROP TABLE IF EXISTS Company_department;
 
-CREATE TABLE emp_DEPARTMENT (
-  Dname VARCHAR(255) NOT NULL,
-  Dnumber INT NOT NULL PRIMARY KEY,
-  Mgrssn CHAR(11),
-  Mgrstartdate DATE
+CREATE TABLE Company_department (
+  dname VARCHAR(255) NOT NULL,
+  dnumber INT NOT NULL PRIMARY KEY,
+  mgrssn CHAR(11),
+  mgrstartdate DATE
 );
 
-CREATE TABLE emp_EMPLOYEE (
-  Fname VARCHAR(255) NOT NULL,
-  Minit CHAR(1),
-  Lname VARCHAR(255) NOT NULL,
-  Ssn INT PRIMARY KEY,
-  Bdate DATE,
-  Address VARCHAR(255),
-  Sex CHAR(1),
-  Salary DECIMAL(10,2),
-  Super_ssn INT,
-  Dno INT NOT NULL,
-  FOREIGN KEY (Dno) REFERENCES emp_DEPARTMENT(Dnumber)
+CREATE TABLE Company_employee (
+  fname VARCHAR(255) NOT NULL,
+  minit CHAR(1),
+  lname VARCHAR(255) NOT NULL,
+  ssn INT PRIMARY KEY,
+  bdate DATE,
+  address VARCHAR(255),
+  sex CHAR(1),
+  salary DECIMAL(10,2),
+  super_ssn INT,
+  dno INT NOT NULL,
+  FOREIGN KEY (dno) REFERENCES Company_department(dnumber)
 );
 
-CREATE TABLE emp_DEPT_LOCATIONS (
-  Dnumber INT NOT NULL,
-  Dlocation VARCHAR(255) NOT NULL,
-  PRIMARY KEY (Dnumber, Dlocation),
-  FOREIGN KEY (Dnumber) REFERENCES emp_DEPARTMENT(Dnumber)
+CREATE TABLE Company_dept_locations (
+  dnumber INT NOT NULL,
+  dlocation VARCHAR(255) NOT NULL,
+  PRIMARY KEY (dnumber, dlocation),
+  FOREIGN KEY (dnumber) REFERENCES Company_department(dnumber)
 );
 
-CREATE TABLE emp_PROJECT (
-  Pname VARCHAR(255) NOT NULL,
-  Pnumber INT NOT NULL PRIMARY KEY,
-  Plocation VARCHAR(255),
-  Dnum INT NOT NULL,
-  FOREIGN KEY (Dnum) REFERENCES emp_DEPARTMENT(Dnumber)
+CREATE TABLE Company_project (
+  pname VARCHAR(255) NOT NULL,
+  pnumber INT NOT NULL PRIMARY KEY,
+  plocation VARCHAR(255),
+  dnum INT NOT NULL,
+  FOREIGN KEY (dnum) REFERENCES Company_department(dnumber)
 );
 
-CREATE TABLE emp_WORKS_ON (
-  Essn INT NOT NULL,
-  Pno INT NOT NULL,
-  Hours INT,
-  PRIMARY KEY (Essn, Pno),
-  FOREIGN KEY (Essn) REFERENCES emp_EMPLOYEE(Ssn),
-  FOREIGN KEY (Pno) REFERENCES emp_PROJECT(Pnumber)
+CREATE TABLE Company_works_on (
+  essn INT NOT NULL,
+  pno INT NOT NULL,
+  hours INT,
+  PRIMARY KEY (essn, pno),
+  FOREIGN KEY (essn) REFERENCES Company_employee(ssn),
+  FOREIGN KEY (pno) REFERENCES Company_project(pnumber)
 );
 
-CREATE TABLE emp_DEPENDENT (
-  Essn INT NOT NULL,
-  Dependent_name VARCHAR(255) NOT NULL,
-  Sex CHAR(1),
-  Bdate DATE,
-  Relationship VARCHAR(255),
-  PRIMARY KEY (Essn, Dependent_name),
-  FOREIGN KEY (Essn) REFERENCES emp_EMPLOYEE(Ssn)
+CREATE TABLE Company_dependent (
+  essn INT NOT NULL,
+  dependent_name VARCHAR(255) NOT NULL,
+  sex CHAR(1),
+  bdate DATE,
+  relationship VARCHAR(255),
+  PRIMARY KEY (essn, dependent_name),
+  FOREIGN KEY (essn) REFERENCES Company_employee(ssn)
 );
