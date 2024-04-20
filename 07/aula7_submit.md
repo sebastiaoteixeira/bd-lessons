@@ -7,16 +7,17 @@
 
 ```
 ... Write here your answer ...
-Esta na terceira forma normal 
-It is possible to <u>underline</u> -> {A, B,.. }
--> R1 (_A_, B, C)
--> R2 (B,F)
+Primeira forma normal 
+Não existem atributos multivalor, mas existem dependências parciais
 ```
 
 ### *b)* 
 
 ```
-
+-> Livro (_Titulo_Livro_, _Nome_Autor_, Editor, Tipo_Livro, NoPaginas,Ano_Publicacao)
+-> Preco (_Tipo_Livro_, _NoPaginas_, Preco)
+-> Autor (_Nome_Autor_, Afiliacao_Autor)
+-> Editor (_Editor_, Endereco_Editor)
 ```
 
 
