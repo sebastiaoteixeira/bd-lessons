@@ -28,21 +28,21 @@ Não existem atributos multivalor, mas existem dependências parciais
 ### *a)*
 
 ```
--> R1 (_A_, _B_, C, D, E, F, G, H, I, J)
+AB
 ```
 
 
 ### *b)* 
 
 ```
--> R2 (_A_, _B_, C) (_A_, D, E, I, J) (_B_, F, G, H)
+(_A_, _B_, C) (_A_, D, E, I, J) (_B_, F, G, H)
 ```
 
 
 ### *c)* 
 
 ```
--> R3 (_A_, _B_ C) (_A_, D, E) (_B_, F) (F, G, H) (D, I, J)
+(_A_, _B_ C) (_A_, D, E) (_B_, F) (F, G, H) (D, I, J)
 ```
 
 
@@ -51,21 +51,21 @@ Não existem atributos multivalor, mas existem dependências parciais
 ### *a)*
 
 ```
-(A, B)
+AB
 ```
 
 
 ### *b)* 
 
 ```
-(A, B, C, D, E)
+(_A_, _B_, C, D) (_D_, E)
 ```
 
 
 ### *c)* 
 
 ```
-... Write here your answer ...
+(_C_, A) (_D_, E) (_B_, C, D)
 ```
 
 
@@ -75,24 +75,24 @@ Não existem atributos multivalor, mas existem dependências parciais
 ### *a)*
 
 ```
-... Write here your answer ...
+AB
 ```
 
 ### *b)* 
 
 ```
-... Write here your answer ...
+(_A_, _B_, D, E) (_A_, C)
 ```
 
 
 ### *c)* 
 
 ```
-... Write here your answer ...
+(_A_, _B_, E) (_A_, C) (_C_, D)
 ```
 
 ### *d)* 
 
 ```
-... Write here your answer ...
+Já está na BCNF porque não existe nenhuma relação que não seja X->Y onde X é superchave e Y é subchave
 ```
