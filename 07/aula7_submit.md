@@ -7,6 +7,7 @@
 
 ```
 ... Write here your answer ...
+Esta na terceira forma normal 
 It is possible to <u>underline</u> -> {A, B,.. }
 -> R1 (_A_, B, C)
 -> R2 (B,F)
@@ -15,7 +16,7 @@ It is possible to <u>underline</u> -> {A, B,.. }
 ### *b)* 
 
 ```
-... Write here your answer ...
+
 ```
 
 
@@ -26,21 +27,21 @@ It is possible to <u>underline</u> -> {A, B,.. }
 ### *a)*
 
 ```
-... Write here your answer ...
+-> R1 (_A_, _B_, C, D, E, F, G, H, I, J)
 ```
 
 
 ### *b)* 
 
 ```
-... Write here your answer ...
+-> R2 (_A_, _B_, C) (_A_, D, E, I, J) (_B_, F, G, H)
 ```
 
 
 ### *c)* 
 
 ```
-... Write here your answer ...
+-> R3 (_A_, _B_ C) (_A_, D, E) (_B_, F) (F, G, H) (D, I, J)
 ```
 
 
@@ -49,14 +50,14 @@ It is possible to <u>underline</u> -> {A, B,.. }
 ### *a)*
 
 ```
-... Write here your answer ...
+(A, B)
 ```
 
 
 ### *b)* 
 
 ```
-... Write here your answer ...
+(A, B, C, D, E)
 ```
 
 
