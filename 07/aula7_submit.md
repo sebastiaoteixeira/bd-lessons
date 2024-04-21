@@ -6,7 +6,6 @@
 ### *a)*
 
 ```
-... Write here your answer ...
 Primeira forma normal 
 Não existem atributos multivalor, mas existem dependências parciais
 ```
