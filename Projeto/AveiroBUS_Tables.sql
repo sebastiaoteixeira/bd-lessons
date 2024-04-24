@@ -1,9 +1,9 @@
-CREATE SCHEMA UrbanBUS
-
 CREATE TABLE [stop] (
   [id] integer PRIMARY KEY,
   [name] nvarchar(255),
-  [location] int
+  [location] nvarchar(255),
+  [longitude] decimal(9,6),
+  [latitude] decimal(9,6)
 )
 GO
 
@@ -18,7 +18,8 @@ CREATE TABLE [line] (
   [number] integer PRIMARY KEY,
   [designation] nvarchar(255),
   [idFirstStop] integer,
-  [idLastStop] integer
+  [idLastStop] integer,
+  [color] integer
 )
 GO
 
@@ -126,9 +127,10 @@ CREATE TABLE [stop_journeyInstance] (
 GO
 
 CREATE TABLE [journeyInstance] (
-  [id] integer PRIMARY KEY,
+  [id] integer,
   [idJourney] integer,
-  [startTime] datetime
+  [startTime] datetime,
+  PRIMARY KEY ([id], [idJourney])
 )
 GO
 
