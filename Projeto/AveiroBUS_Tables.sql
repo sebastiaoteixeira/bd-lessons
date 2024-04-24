@@ -1,36 +1,38 @@
-CREATE TABLE [stop] (
+CREATE SCHEMA [UrbanBus]
+
+CREATE TABLE [UrbanBus.stop] (
   [id] integer PRIMARY KEY,
   [name] nvarchar(255),
   [location] nvarchar(255),
-  [longitude] decimal(9,6),
-  [latitude] decimal(9,6)
+  [longitude] decimal(9,6) CHECK (longitude BETWEEN -180 AND 180),
+  [latitude] decimal(9,6) CHECK (longitude BETWEEN -180 AND 180)
 )
 GO
 
-CREATE TABLE [line_stop] (
+CREATE TABLE [UrbanBus.line_stop] (
   [idLine] integer,
   [idStop] integer,
   PRIMARY KEY ([idLine], [idStop])
 )
 GO
 
-CREATE TABLE [line] (
+CREATE TABLE [UrbanBus.line] (
   [number] integer PRIMARY KEY,
   [designation] nvarchar(255),
   [idFirstStop] integer,
   [idLastStop] integer,
-  [color] integer
+  [color] integer CHECK (color BETWEEN 0 AND 16777215)
 )
 GO
 
-CREATE TABLE [exceptions] (
+CREATE TABLE [UrbanBus.exceptions] (
   [idJourney] integer,
   [idStop] integer,
   PRIMARY KEY ([idJourney], [idStop])
 )
 GO
 
-CREATE TABLE [journey] (
+CREATE TABLE [UrbanBus.journey] (
   [id] integer PRIMARY KEY,
   [startTime] datetime,
   [idFirstStop] integer,
@@ -38,13 +40,13 @@ CREATE TABLE [journey] (
 )
 GO
 
-CREATE TABLE [zone] (
+CREATE TABLE [UrbanBus.zone] (
   [id] integer PRIMARY KEY,
   [designation] integer
 )
 GO
 
-CREATE TABLE [zone_stop] (
+CREATE TABLE [UrbanBus.zone_stop] (
   [idStop1] integer,
   [idStop2] integer,
   [idZone] integer,
@@ -52,50 +54,50 @@ CREATE TABLE [zone_stop] (
 )
 GO
 
-CREATE TABLE [transportTicket] (
+CREATE TABLE [UrbanBus.transportTicket] (
   [number] integer PRIMARY KEY,
   [zoneNumber] integer
 )
 GO
 
-CREATE TABLE [tripsTicket] (
+CREATE TABLE [UrbanBus.tripsTicket] (
   [ticketNumber] integer PRIMARY KEY,
   [tripsCount] integer
 )
 GO
 
-CREATE TABLE [subscriptionTicket] (
+CREATE TABLE [UrbanBus.subscriptionTicket] (
   [ticketNumber] integer PRIMARY KEY,
   [expirationDate] date
 )
 GO
 
-CREATE TABLE [itemTariff] (
+CREATE TABLE [UrbanBus.itemTariff] (
   [id] integer PRIMARY KEY,
   [value] integer
 )
 GO
 
-CREATE TABLE [purchasedItem] (
+CREATE TABLE [UrbanBus.purchasedItem] (
   [id] integer PRIMARY KEY,
   [idItemPreco] integer,
   [idTransportTicket] integer
 )
 GO
 
-CREATE TABLE [subscription] (
+CREATE TABLE [UrbanBus.subscription] (
   [itemId] integer PRIMARY KEY,
   [days] integer
 )
 GO
 
-CREATE TABLE [trips] (
+CREATE TABLE [UrbanBus.trips] (
   [itemId] integer PRIMARY KEY,
   [tripsCount] integer
 )
 GO
 
-CREATE TABLE [user] (
+CREATE TABLE [UrbanBus.user] (
   [number] integer,
   [numberTransportTicket] integer,
   [name] nvarchar(255),
@@ -109,7 +111,7 @@ CREATE TABLE [user] (
 )
 GO
 
-CREATE TABLE [validation] (
+CREATE TABLE [UrbanBus.validation] (
   [numberTransportTicket] integer,
   [idJourneyInstance] integer,
   [idStop] integer,
@@ -118,7 +120,7 @@ CREATE TABLE [validation] (
 )
 GO
 
-CREATE TABLE [stop_journeyInstance] (
+CREATE TABLE [UrbanBus.stop_journeyInstance] (
   [idJourneyInstance] integer,
   [idStop] integer,
   [stopTime] datetime,
@@ -126,7 +128,7 @@ CREATE TABLE [stop_journeyInstance] (
 )
 GO
 
-CREATE TABLE [journeyInstance] (
+CREATE TABLE [UrbanBus.journeyInstance] (
   [id] integer,
   [idJourney] integer,
   [startTime] datetime,
@@ -134,80 +136,80 @@ CREATE TABLE [journeyInstance] (
 )
 GO
 
-ALTER TABLE [line] ADD FOREIGN KEY ([idFirstStop]) REFERENCES [stop] ([id])
+ALTER TABLE [UrbanBus.line] ADD FOREIGN KEY ([idFirstStop]) REFERENCES [stop] ([id])
 GO
 
-ALTER TABLE [line] ADD FOREIGN KEY ([idLastStop]) REFERENCES [stop] ([id])
+ALTER TABLE [UrbanBus.line] ADD FOREIGN KEY ([idLastStop]) REFERENCES [stop] ([id])
 GO
 
-ALTER TABLE [journey] ADD FOREIGN KEY ([idFirstStop]) REFERENCES [stop] ([id])
+ALTER TABLE [UrbanBus.journey] ADD FOREIGN KEY ([idFirstStop]) REFERENCES [stop] ([id])
 GO
 
-ALTER TABLE [journey] ADD FOREIGN KEY ([idLastStop]) REFERENCES [stop] ([id])
+ALTER TABLE [UrbanBus.journey] ADD FOREIGN KEY ([idLastStop]) REFERENCES [stop] ([id])
 GO
 
-ALTER TABLE [exceptions] ADD FOREIGN KEY ([idJourney]) REFERENCES [journey] ([id])
+ALTER TABLE [UrbanBus.exceptions] ADD FOREIGN KEY ([idJourney]) REFERENCES [journey] ([id])
 GO
 
-ALTER TABLE [exceptions] ADD FOREIGN KEY ([idStop]) REFERENCES [stop] ([id])
+ALTER TABLE [UrbanBus.exceptions] ADD FOREIGN KEY ([idStop]) REFERENCES [stop] ([id])
 GO
 
-ALTER TABLE [line_stop] ADD FOREIGN KEY ([idLine]) REFERENCES [line] ([number])
+ALTER TABLE [UrbanBus.line_stop] ADD FOREIGN KEY ([idLine]) REFERENCES [line] ([number])
 GO
 
-ALTER TABLE [line_stop] ADD FOREIGN KEY ([idStop]) REFERENCES [stop] ([id])
+ALTER TABLE [UrbanBus.line_stop] ADD FOREIGN KEY ([idStop]) REFERENCES [stop] ([id])
 GO
 
-ALTER TABLE [zone_stop] ADD FOREIGN KEY ([idStop1]) REFERENCES [stop] ([id])
+ALTER TABLE [UrbanBus.zone_stop] ADD FOREIGN KEY ([idStop1]) REFERENCES [stop] ([id])
 GO
 
-ALTER TABLE [zone_stop] ADD FOREIGN KEY ([idStop2]) REFERENCES [stop] ([id])
+ALTER TABLE [UrbanBus.zone_stop] ADD FOREIGN KEY ([idStop2]) REFERENCES [stop] ([id])
 GO
 
-ALTER TABLE [zone_stop] ADD FOREIGN KEY ([idZone]) REFERENCES [zone] ([id])
+ALTER TABLE [UrbanBus.zone_stop] ADD FOREIGN KEY ([idZone]) REFERENCES [zone] ([id])
 GO
 
-ALTER TABLE [transportTicket] ADD FOREIGN KEY ([zoneNumber]) REFERENCES [zone] ([id])
+ALTER TABLE [UrbanBus.transportTicket] ADD FOREIGN KEY ([zoneNumber]) REFERENCES [zone] ([id])
 GO
 
-ALTER TABLE [subscriptionTicket] ADD FOREIGN KEY ([ticketNumber]) REFERENCES [transportTicket] ([number])
+ALTER TABLE [UrbanBus.subscriptionTicket] ADD FOREIGN KEY ([ticketNumber]) REFERENCES [transportTicket] ([number])
 GO
 
-ALTER TABLE [tripsTicket] ADD FOREIGN KEY ([ticketNumber]) REFERENCES [transportTicket] ([number])
+ALTER TABLE [UrbanBus.tripsTicket] ADD FOREIGN KEY ([ticketNumber]) REFERENCES [transportTicket] ([number])
 GO
 
-ALTER TABLE [itemTariff] ADD FOREIGN KEY ([id]) REFERENCES [zone] ([id])
+ALTER TABLE [UrbanBus.itemTariff] ADD FOREIGN KEY ([id]) REFERENCES [zone] ([id])
 GO
 
-ALTER TABLE [itemTariff] ADD FOREIGN KEY ([id]) REFERENCES [subscription] ([itemId])
+ALTER TABLE [UrbanBus.itemTariff] ADD FOREIGN KEY ([id]) REFERENCES [subscription] ([itemId])
 GO
 
-ALTER TABLE [itemTariff] ADD FOREIGN KEY ([id]) REFERENCES [trips] ([itemId])
+ALTER TABLE [UrbanBus.itemTariff] ADD FOREIGN KEY ([id]) REFERENCES [trips] ([itemId])
 GO
 
-ALTER TABLE [transportTicket] ADD FOREIGN KEY ([number]) REFERENCES [user] ([numberTransportTicket])
+ALTER TABLE [UrbanBus.transportTicket] ADD FOREIGN KEY ([number]) REFERENCES [user] ([numberTransportTicket])
 GO
 
-ALTER TABLE [stop_journeyInstance] ADD FOREIGN KEY ([idJourneyInstance]) REFERENCES [journeyInstance] ([id])
+ALTER TABLE [UrbanBus.stop_journeyInstance] ADD FOREIGN KEY ([idJourneyInstance]) REFERENCES [journeyInstance] ([id])
 GO
 
-ALTER TABLE [journeyInstance] ADD FOREIGN KEY ([idJourney]) REFERENCES [journey] ([id])
+ALTER TABLE [UrbanBus.journeyInstance] ADD FOREIGN KEY ([idJourney]) REFERENCES [journey] ([id])
 GO
 
-ALTER TABLE [stop_journeyInstance] ADD FOREIGN KEY ([idStop]) REFERENCES [stop] ([id])
+ALTER TABLE [UrbanBus.stop_journeyInstance] ADD FOREIGN KEY ([idStop]) REFERENCES [stop] ([id])
 GO
 
-ALTER TABLE [purchasedItem] ADD FOREIGN KEY ([idTransportTicket]) REFERENCES [transportTicket] ([number])
+ALTER TABLE [UrbanBus.purchasedItem] ADD FOREIGN KEY ([idTransportTicket]) REFERENCES [transportTicket] ([number])
 GO
 
-ALTER TABLE [purchasedItem] ADD FOREIGN KEY ([idItemPreco]) REFERENCES [itemTariff] ([id])
+ALTER TABLE [UrbanBus.purchasedItem] ADD FOREIGN KEY ([idItemPreco]) REFERENCES [itemTariff] ([id])
 GO
 
-ALTER TABLE [stop_journeyInstance] ADD FOREIGN KEY ([idStop]) REFERENCES [validation] ([idStop])
+ALTER TABLE [UrbanBus.stop_journeyInstance] ADD FOREIGN KEY ([idStop]) REFERENCES [validation] ([idStop])
 GO
 
-ALTER TABLE [validation] ADD FOREIGN KEY ([idJourneyInstance]) REFERENCES [stop_journeyInstance] ([idJourneyInstance])
+ALTER TABLE [UrbanBus.validation] ADD FOREIGN KEY ([idJourneyInstance]) REFERENCES [stop_journeyInstance] ([idJourneyInstance])
 GO
 
-ALTER TABLE [transportTicket] ADD FOREIGN KEY ([number]) REFERENCES [validation] ([numberTransportTicket])
+ALTER TABLE [UrbanBus.transportTicket] ADD FOREIGN KEY ([number]) REFERENCES [validation] ([numberTransportTicket])
 GO
