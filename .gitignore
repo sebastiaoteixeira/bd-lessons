@@ -7,3 +7,5 @@
 
 # Ignore cache files
 *.cache
+
+venv/
