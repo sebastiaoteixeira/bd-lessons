@@ -1,5 +1,3 @@
-CREATE SCHEMA [UrbanBus]
-
 CREATE TABLE [UrbanBus.stop] (
   [id] integer PRIMARY KEY,
   [name] nvarchar(255),
@@ -56,6 +54,7 @@ GO
 
 CREATE TABLE [UrbanBus.transportTicket] (
   [number] integer PRIMARY KEY,
+  [clientNumber] integer,
   [zoneNumber] integer
 )
 GO
@@ -97,9 +96,8 @@ CREATE TABLE [UrbanBus.trips] (
 )
 GO
 
-CREATE TABLE [UrbanBus.user] (
+CREATE TABLE [UrbanBus.client] (
   [number] integer,
-  [numberTransportTicket] integer,
   [name] nvarchar(255),
   [email] nvarchar(255),
   [nif] integer,
@@ -107,7 +105,7 @@ CREATE TABLE [UrbanBus.user] (
   [salt] nvarchar(255),
   [expiration] date,
   [token] nvarchar(255),
-  PRIMARY KEY ([number], [token])
+  PRIMARY KEY ([number])
 )
 GO
 
@@ -132,7 +130,7 @@ CREATE TABLE [UrbanBus.journeyInstance] (
   [id] integer,
   [idJourney] integer,
   [startTime] datetime,
-  PRIMARY KEY ([id], [idJourney])
+  PRIMARY KEY ([id])
 )
 GO
 
@@ -181,13 +179,13 @@ GO
 ALTER TABLE [UrbanBus.itemTariff] ADD FOREIGN KEY ([id]) REFERENCES [UrbanBus.zone] ([id])
 GO
 
-ALTER TABLE [UrbanBus.itemTariff] ADD FOREIGN KEY ([id]) REFERENCES [UrbanBus.subscription] ([itemId])
+ALTER TABLE [UrbanBus.subscription] ADD FOREIGN KEY ([itemId]) REFERENCES [UrbanBus.itemTariff] ([id])
 GO
 
-ALTER TABLE [UrbanBus.itemTariff] ADD FOREIGN KEY ([id]) REFERENCES [UrbanBus.trips] ([itemId])
+ALTER TABLE [UrbanBus.trips] ADD FOREIGN KEY ([itemId]) REFERENCES [UrbanBus.itemTariff] ([id])
 GO
 
-ALTER TABLE [UrbanBus.transportTicket] ADD FOREIGN KEY ([number]) REFERENCES [UrbanBus.user] ([numberTransportTicket])
+ALTER TABLE [UrbanBus.transportTicket] ADD FOREIGN KEY ([clientNumber]) REFERENCES [UrbanBus.client] ([number])
 GO
 
 ALTER TABLE [UrbanBus.stop_journeyInstance] ADD FOREIGN KEY ([idJourneyInstance]) REFERENCES [UrbanBus.journeyInstance] ([id])
@@ -205,11 +203,9 @@ GO
 ALTER TABLE [UrbanBus.purchasedItem] ADD FOREIGN KEY ([idItemPreco]) REFERENCES [UrbanBus.itemTariff] ([id])
 GO
 
-ALTER TABLE [UrbanBus.stop_journeyInstance] ADD FOREIGN KEY ([idStop]) REFERENCES [UrbanBus.validation] ([idStop])
+ALTER TABLE [UrbanBus.validation] ADD FOREIGN KEY ([idJourneyInstance], [idStop]) REFERENCES [UrbanBus.stop_journeyInstance] ([idJourneyInstance], [idStop])
 GO
 
-ALTER TABLE [UrbanBus.validation] ADD FOREIGN KEY ([idJourneyInstance]) REFERENCES [UrbanBus.stop_journeyInstance] ([idJourneyInstance])
+ALTER TABLE [UrbanBus.validation] ADD FOREIGN KEY ([numberTransportTicket]) REFERENCES [UrbanBus.transportTicket] ([number])
 GO
 
-ALTER TABLE [UrbanBus.transportTicket] ADD FOREIGN KEY ([number]) REFERENCES [UrbanBus.validation] ([numberTransportTicket])
-GO
