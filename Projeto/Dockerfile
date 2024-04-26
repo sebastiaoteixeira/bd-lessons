@@ -29,4 +29,7 @@ RUN apt-get -y clean
 COPY . /app
 WORKDIR /app
 
+# expose port 5000.
+EXPOSE 5000
+
 ENTRYPOINT ["python", "run.py"]

@@ -1,6 +1,7 @@
 import sys
 import getopt
 from .utils import runSQL
+from .server import app
 
 def run():
     try:
@@ -17,6 +18,9 @@ def run():
             connection = runSQL.dbconnect()
             for res in runSQL.runSQLFile(connection, arg):
                 print(res)
+            connection.closeConnection()
             return
-    
+        
+    print("Starting api server...")
+    app.run(host="0.0.0.0", port=5000, debug=True)
 

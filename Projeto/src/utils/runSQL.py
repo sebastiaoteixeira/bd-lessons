@@ -17,6 +17,11 @@ class dbconnect():
             self.conn = pyodbc.connect(self.connectionString)
         return self.conn
 
+    def closeConnection(self):
+        if self.conn:
+            self.conn.close()
+            self.conn = None
+
 def runSQL(connection, query, args):
     conn = connection.getConnection()
     cursor = conn.cursor()
