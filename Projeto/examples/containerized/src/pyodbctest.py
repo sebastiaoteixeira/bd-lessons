@@ -10,6 +10,7 @@ USERNAME = os.environ.get('SQL_USER')
 PASSWORD = os.environ.get('SQL_PASSWORD')
 
 connectionString = f'DRIVER={{ODBC Driver 18 for SQL Server}};SERVER={SERVER};DATABASE={DATABASE};UID={USERNAME};PWD={PASSWORD};TrustServerCertificate=yes'
+print(connectionString)
 
 conn = pyodbc.connect(connectionString)
 
