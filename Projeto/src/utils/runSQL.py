@@ -4,14 +4,15 @@ import os
 class dbconnect():
     def __init__(self):
         self.conn = None
-        
+
         SERVER = os.environ.get('SQL_SERVER')
         DATABASE = os.environ.get('SQL_DATABASE')
         USERNAME = os.environ.get('SQL_USER')
         PASSWORD = os.environ.get('SQL_PASSWORD')
 
         self.connectionString = f'DRIVER={{ODBC Driver 18 for SQL Server}};SERVER={SERVER};DATABASE={DATABASE};UID={USERNAME};PWD={PASSWORD};TrustServerCertificate=yes'
-    
+        print(self.connectionString)
+
     def getConnection(self):
         if self.conn is None:
             self.conn = pyodbc.connect(self.connectionString)
@@ -67,8 +68,4 @@ def runSQLFile(connection, queryFile):
 
             res = runSQL(connection, query, inputs)
             yield res
-
-if __name__ == '__main__':
-    for result in runSQLFile('query.sql'):
-        print(result)
 
