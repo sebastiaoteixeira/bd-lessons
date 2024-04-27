@@ -79,7 +79,7 @@ def journeys():
 
 @app.route('/api/v1/journey/<int:journeynumber>', methods=['GET'])
 def journey(journeynumber):
-    # TODO: Implement journey getter (with include stops option)
+    # TODO: Implement journey getter
     pass
 
 @app.route('/api/v1/line/<int:linenumber>/journeys', methods=['GET'])
