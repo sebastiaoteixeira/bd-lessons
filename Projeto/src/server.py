@@ -1,8 +1,21 @@
 from flask import Flask, jsonify
+from .utils.runSQL import runSQLQuery, dbconnect
+from datetime import datetime
 
 app = Flask(__name__)
 
+# Stats
+stats = {
+    'start_time': datetime.utcnow(),
+    'requests': 0,
+    'errors': 0
+}
 
+# Connect to the database
+connection = dbconnect()
+
+
+## HELLO WORLD ##
 @app.route('/api/v1/hello', methods=['GET'])
 def hello():
     return jsonify({'message': 'Hello, World!'})
@@ -35,6 +48,9 @@ def require_auth(func):
 @app.route('/api/v1/stops', methods=['GET'])
 def stops():
     # TODO: Implement stops getter
+
+    for stop in runSQLQuery(connection, 'queries/stops.sql', None):
+        yield stop
     pass
 
 @app.route('/api/v1/stop/<int:stopnumber>', methods=['GET'])
@@ -127,3 +143,18 @@ def line_journeyInstances(linenumber):
     pass
 
 
+
+
+
+
+
+
+
+## STATS ##
+@app.route('/api/v1/stats', methods=['GET'])
+def stats():
+    return jsonify({
+        'uptime': datetime.datetime.now() - stats['start_time'],
+        'requests': stats['requests'],
+        'errors': stats['errors']
+    })

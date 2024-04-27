@@ -30,11 +30,23 @@ def runSQL(connection, query, args):
         cursor.execute(query, args)
     else:
         cursor.execute(query)
-    if 'SELECT' in query:
-        rows = cursor.fetchall()
-        return rows
-    conn.commit()
-    return ('Query executed successfully',)
+    if 'SELECT' in query.upper():
+        for row in cursor:
+            yield row
+    else:
+        conn.commit()
+        return ('Query executed successfully',)
+
+def runSQLQuery(connection, queryFile, args):
+    with open(queryFile, 'r') as file:
+        query = file.read()
+
+    # Remove comments
+    query = '\n'.join([line for line in query.split('\n') if not line.startswith('--')])
+
+    for row in runSQL(connection, query, args):
+        yield row
+
 
 def runSQLFile(connection, queryFile):
     with open(queryFile, 'r') as file:
