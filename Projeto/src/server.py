@@ -53,22 +53,22 @@ def line(linenumber):
     pass
 
 @app.route('/api/v1/line/<int:linenumber>/stops', methods=['GET'])
-def stations(linenumber):
+def line_stops(linenumber):
     # TODO: Implement stops getter for a line (ordened and with time to next stop)
     pass
 
 @app.route('/api/v1/line/<int:linenumber>/stop/<int:stopnumber>', methods=['GET'])
-def station(linenumber, stopnumber):
-    # TODO: Implement stop getter for a line (with time to next stop)
+def line_stop(linenumber, stopnumber):
+    # TODO: Implement stop getter for a line (should return next stop and time to next stop)
     pass
 
 @app.route('/api/v1/line/<int:linenumber>/stop/<int:stopnumber>/next', methods=['GET'])
-def next_station(linenumber, stopnumber):
+def next_stop(linenumber, stopnumber):
     # TODO: Implement next stop getter for a stop in a line
     pass
 
 @app.route('/api/v1/line/<int:linenumber>/stop/<int:stopnumber>/prev', methods=['GET'])
-def prev_station(linenumber, stopnumber):
+def prev_stop(linenumber, stopnumber):
     # TODO: Implement previous stop getter for a stop in a line
     pass
 
@@ -96,8 +96,8 @@ def price(ticketType, start, end):
 
 
 # Module 3: Statistics and Registers
-@app.route('/api/v1/journeyInstance', methods=['GET'])
-def journeyInstance():
+@app.route('/api/v1/journeyInstances', methods=['GET'])
+def journeyInstances():
     # TODO: Implement journey instance getter (with mintime, maxtime, journey and/or line options)
     pass
 
@@ -112,12 +112,12 @@ def journeyInstanceStops(journeyInstanceNumber):
     pass
 
 @app.route('/api/v1/journeyInstance/<int:journeyInstanceNumber>/validations', methods=['GET'])
-def journeyInstanceValidations(journeyInstanceNumber, ):
+def journeyInstanceValidations(journeyInstanceNumber):
     # TODO: Implement journey instance validations getter (with mintime and/or maxtime options)
     pass
 
 @app.route('/api/v1/journeyInstance/<int:journeyInstanceNumber>/stop/<int:stopnumber>/validations', methods=['GET'])
-def journeyInstanceStop(journeyInstanceNumber, stopnumber):
+def journeyInstanceStopValidations(journeyInstanceNumber, stopnumber):
     # TODO: Implement journey instance stop getter
     pass
 
