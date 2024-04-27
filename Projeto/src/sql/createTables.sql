@@ -1,5 +1,5 @@
 CREATE TABLE [UrbanBus.stop] (
-  [id] integer PRIMARY KEY,
+  [id] integer IDENTITY(1,1) PRIMARY KEY,
   [name] nvarchar(255),
   [location] nvarchar(255),
   [longitude] decimal(9,6) CHECK (longitude BETWEEN -180 AND 180),
@@ -31,7 +31,7 @@ CREATE TABLE [UrbanBus.exceptions] (
 GO
 
 CREATE TABLE [UrbanBus.journey] (
-  [id] integer PRIMARY KEY,
+  [id] integer IDENTITY(1,1) PRIMARY KEY,
   [startTime] datetime,
   [idFirstStop] integer,
   [idLastStop] integer
@@ -39,7 +39,7 @@ CREATE TABLE [UrbanBus.journey] (
 GO
 
 CREATE TABLE [UrbanBus.zone] (
-  [id] integer PRIMARY KEY,
+  [id] integer IDENTITY(1,1) PRIMARY KEY,
   [designation] integer
 )
 GO
@@ -72,13 +72,13 @@ CREATE TABLE [UrbanBus.subscriptionTicket] (
 GO
 
 CREATE TABLE [UrbanBus.itemTariff] (
-  [id] integer PRIMARY KEY,
+  [id] integer IDENTITY(1,1) PRIMARY KEY,
   [value] integer
 )
 GO
 
 CREATE TABLE [UrbanBus.purchasedItem] (
-  [id] integer PRIMARY KEY,
+  [id] integer IDENTITY(1,1) PRIMARY KEY,
   [idItemPreco] integer,
   [idTransportTicket] integer
 )
