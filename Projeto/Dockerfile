@@ -17,6 +17,8 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
   && echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile \
   && echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
 
+RUN apt-get install -y entr
+
 # upgrade pip and install requirements.
 COPY /requirements.txt /requirements.txt
 RUN pip install --upgrade pip
@@ -32,4 +34,4 @@ WORKDIR /app
 # expose port 5000.
 EXPOSE 5000
 
-ENTRYPOINT ["python", "run.py"]
+ENTRYPOINT ["bash", "run.sh"]
