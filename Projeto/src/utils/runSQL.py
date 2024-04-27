@@ -23,7 +23,7 @@ class dbconnect():
             self.conn.close()
             self.conn = None
 
-def runSQL(connection, query, args):
+def runSQL(connection, query, args=None):
     conn = connection.getConnection()
     cursor = conn.cursor()
     if args:
@@ -37,7 +37,7 @@ def runSQL(connection, query, args):
         conn.commit()
         return ('Query executed successfully',)
 
-def runSQLQuery(connection, queryFile, args):
+def runSQLQuery(connection, queryFile, args=None):
     with open(queryFile, 'r') as file:
         query = file.read()
 

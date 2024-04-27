@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from .utils.runSQL import runSQLQuery, dbconnect
 from datetime import datetime
 
@@ -47,16 +47,31 @@ def require_auth(func):
 # Module 1: Stops, Lines and Journeys
 @app.route('/api/v1/stops', methods=['GET'])
 def stops():
-    # TODO: Implement stops getter
+    result = []
 
-    for stop in runSQLQuery(connection, 'queries/stops.sql', None):
-        yield stop
-    pass
+    name = request.args.get('name')
+    name = f'%{name}%' if name else '%'
+    
+
+    for stop in runSQLQuery(connection, './src/sql/stops.sql', (name,)):
+        result.append({
+            'id': stop[0],
+            'name': stop[1],
+            'latitude': stop[2],
+            'longitude': stop[3]
+        })
+    
+    return jsonify(result)
 
 @app.route('/api/v1/stop/<int:stopnumber>', methods=['GET'])
 def stop(stopnumber):
-    # TODO: Implement stop getter
-    pass
+    for stop in runSQLQuery(connection, './src/sql/stop.sql', (stopnumber,)):
+        return jsonify({
+            'id': stop[0],
+            'name': stop[1],
+            'latitude': stop[2],
+            'longitude': stop[3]
+        })
 
 @app.route('/api/v1/lines', methods=['GET'])
 def lines():
