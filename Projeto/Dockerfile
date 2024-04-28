@@ -34,4 +34,4 @@ WORKDIR /app
 # expose port 5000.
 EXPOSE 5000
 
-ENTRYPOINT ["bash", "run.sh"]
+ENTRYPOINT ["python", "run.py"]
