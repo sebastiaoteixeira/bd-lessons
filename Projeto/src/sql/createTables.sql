@@ -10,7 +10,10 @@ GO
 CREATE TABLE [UrbanBus.line_stop] (
   [idLine] integer,
   [idStop] integer,
-  PRIMARY KEY ([idLine], [idStop])
+  [idNextStop] integer,
+  [timeToNext] time,
+  [outbound] BIT NOT NULL DEFAULT 0,
+  PRIMARY KEY ([idLine], [idStop], [outbound])
 )
 GO
 
@@ -26,13 +29,14 @@ GO
 CREATE TABLE [UrbanBus.exceptions] (
   [idJourney] integer,
   [idStop] integer,
+  [timeModification] time,
   PRIMARY KEY ([idJourney], [idStop])
 )
 GO
 
 CREATE TABLE [UrbanBus.journey] (
   [id] integer IDENTITY(1,1) PRIMARY KEY,
-  [startTime] datetime,
+  [startTime] time,
   [idFirstStop] integer,
   [idLastStop] integer
 )
@@ -157,6 +161,8 @@ GO
 
 ALTER TABLE [UrbanBus.line_stop] ADD FOREIGN KEY ([idStop]) REFERENCES [UrbanBus.stop] ([id])
 GO
+
+ALTER TABLE [UrbanBus.line_stop] ADD FOREIGN KEY ([idNextStop]) REFERENCES [UrbanBus.stop] ([id])
 
 ALTER TABLE [UrbanBus.zone_stop] ADD FOREIGN KEY ([idStop1]) REFERENCES [UrbanBus.stop] ([id])
 GO
