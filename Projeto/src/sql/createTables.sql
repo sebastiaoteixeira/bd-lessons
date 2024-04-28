@@ -38,7 +38,8 @@ CREATE TABLE [UrbanBus.journey] (
   [id] integer IDENTITY(1,1) PRIMARY KEY,
   [startTime] time,
   [idFirstStop] integer,
-  [idLastStop] integer
+  [idLastStop] integer,
+  [idLine] integer
 )
 GO
 
@@ -148,6 +149,9 @@ ALTER TABLE [UrbanBus.journey] ADD FOREIGN KEY ([idFirstStop]) REFERENCES [Urban
 GO
 
 ALTER TABLE [UrbanBus.journey] ADD FOREIGN KEY ([idLastStop]) REFERENCES [UrbanBus.stop] ([id])
+GO
+
+ALTER TABLE [UrbanBus.journey] ADD FOREIGN KEY ([idLine]) REFERENCES [UrbanBus.line] ([number])
 GO
 
 ALTER TABLE [UrbanBus.exceptions] ADD FOREIGN KEY ([idJourney]) REFERENCES [UrbanBus.journey] ([id])

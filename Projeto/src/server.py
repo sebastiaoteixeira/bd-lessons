@@ -203,10 +203,37 @@ def next_stop(linenumber, stopnumber):
     for stop in runSQLQuery(connection, './src/sql/next_stop.sql', (linenumber, stopnumber, direction == 'outbound')):
         return jsonify(getLineStop(stop[0], stop[1:]))
 
+# Base function for journey getters
+def getJourney(journey=None, line=None, firstStop=None, lastStop=None, time=None, price=None):
+    return 
+
 @app.route('/api/v1/journeys', methods=['GET'])
 def journeys():
-    # TODO: Implement journeys getter (with include stops option)
-    pass
+    result = []
+
+    line = request.args.get('line')
+    includeStops = request.args.get('includeStops')
+    if includeStops:
+        includeStops = includeStops.split(',')
+    limit = request.args.get('limit')
+    if not limit:
+        limit = 1000
+    offset = request.args.get('offset')
+    if not offset:
+        offset = 0
+
+    for journey in runSQLQuery(connection, './src/sql/journeys.sql', (line,), limit, offset):
+        result.append({
+            'number': journey[0],
+            'idLine': journey[1],
+            'idFirstStop': journey[2],
+            'idLastStop': journey[3],
+            'time': str(journey[4]),
+            'price': journey[5]
+        })
+
+    return jsonify(result)
+
 
 @app.route('/api/v1/journey/<int:journeynumber>', methods=['GET'])
 def journey(journeynumber):
@@ -216,6 +243,7 @@ def journey(journeynumber):
 @app.route('/api/v1/line/<int:linenumber>/journeys', methods=['GET'])
 def line_journeys(linenumber):
     # TODO: Implement journeys getter for a line (with include stops option)
+    #       Alias: /api/v1/journeys?line=<linenumber>
     pass
 
 
