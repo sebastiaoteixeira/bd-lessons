@@ -1,4 +1,4 @@
-SELECT [id], [name], [location], [longitude], [latitude]
+SELECT [name], [location], [longitude], [latitude]
 FROM [UrbanBus.stop]
 WHERE [id] = ?;
 

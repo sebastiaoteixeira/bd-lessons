@@ -23,7 +23,7 @@ class dbconnect():
             self.conn.close()
             self.conn = None
 
-def runSQL(connection, query, args=None):
+def runSQL(connection, query, args=None, limit=1000, offset=0):
     conn = connection.getConnection()
     cursor = conn.cursor()
     if args:
@@ -31,20 +31,27 @@ def runSQL(connection, query, args=None):
     else:
         cursor.execute(query)
     if 'SELECT' in query.upper():
+        cursor.skip(offset)
         for row in cursor:
             yield row
+            if limit:
+                limit -= 1
+                if limit == 0:
+                    break
     else:
         conn.commit()
         return ('Query executed successfully',)
 
-def runSQLQuery(connection, queryFile, args=None):
+def runSQLQuery(connection, queryFile, args=None, limit=1000, offset=0):
+    limit = min(int(limit), 1000)
+    offset = max(int(offset), 0)
     with open(queryFile, 'r') as file:
         query = file.read()
 
     # Remove comments
     query = '\n'.join([line for line in query.split('\n') if not line.startswith('--')])
 
-    for row in runSQL(connection, query, args):
+    for row in runSQL(connection, query, args, limit, offset):
         yield row
 
 
@@ -61,23 +68,7 @@ def runSQLFile(connection, queryFile):
 
     for query in queries:
         query = query.strip()
-        inputs = {}
-        first = True
-        if ':' not in query:
-            print(query)
-            yield runSQL(connection, query, None)
-        else:
-            for query in query.split(':'):
-                if first:
-                    first = False
-                else:
-                    print('<enter value for ', query.split()[0], end='> ')
-                    inputs[query.split()[0]] = input()
-                print(query)
-
-            print(query)
-            print(inputs)
-
-            res = runSQL(connection, query, inputs)
-            yield res
+        print(query)
+        for row in runSQL(connection, query):
+            yield row
 
