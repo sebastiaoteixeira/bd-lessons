@@ -204,8 +204,33 @@ def next_stop(linenumber, stopnumber):
         return jsonify(getLineStop(stop[0], stop[1:]))
 
 # Base function for journey getters
-def getJourney(journey=None, line=None, firstStop=None, lastStop=None, time=None, price=None):
-    return 
+def getJourneyWhereClause(journey=None, line=None, time=None, price=None, stops=None):
+    args = [journey, line, time, price]
+    where_clause = ''
+
+    if any(args) or stops:
+        where_clause = ' WHERE '
+
+    if any(args):
+        where_clause += ' AND '.join([f'{arg[0]} = {arg[1]}' for arg in zip(['number', 'idLine', 'time', 'price'], args) if arg[1]])
+
+    if stops:
+        # All stops must be in the line of the journey
+        where_clause += f' AND {len(stops)} = (SELECT count(*) FROM [UrbanBus.line_stop] WHERE [UrbanBus.journey].[outbound] = [UrbanBus.line_stop].[outbound] AND idLine = {line} AND ('
+        for i, stop in enumerate(stops):
+            where_clause += f' OR idStop = {stop}'
+        where_clause += '))'
+        
+        # Stops should not be in the exceptions table
+        where_clause += f' AND id <> ANY (SELECT idJourney FROM [UrbanBus.exceptions] WHERE '
+        for i, stop in enumerate(stops):
+            where_clause += f' OR idStop = {stop}'
+        where_clause += ')'
+    
+    where_clause = where_clause.replace('WHERE  AND', 'WHERE').replace('WHERE  OR', 'WHERE').replace('( OR ', '(')
+
+    app.logger.info('WHERE CLAUSE: ' + where_clause)
+    return where_clause
 
 @app.route('/api/v1/journeys', methods=['GET'])
 def journeys():
@@ -222,14 +247,15 @@ def journeys():
     if not offset:
         offset = 0
 
-    for journey in runSQLQuery(connection, './src/sql/journeys.sql', (line,), limit, offset):
+    where_clause = getJourneyWhereClause(line=line, stops=includeStops)
+
+    for journey in runSQLQuery(connection, './src/sql/journeys.sql', limit=limit, offset=offset, append=where_clause):
         result.append({
-            'number': journey[0],
+            'id': journey[0],
             'idLine': journey[1],
             'idFirstStop': journey[2],
             'idLastStop': journey[3],
             'time': str(journey[4]),
-            'price': journey[5]
         })
 
     return jsonify(result)
@@ -238,12 +264,39 @@ def journeys():
 @app.route('/api/v1/journey/<int:journeynumber>', methods=['GET'])
 def journey(journeynumber):
     # TODO: Implement journey getter
+    for journey in runSQLQuery(connection, './src/sql/journey.sql', (journeynumber,)):
+        return jsonify({
+            'id': journeynumber,
+            'idLine': journey[0],
+            'idFirstStop': journey[1],
+            'idLastStop': journey[2],
+            'time': str(journey[3]),
+            'direction': 'outbound' if journey[4] else 'inbound'
+        })
     pass
 
 @app.route('/api/v1/line/<int:linenumber>/journeys', methods=['GET'])
 def line_journeys(linenumber):
     # TODO: Implement journeys getter for a line (with include stops option)
-    #       Alias: /api/v1/journeys?line=<linenumber>
+    # Alias: /api/v1/journeys?line=<linenumber>
+    result = []
+
+    includeStops = request.args.get('includeStops')
+    if includeStops:
+        includeStops = includeStops.split(',')
+
+    where_clause = getJourneyWhereClause(line=linenumber, stops=includeStops)
+
+    for journey in runSQLQuery(connection, './src/sql/journeys.sql', append=where_clause):
+        result.append({
+            'id': journey[0],
+            'idLine': journey[1],
+            'idFirstStop': journey[2],
+            'idLastStop': journey[3],
+            'time': str(journey[4]),
+        })
+
+    return jsonify(result)
     pass
 
 

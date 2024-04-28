@@ -39,7 +39,8 @@ CREATE TABLE [UrbanBus.journey] (
   [startTime] time,
   [idFirstStop] integer,
   [idLastStop] integer,
-  [idLine] integer
+  [idLine] integer,
+  [outbound] BIT NOT NULL DEFAULT 0
 )
 GO
 
