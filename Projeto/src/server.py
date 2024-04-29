@@ -1,15 +1,10 @@
-from flask import Flask, jsonify, request
+from flask import jsonify, request
+from .app import App
 from .utils.runSQL import runSQLQuery, dbconnect
-from datetime import datetime
+import time
 
-app = Flask(__name__)
+app = App(__name__)
 
-# Stats
-stats = {
-    'start_time': datetime.utcnow(),
-    'requests': 0,
-    'errors': 0
-}
 
 # Connect to the database
 connection = dbconnect()
@@ -90,7 +85,7 @@ def lines():
             'designation': line[1],
             'idFirstStop': line[2],
             'idLastStop': line[3],
-            'color': line[4]
+            'color': "{:0>6}".format(hex(line[4])[2:]).capitalize()
         })
 
     return jsonify(result)
@@ -104,7 +99,7 @@ def line(linenumber):
             'designation': line[0],
             'idFirstStop': line[1],
             'idLastStop': line[2],
-            'color': line[3]
+            'color': "{:0>6}".format(hex(line[3])[2:]).capitalize()
         })
 
 
@@ -325,7 +320,7 @@ def journeyInstances():
     if not offset:
         offset = 0
 
-    where_clause = getJourneyWhereClause(line=line, journey=journey, time=mintime, price=maxtime)
+    where_clause = getJourneyWhereClause(line=line, journey=journey, time=mintime)
 
     for journeyInstance in runSQLQuery(connection, './src/sql/journeyInstances.sql', limit=limit, offset=offset, append=where_clause):
         result.append({
@@ -391,8 +386,4 @@ def line_journeyInstances(linenumber):
 ## STATS ##
 @app.route('/api/v1/stats', methods=['GET'])
 def stats():
-    return jsonify({
-        'uptime': datetime.datetime.now() - stats['start_time'],
-        'requests': stats['requests'],
-        'errors': stats['errors']
-        })
+    return jsonify(app.get_stats())
