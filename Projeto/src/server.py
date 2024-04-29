@@ -256,6 +256,7 @@ def journeys():
             'idFirstStop': journey[2],
             'idLastStop': journey[3],
             'time': str(journey[4]),
+            'direction': 'outbound' if journey[5] else 'inbound'
         })
 
     return jsonify(result)
