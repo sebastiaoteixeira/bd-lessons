@@ -311,11 +311,52 @@ def price(ticketType, start, end):
 @app.route('/api/v1/journeyInstances', methods=['GET'])
 def journeyInstances():
     # TODO: Implement journey instance getter (with mintime, maxtime, journey and/or line options)
+    result = []
+
+    mintime = request.args.get('mintime')
+    maxtime = request.args.get('maxtime')
+    journey = request.args.get('journey')
+    line = request.args.get('line')
+    limit = request.args.get('limit')
+    if not limit:
+        limit = 1000
+    offset = request.args.get('offset')
+    if not offset:
+        offset = 0
+
+    where_clause = getJourneyWhereClause(line=line, journey=journey, time=mintime, price=maxtime)
+
+    for journeyInstance in runSQLQuery(connection, './src/sql/journeyInstances.sql', limit=limit, offset=offset, append=where_clause):
+        result.append({
+            'id': journeyInstance[0],
+            'idJourney': journeyInstance[1],
+            'dateTime': str(journeyInstance[3]),
+            'journey': {
+                'idLine': journeyInstance[4],
+                'idFirstStop': journeyInstance[5],
+                'idLastStop': journeyInstance[6],
+                'time': str(journeyInstance[7])
+            }
+        })
+
+    return jsonify(result)
     pass
 
 @app.route('/api/v1/journeyInstance/<int:journeyInstanceNumber>', methods=['GET'])
 def journeyInstance(journeyInstanceNumber):
     # TODO: Implement journey instance getter
+    for journeyInstance in runSQLQuery(connection, './src/sql/journeyInstance.sql', (journeyInstanceNumber,)):
+        return jsonify({
+            'id': journeyInstanceNumber,
+            'idJourney': journeyInstance[0],
+            'dateTime': str(journeyInstance[2]),
+            'journey': {
+                'idLine': journeyInstance[3],
+                'idFirstStop': journeyInstance[4],
+                'idLastStop': journeyInstance[5],
+                'time': str(journeyInstance[6])
+            }
+        })
     pass
 
 @app.route('/api/v1/journeyInstance/<int:journeyInstanceNumber>/stops', methods=['GET'])
