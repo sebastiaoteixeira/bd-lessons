@@ -204,25 +204,25 @@ def next_stop(linenumber, stopnumber):
         return jsonify(getLineStop(stop[0], stop[1:]))
 
 # Base function for journey getters
-def getJourneyWhereClause(journey=None, line=None, time=None, price=None, stops=None):
-    args = [journey, line, time, price]
+def getJourneyWhereClause(journey=None, line=None, time=None, stops=None):
+    args = [journey, line, time]
     where_clause = ''
 
     if any(args) or stops:
         where_clause = ' WHERE '
 
     if any(args):
-        where_clause += ' AND '.join([f'{arg[0]} = {arg[1]}' for arg in zip(['number', 'idLine', 'time', 'price'], args) if arg[1]])
+        where_clause += ' AND '.join([f'{arg[0]} = {arg[1]}' for arg in zip(['number', 'idLine', 'time'], args) if arg[1]])
 
     if stops:
         # All stops must be in the line of the journey
-        where_clause += f' AND {len(stops)} = (SELECT count(*) FROM [UrbanBus.line_stop] WHERE [UrbanBus.journey].[outbound] = [UrbanBus.line_stop].[outbound] AND idLine = {line} AND ('
+        where_clause += f' AND {len(stops)} = ALL (SELECT count(*) FROM [UrbanBus.line_stop] WHERE [UrbanBus.journey].[outbound] = [UrbanBus.line_stop].[outbound] AND idLine = {line} AND ('
         for i, stop in enumerate(stops):
             where_clause += f' OR idStop = {stop}'
         where_clause += '))'
         
         # Stops should not be in the exceptions table
-        where_clause += f' AND id <> ANY (SELECT idJourney FROM [UrbanBus.exceptions] WHERE '
+        where_clause += f' AND id <> ALL (SELECT idJourney FROM [UrbanBus.exceptions] WHERE '
         for i, stop in enumerate(stops):
             where_clause += f' OR idStop = {stop}'
         where_clause += ')'
