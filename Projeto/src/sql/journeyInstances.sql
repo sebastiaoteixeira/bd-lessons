@@ -5,8 +5,8 @@ SELECT
     j.[idLine] AS 'journey.idLine',
     j.[idFirstStop] AS 'journey.idFirstStop',
     j.[idLastStop] AS 'journey.idLastStop',
-    j.[time] AS 'journey.time'
+    j.[startTime] AS 'journey.time'
 FROM 
-    [UrbanBus.journeyInstance] ji
+    [UrbanBus.journeyInstance] AS ji
 JOIN 
-    [UrbanBus.journey] j ON ji.[idJourney] = j.[id]
+    [UrbanBus.journey] AS j ON ji.[idJourney] = j.[id]

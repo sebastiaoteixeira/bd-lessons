@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify
 import time
 
 # Create a customized Flask class
@@ -20,7 +20,7 @@ class App(Flask):
                     self.stats['requests'] += 1
                     content = f(*args, **kwargs)
                     if content is None:
-                        return '{"status": "No content"}', 204
+                        return jsonify({"status": "not found"}), 404
                     else:
                         return content
                 except Exception as e:

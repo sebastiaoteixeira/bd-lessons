@@ -42,11 +42,13 @@ def runSQL(connection, query, args=None, limit=1000, offset=0):
         conn.commit()
         return ('Query executed successfully',)
 
-def runSQLQuery(connection, queryFile, args=None, limit=1000, offset=0, append=''):
+def runSQLQuery(connection, queryFile, args=None, *, limit=1000, offset=0, append='', logger=None):
     limit = min(int(limit), 1000)
     offset = max(int(offset), 0)
     with open(queryFile, 'r') as file:
         query = file.read() + append
+    if logger:
+        logger.debug(query)
 
     # Remove comments
     query = '\n'.join([line for line in query.split('\n') if not line.startswith('--')])

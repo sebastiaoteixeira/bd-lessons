@@ -133,10 +133,9 @@ CREATE TABLE [UrbanBus.stop_journeyInstance] (
 GO
 
 CREATE TABLE [UrbanBus.journeyInstance] (
-  [id] integer,
+  [id] integer IDENTITY(1,1) PRIMARY KEY,
   [idJourney] integer,
-  [startTime] datetime,
-  PRIMARY KEY ([id])
+  [startTime] datetime
 )
 GO
 

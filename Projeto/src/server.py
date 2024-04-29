@@ -218,7 +218,7 @@ def getJourneyWhereClause(journey=None, line=None, time=None, stops=None):
         
         # Stops should not be in the exceptions table
         where_clause += f' AND id <> ALL (SELECT idJourney FROM [UrbanBus.exceptions] WHERE '
-        for i, stop in enumerate(stops):
+        for stop in stops:
             where_clause += f' OR idStop = {stop}'
         where_clause += ')'
     
@@ -293,7 +293,6 @@ def line_journeys(linenumber):
         })
 
     return jsonify(result)
-    pass
 
 
 # Module 2: Tickets and Prices
@@ -326,31 +325,30 @@ def journeyInstances():
         result.append({
             'id': journeyInstance[0],
             'idJourney': journeyInstance[1],
-            'dateTime': str(journeyInstance[3]),
-            'journey': {
-                'idLine': journeyInstance[4],
-                'idFirstStop': journeyInstance[5],
-                'idLastStop': journeyInstance[6],
-                'time': str(journeyInstance[7])
-            }
-        })
-
-    return jsonify(result)
-    pass
-
-@app.route('/api/v1/journeyInstance/<int:journeyInstanceNumber>', methods=['GET'])
-def journeyInstance(journeyInstanceNumber):
-    # TODO: Implement journey instance getter
-    for journeyInstance in runSQLQuery(connection, './src/sql/journeyInstance.sql', (journeyInstanceNumber,)):
-        return jsonify({
-            'id': journeyInstanceNumber,
-            'idJourney': journeyInstance[0],
             'dateTime': str(journeyInstance[2]),
             'journey': {
                 'idLine': journeyInstance[3],
                 'idFirstStop': journeyInstance[4],
                 'idLastStop': journeyInstance[5],
                 'time': str(journeyInstance[6])
+            }
+        })
+
+    return jsonify(result)
+
+@app.route('/api/v1/journeyInstance/<int:journeyInstanceNumber>', methods=['GET'])
+def journeyInstance(journeyInstanceNumber):
+    # TODO: Implement journey instance getter
+    for journeyInstance in runSQLQuery(connection, './src/sql/journeyInstance.sql', (journeyInstanceNumber,), logger=app.logger):
+        return jsonify({
+            'id': journeyInstanceNumber,
+            'dateTime': str(journeyInstance[0]),
+            'journey': {
+                'id': journeyInstance[1],
+                'idLine': journeyInstance[2],
+                'idFirstStop': journeyInstance[3],
+                'idLastStop': journeyInstance[4],
+                'time': str(journeyInstance[5])
             }
         })
     pass
