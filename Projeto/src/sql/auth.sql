@@ -3,8 +3,8 @@ SET @clientID = (
 	SELECT [UrbanBus.client].[number] FROM [UrbanBus.client] WHERE [UrbanBus.client].[email] = ?
 );
 
+DECLARE @result BIT;
 
-DECLARE @token CHAR(256);
+EXEC [checkPassword] @clientID, ?, @result OUTPUT;
 
-EXEC [createSession] @clientID, @token OUTPUT;
-
+SELECT @result;

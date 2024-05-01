@@ -3,11 +3,12 @@
 -- Returns: sessionID INT
 
 ALTER PROCEDURE [createSession]
-	@clientID INT, @token CHAR(64) OUTPUT
+	@clientID INT
 AS BEGIN
   	DECLARE @CharPool VARCHAR(96) = 'abcdefghijkmnopqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ0123456789.,-_!$@#%^&*';
   	DECLARE @PoolLength INT = len(@CharPool);
 	DECLARE @i INT = 0;
+	DECLARE @token CHAR(64);
 	DECLARE @tempToken VARCHAR(64);
 
 	SET @tempToken = '';

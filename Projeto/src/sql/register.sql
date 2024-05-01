@@ -11,13 +11,11 @@ EXEC [passwordConstructor] @password, @passwordHash OUTPUT, @passwordSalt OUTPUT
 INSERT INTO [UrbanBus.client] ([name], [email], [nif], [pHash], [salt])
 VALUES (@name, @email, @nif, @passwordHash, @passwordSalt);
 
-DECLARE @token CHAR(64);
-
 
 DECLARE @clientID INT;
 SET @clientID = (
 	SELECT [UrbanBus.client].[number] FROM [UrbanBus.client] WHERE [UrbanBus.client].[email] = @email
 );
 
-EXEC [createSession] @clientID, @token OUTPUT;
+EXEC [createSession] @clientID;
 

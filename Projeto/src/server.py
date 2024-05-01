@@ -28,15 +28,22 @@ def register():
     for _ in runSQLQuery(connection, './src/sql/register.sql', (email, password, name, nif), logger=app.logger):
         pass
 
+    for token in runSQLQuery(connection, './src/sql/getTokenSession.sql', (email,), logger=app.logger):
+        return jsonify({'token': token[0]})
+
+
 @app.route('/api/v1/auth', methods=['POST'])
 def auth():
-    # TODO: Implement authentication
-    pass
+    email = request.json['email']
+    password = request.json['password']
 
-@app.route('/api/v1/auth', methods=['DELETE'])
-def unauth():
-    # TODO: Implement unauthentication
-    pass
+    for result in runSQLQuery(connection, './src/sql/auth.sql', (email, password), logger=app.logger):
+        app.logger.info(result)
+
+    for token in runSQLQuery(connection, './src/sql/getTokenSession.sql', (email,), logger=app.logger):
+        return jsonify({'token': token[0]})
+    return jsonify({'error': 'Invalid credentials'}), 401
+
 
 # Decorator: Only authenticated users can access these routes
 def require_auth(func):
@@ -145,7 +152,7 @@ def line_stops(linenumber):
     if direction:
         directions = [direction]
         if direction not in ['inbound', 'outbound']:
-            return jsonify({'error': 'Invalid direction'})
+            return jsonify({'error': 'Invalid direction'}), 400
     else:
         directions = ['inbound', 'outbound']
 
@@ -169,7 +176,7 @@ def line_stops(linenumber):
         result[key] = computeStopsOrder(raw_result[key], firstAndLastStop[0 if key == 'inbound' else 1], firstAndLastStop[0 if key == 'outbound' else 1])
 
     if None in result.values():
-        return jsonify({'error': 'Invalid stops order'})
+        return jsonify({'error': 'Invalid stops order'}), 500
 
     return jsonify(result)
 
@@ -208,9 +215,9 @@ def line_stop(linenumber, stopnumber):
 def next_stop(linenumber, stopnumber):
     direction = request.args.get('direction')
     if not direction:
-        return jsonify({'error': 'Direction is required'})
+        return jsonify({'error': 'Direction is required'}), 400
     if direction not in ['inbound', 'outbound']:
-        return jsonify({'error': 'Invalid direction'})
+        return jsonify({'error': 'Invalid direction'}), 400
 
     for stop in runSQLQuery(connection, './src/sql/next_stop.sql', (linenumber, stopnumber, direction == 'outbound')):
         return jsonify(getLineStop(stop[0], stop[1:]))
