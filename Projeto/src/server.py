@@ -56,15 +56,22 @@ def require_auth(func):
             return jsonify({'error': 'Unauthorized'}), 401
 
         for result in runSQLQuery(connection, './src/sql/checkAuthentication.sql', (token,), logger=app.logger):
+            app.logger.debug('AUTH RESULT: ' + str(result))
             if result[0]:
                 return func()
             return jsonify({'error': 'Unauthorized'}), 401
     return wrapper
 
+# Authentication checker
+@app.route('/api/v1/auth/check', methods=['GET'])
+@require_auth
+def check_auth():
+    return jsonify({'message': 'Authenticated', 'token': request.headers.get('Authorization')})
+
 
 ## GETTERS ##
 # Module 1: Stops, Lines and Journeys
-@app.route('/api/v1/stops', methods=['GET'], strict_slashes=False)
+@app.route('/api/v1/stops', methods=['GET'])
 def stops():
     result = []
 
@@ -77,7 +84,7 @@ def stops():
     if not offset:
         offset = 0
 
-    for stop in runSQLQuery(connection, './src/sql/stops.sql', (name,), limit, offset):
+    for stop in runSQLQuery(connection, './src/sql/stops.sql', (name,), limit=limit, offset=offset):
         result.append({
             'id': stop[0],
             'name': stop[1],

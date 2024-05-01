@@ -26,6 +26,8 @@ class App(Flask):
                 except Exception as e:
                     self.stats['errors'] += 1
                     raise e
+            # By default, strict_slashes is False
+            options.setdefault('strict_slashes', False)
             self.add_url_rule(rule, endpoint=endpoint, view_func=wrapper, **options)
         return decorator
 
