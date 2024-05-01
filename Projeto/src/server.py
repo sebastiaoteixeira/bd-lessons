@@ -25,10 +25,10 @@ def register():
     nif = request.json['nif']
     password = request.json['password']
 
-    for _ in runSQLQuery(connection, './src/sql/register.sql', (email, password, name, nif), logger=app.logger):
+    for _ in runSQLQuery(connection, './src/sql/queries/register.sql', (email, password, name, nif), logger=app.logger):
         pass
 
-    for token in runSQLQuery(connection, './src/sql/getTokenSession.sql', (email,), logger=app.logger):
+    for token in runSQLQuery(connection, './src/sql/queries/getTokenSession.sql', (email,), logger=app.logger):
         return jsonify({'token': token[0]})
 
 
@@ -37,10 +37,10 @@ def auth():
     email = request.json['email']
     password = request.json['password']
 
-    for result in runSQLQuery(connection, './src/sql/auth.sql', (email, password), logger=app.logger):
+    for result in runSQLQuery(connection, './src/sql/queries/auth.sql', (email, password), logger=app.logger):
         app.logger.info(result)
 
-    for token in runSQLQuery(connection, './src/sql/getTokenSession.sql', (email,), logger=app.logger):
+    for token in runSQLQuery(connection, './src/sql/queries/getTokenSession.sql', (email,), logger=app.logger):
         return jsonify({'token': token[0]})
     return jsonify({'error': 'Invalid credentials'}), 401
 
@@ -55,11 +55,12 @@ def require_auth(func):
         if not token:
             return jsonify({'error': 'Unauthorized'}), 401
 
-        for result in runSQLQuery(connection, './src/sql/checkAuthentication.sql', (token,), logger=app.logger):
+        for result in runSQLQuery(connection, './src/sql/queries/checkAuthentication.sql', (token,), logger=app.logger):
             app.logger.debug('AUTH RESULT: ' + str(result))
             if result[0]:
                 return func()
             return jsonify({'error': 'Unauthorized'}), 401
+    wrapper.__name__ = func.__name__
     return wrapper
 
 # Authentication checker
@@ -69,8 +70,8 @@ def check_auth():
     return jsonify({'message': 'Authenticated', 'token': request.headers.get('Authorization')})
 
 
-## GETTERS ##
 # Module 1: Stops, Lines and Journeys
+## GETTERS ##
 @app.route('/api/v1/stops', methods=['GET'])
 def stops():
     result = []
@@ -84,7 +85,7 @@ def stops():
     if not offset:
         offset = 0
 
-    for stop in runSQLQuery(connection, './src/sql/stops.sql', (name,), limit=limit, offset=offset):
+    for stop in runSQLQuery(connection, './src/sql/queries/stops.sql', (name,), limit=limit, offset=offset):
         result.append({
             'id': stop[0],
             'name': stop[1],
@@ -97,7 +98,7 @@ def stops():
 
 @app.route('/api/v1/stop/<int:stopnumber>', methods=['GET'])
 def stop(stopnumber):
-    for stop in runSQLQuery(connection, './src/sql/stop.sql', (stopnumber,)):
+    for stop in runSQLQuery(connection, './src/sql/queries/stop.sql', (stopnumber,)):
         return jsonify({
             'id': stopnumber,
             'name': stop[0],
@@ -110,7 +111,7 @@ def stop(stopnumber):
 def lines():
     result = []
 
-    for line in runSQLQuery(connection, './src/sql/lines.sql'):
+    for line in runSQLQuery(connection, './src/sql/queries/lines.sql'):
         result.append({
             'number': line[0],
             'designation': line[1],
@@ -124,7 +125,7 @@ def lines():
 
 @app.route('/api/v1/line/<int:linenumber>', methods=['GET'])
 def line(linenumber):
-    for line in runSQLQuery(connection, './src/sql/line.sql', (linenumber,)):
+    for line in runSQLQuery(connection, './src/sql/queries/line.sql', (linenumber,)):
         return jsonify({
             'number': linenumber,
             'designation': line[0],
@@ -167,11 +168,11 @@ def line_stops(linenumber):
     app.logger.info(raw_result)
     firstAndLastStop = []
 
-    for line in runSQLQuery(connection, './src/sql/line.sql', (linenumber,)):
+    for line in runSQLQuery(connection, './src/sql/queries/line.sql', (linenumber,)):
         firstAndLastStop.extend(line[1:3])
         break
 
-    for stop in runSQLQuery(connection, './src/sql/uniDir_line_stops.sql', (linenumber, direction == 'outbound')) if direction else runSQLQuery(connection, './src/sql/line_stops.sql', (linenumber,)):
+    for stop in runSQLQuery(connection, './src/sql/queries/uniDir_line_stops.sql', (linenumber, direction == 'outbound')) if direction else runSQLQuery(connection, './src/sql/queries/line_stops.sql', (linenumber,)):
         raw_result[getDirection(stop)].append({
             'id': stop[0],
             'idNextStop': stop[1]
@@ -212,7 +213,7 @@ def line_stop(linenumber, stopnumber):
 
     direction = request.args.get('direction')
 
-    for stop in runSQLQuery(connection, './src/sql/uniDir_line_stop.sql', (linenumber, stopnumber, direction == 'outbound')) if direction else runSQLQuery(connection, './src/sql/line_stop.sql', (linenumber, stopnumber)):
+    for stop in runSQLQuery(connection, './src/sql/queries/uniDir_line_stop.sql', (linenumber, stopnumber, direction == 'outbound')) if direction else runSQLQuery(connection, './src/sql/queries/line_stop.sql', (linenumber, stopnumber)):
         result.append(getLineStop(stopnumber, stop))
 
     return jsonify(result)
@@ -226,7 +227,7 @@ def next_stop(linenumber, stopnumber):
     if direction not in ['inbound', 'outbound']:
         return jsonify({'error': 'Invalid direction'}), 400
 
-    for stop in runSQLQuery(connection, './src/sql/next_stop.sql', (linenumber, stopnumber, direction == 'outbound')):
+    for stop in runSQLQuery(connection, './src/sql/queries/next_stop.sql', (linenumber, stopnumber, direction == 'outbound')):
         return jsonify(getLineStop(stop[0], stop[1:]))
 
 # Base function for journey getters
@@ -275,7 +276,7 @@ def journeys():
 
     where_clause = getJourneyWhereClause(line=line, stops=includeStops)
 
-    for journey in runSQLQuery(connection, './src/sql/journeys.sql', limit=limit, offset=offset, append=where_clause):
+    for journey in runSQLQuery(connection, './src/sql/queries/journeys.sql', limit=limit, offset=offset, append=where_clause):
         result.append({
             'id': journey[0],
             'idLine': journey[1],
@@ -291,7 +292,7 @@ def journeys():
 @app.route('/api/v1/journey/<int:journeynumber>', methods=['GET'])
 def journey(journeynumber):
     # TODO: Implement journey getter
-    for journey in runSQLQuery(connection, './src/sql/journey.sql', (journeynumber,)):
+    for journey in runSQLQuery(connection, './src/sql/queries/journey.sql', (journeynumber,)):
         return jsonify({
             'id': journeynumber,
             'idLine': journey[0],
@@ -314,7 +315,7 @@ def line_journeys(linenumber):
 
     where_clause = getJourneyWhereClause(line=linenumber, stops=includeStops)
 
-    for journey in runSQLQuery(connection, './src/sql/journeys.sql', append=where_clause):
+    for journey in runSQLQuery(connection, './src/sql/queries/journeys.sql', append=where_clause):
         result.append({
             'id': journey[0],
             'idLine': journey[1],
@@ -327,13 +328,33 @@ def line_journeys(linenumber):
 
 
 # Module 2: Tickets and Prices
-@app.route('/api/v1/price/<string:ticketType>/<int:start>/<int:end>', methods=['GET'])
+## GETTERS ##
+@app.route('/api/v1/prices', methods=['GET'])
 def price(ticketType, start, end):
-    # TODO: Implement price getter
+    # TODO: Implement price getter (with ticket type, start and end stops)
+    pass
+
+@app.route('/api/v1/tickets', methods=['GET'])
+def tickets():
+    # TODO: Implement tickets getter with all items purchased (onlyValid options)
+    pass
+
+@app.route('/api/v1/myTickets', methods=['GET'])
+@require_auth
+def myTickets():
+    # TODO: Implement tickets getter with all items purchased (onlyValid options)
+    pass
+
+@app.route('/api/v1/ticket/<int:ticketnumber>', methods=['GET'])
+def ticket(ticketnumber):
+    # TODO: Implement ticket getter with all items purchased
     pass
 
 
+
+
 # Module 3: Statistics and Registers
+## GETTERS ##
 @app.route('/api/v1/journeyInstances', methods=['GET'])
 def journeyInstances():
     # TODO: Implement journey instance getter (with mintime, maxtime, journey and/or line options)
@@ -352,7 +373,7 @@ def journeyInstances():
 
     where_clause = getJourneyWhereClause(line=line, journey=journey, time=mintime)
 
-    for journeyInstance in runSQLQuery(connection, './src/sql/journeyInstances.sql', limit=limit, offset=offset, append=where_clause):
+    for journeyInstance in runSQLQuery(connection, './src/sql/queries/journeyInstances.sql', limit=limit, offset=offset, append=where_clause):
         result.append({
             'id': journeyInstance[0],
             'idJourney': journeyInstance[1],
@@ -370,7 +391,7 @@ def journeyInstances():
 @app.route('/api/v1/journeyInstance/<int:journeyInstanceNumber>', methods=['GET'])
 def journeyInstance(journeyInstanceNumber):
     # TODO: Implement journey instance getter
-    for journeyInstance in runSQLQuery(connection, './src/sql/journeyInstance.sql', (journeyInstanceNumber,), logger=app.logger):
+    for journeyInstance in runSQLQuery(connection, './src/sql/queries/journeyInstance.sql', (journeyInstanceNumber,), logger=app.logger):
         return jsonify({
             'id': journeyInstanceNumber,
             'dateTime': str(journeyInstance[0]),
