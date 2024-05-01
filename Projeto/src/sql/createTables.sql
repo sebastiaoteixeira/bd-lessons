@@ -103,14 +103,14 @@ CREATE TABLE [UrbanBus.trips] (
 GO
 
 CREATE TABLE [UrbanBus.client] (
-  [number] integer,
+  [number] integer IDENTITY(1,1),
   [name] nvarchar(255),
-  [email] nvarchar(255),
+  [email] nvarchar(255) UNIQUE,
   [nif] integer,
-  [pHash] integer,
-  [salt] nvarchar(255),
+  [pHash] binary(64),
+  [salt] char(16),
   [expiration] date,
-  [token] nvarchar(255),
+  [token] char(64),
   PRIMARY KEY ([number])
 )
 GO

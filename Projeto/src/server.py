@@ -17,10 +17,16 @@ def hello():
 
 
 ## AUTHENTICATION ##
-@app.route('/api/v1/register', methods=['GET'])
+@app.route('/api/v1/register', methods=['POST'])
 def register():
     # TODO: Implement registration
-    pass
+    name = request.json['name']
+    email = request.json['email']
+    nif = request.json['nif']
+    password = request.json['password']
+
+    for _ in runSQLQuery(connection, './src/sql/register.sql', (email, password, name, nif), logger=app.logger):
+        pass
 
 @app.route('/api/v1/auth', methods=['POST'])
 def auth():
@@ -34,8 +40,19 @@ def unauth():
 
 # Decorator: Only authenticated users can access these routes
 def require_auth(func):
-    # TODO: Implement authentication check in a decorator pattern
-    pass
+    def wrapper():
+        # Check for the header 'Authorization'
+        # If not, return 401 Unauthorized
+        # If valid, call the function
+        token = request.headers.get('Authorization')
+        if not token:
+            return jsonify({'error': 'Unauthorized'}), 401
+
+        for result in runSQLQuery(connection, './src/sql/checkAuthentication.sql', (token,), logger=app.logger):
+            if result[0]:
+                return func()
+            return jsonify({'error': 'Unauthorized'}), 401
+    return wrapper
 
 
 ## GETTERS ##

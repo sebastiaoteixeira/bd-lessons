@@ -23,14 +23,17 @@ class dbconnect():
             self.conn.close()
             self.conn = None
 
-def runSQL(connection, query, args=None, limit=1000, offset=0):
+def runSQL(connection, query, args=None, limit=1000, offset=0, logger=None):
     conn = connection.getConnection()
     cursor = conn.cursor()
     if args:
         cursor.execute(query, args)
     else:
         cursor.execute(query)
-    if 'SELECT' in query.upper():
+    if logger:
+        for msg in cursor.messages:
+            logger.debug(msg)
+    try:
         cursor.skip(offset)
         for row in cursor:
             yield row
@@ -38,9 +41,15 @@ def runSQL(connection, query, args=None, limit=1000, offset=0):
                 limit -= 1
                 if limit == 0:
                     break
-    else:
-        conn.commit()
-        return ('Query executed successfully',)
+    except pyodbc.ProgrammingError as e:
+        if 'No results.  Previous SQL was not a query.' in str(e):
+            if logger:
+                logger.debug('No results.  Previous SQL was not a query.')
+            conn.commit()
+            return ('Query executed successfully',)
+        else:
+            conn.closeConnection()
+            raise e
 
 def runSQLQuery(connection, queryFile, args=None, *, limit=1000, offset=0, append='', logger=None):
     limit = min(int(limit), 1000)
@@ -53,7 +62,7 @@ def runSQLQuery(connection, queryFile, args=None, *, limit=1000, offset=0, appen
     # Remove comments
     query = '\n'.join([line for line in query.split('\n') if not line.startswith('--')])
 
-    for row in runSQL(connection, query, args, limit, offset):
+    for row in runSQL(connection, query, args, limit, offset, logger):
         yield row
 
 
