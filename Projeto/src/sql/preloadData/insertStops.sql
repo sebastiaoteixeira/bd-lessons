@@ -1,8 +1,25 @@
 INSERT INTO [UrbanBus.stop] ([name], [location], [longitude], [latitude])
 VALUES
+--Z1
 ('Estação de Aveiro', 'R. Cmte. Rocha e Cunha 156, 3800-179 Aveiro', 40.643450, -8.641420),
 ('Av. Dr. Lourenço Peixinho - CTT B', 'Av. Dr. Lourenço Peixinho 216A, 3800-181 Aveiro', 40.643250, -8.645047),
+('Av. Dr. Lourenço Peixinho - Capitania B','Av. Dr. Lourenço Peixinho, 3800-159 Aveiro',40.64208,-8.65134),
 ('Caçadores 10 - Misericórdia', 'R. do Batalhão de Caçadores 22-26, 3810-064 Aveiro', 40.640790, -8.653030),
+('Caçadores 10 - Sé', '', , ),
 ('Universidade - Antiga Reitoria A', 'Antiga Reitoria, 3810-193 Aveiro', 40.634953, -8.656961),
 ('Universidade - Antiga Reitoria B', 'Antiga Reitoria, 3810-193 Aveiro', 40.634900, -8.656840),
-('Universidade Crasto', 'Aradas, 3810-193', 40.623050, -8.659240);
+('ISCAUA B', 'Rua Associação Humanitária dos Bombeiros Voluntários de Aveiro, 3810-193 Aveiro', 40.623050, -8.659240),
+('ISCAUA A', 'Rua Associação Humanitária dos Bombeiros Voluntários de Aveiro, 3810-193 Aveiro', 40.6307, -8.65338),
+('Quinta Clementina', 'R. da Quinta da Clementina 53-27, 3800-364', 40.670062, -8.618188 ),
+('Escola de Mataduços A', '', , ),
+('Escola de Mataduços B', '', , ),
+('Olho de Água A', 'Av. Manuel Maria da Rocha Colmieiro 13-22', 40.653934, -8.624060 ),
+('Olho de Água B', 'Av. Manuel Maria da Rocha Colmieiro 13-22', 40.653934, -8.624060 ),
+('R. Luis G. Carvalho', '', , ),
+('Hospital / Universidade A', 'N235, 3810-164 Aveiro', 40.634687, -8.656186 ),
+('Hospital / Universidade B', 'N235, 3810-164 Aveiro', 40.634687, -8.656186 ),
+('Escolas de Santiago', 'R. de Ovar 47-43, 3810-145', 40.627062, -8.649187 ),
+('R.de Ovar - Urbanização Santiago', '', , ),
+('Escola Jaime Magalhães Lima A', '', , ),
+('Escola Jaime Magalhães Lima B', '', , ),
+('R. Dr. Mário Sacramento A', 'R. Mário Sacramento 165-139, 3810-106 Aveiro', 40.62861, -8.64798);
