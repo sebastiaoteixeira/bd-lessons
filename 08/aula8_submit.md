@@ -29,25 +29,34 @@ CREATE CLUSTERED INDEX Idx_rid ON mytemp(rid);
 ### b)
 
 ```
-
+99.22
 ```
 
 ### c)
 
 ```
-... Write here your answer ...
+65 - 2:03
+80 - 1:59
+90 - 1:55
+
+Assim conclui-se que o tempo de inserção reduz com o aumento do fillfactor
 ```
 
 ### d)
 
 ```
-... Write here your answer ...
+65 - 1:43
+80 - 1:55
+90 - 1:55
 ```
 
 ### e)
 
 ```
+sem indice - 1:53
+com todos os indices - 4:08
 
+Com isto conclui-se que um elevado número de índices pode levar a uma quebra de desempenho em operações de inserção
 ```
 
 ## ​8.3.
