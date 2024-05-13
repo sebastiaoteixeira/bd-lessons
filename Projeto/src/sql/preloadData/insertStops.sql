@@ -44,14 +44,15 @@ VALUES
 ('Tanques de Esgueira B', 'N230', 40.642806, -8.622188),
 
 --Z2
+('Sarrazola - Largo S. Bartolomeu', 'Largo de São Bartolomeu, 3800-595 Cacia', 40.689783, -8.602157),
+('Escolas de Póvoa do Paço A', '40.676107, -8.628158', 40.676107, -8.628158),
+('Escolas de Póvoa do Paço B', 'R. Direita da Escola 90-75, Cacia', 40.676915, -8.627294),
 ('Junta de Freguesia de Cacia A', 'Av. Fernando Augusto de Oliveira, 3800-540 Cacia', 40.683449, -8.598317),
---('Monte Cacia', '', , ),
 ('109 / Depósito de Cacia A', 'N16, 3800-587 Cacia', 40.665818, -8.609931),
 ('EB23 Rio Novo Príncipe', '3800-540 Cacia', 40.681317, -8.599815),
 ('Largo Manuel Mateus Ventura A', 'Rua Ecos de Cacia, 3800-582 Cacia', 40.675815, -8.590189),
 ('Largo Manuel Mateus Ventura B', 'Rua Ecos de Cacia, 3800-582 Cacia', 40.675815, -8.590189),
 ('Igreja de Taboeira', 'R. da Infância 8-36, 3800-056', 40.655688, -8.579436),
---('R. Direita do Carregal', '', , ),
 ('Carregal - Areosa A', 'R. Principal do Carregal 33, Requeixo', 40.578055, -8.558683),
 ('Carregal - Areosa B', 'R. Principal do Carregal 33, Requeixo', 40.577576, -8.559767),
 ('Requeixo A', 'EM585 10, Requeixo', 40.592054, -8.530250),
@@ -62,7 +63,6 @@ VALUES
 ('Escola de Eirol B', 'R. da Residência 79, 3800-680 Eirol', 40.607998, -8.531171),
 ('Eixo - Praça J. Magalhães Lima A', 'R. João de Pinho Brandão 29, Eixo', 40.628847, -8.564329),
 ('Eixo - Praça J. Magalhães Lima B', 'R. João de Pinho Brandão 29, Eixo', 40.628847, -8.564329),
---('EB1 de Eixo', '', , ),
 ('EB23 de Eixo', 'R. Dr. Sizenando Ribeiro da Cunha, Eixo', 40.627790, -8.568427),
 ('Campo do Monte', 'R. do Forno, Eixo', 40.621367, -8.573982),
 ('Azurva (Pontão A17) A', 'R. Sérgio Vieira de Melo 208', 40.638701, -8.603174),
@@ -70,4 +70,9 @@ VALUES
 ('Escolas Velhas Oliveirinha', 'R. Conselheiro Arnaldo Vidal 5-3, 3810-861 Oliveirinha', 40.606153, -8.596319),
 ('Granja - Bica', 'R. da Granja de Baixo 36-56, Oliveirinha', 40.599082, -8.580755),
 ('Cruzeiro da Feira', 'N230-1 81, 3810-886 Oliveirinha', 40.609393, -8.589093),
-('Taboeira', 'R. Dr. Lourenço Peixinho 191-155, 3800-043', 40.652367, -8.590169);
+('Taboeira', 'R. Dr. Lourenço Peixinho 191-155, 3800-043', 40.652367, -8.590169),
+('Lavadouros de Sarrazola A', 'R. Ten-Cel. Afonso Lucas 3, Cacia', 40.687855, -8.600951),
+('Lavadouros de Sarrazola B', 'R. Ten-Cel. Afonso Lucas 3, Cacia', 40.688087, -8.601382);
+--('EB1 de Eixo', '', , ),
+--('R. Direita do Carregal', '', , ),
+--('Monte Cacia', '', , ),
