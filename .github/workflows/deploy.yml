@@ -1,0 +1,9 @@
+name: Deploy to azure vm
+on: push
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Deploy app
+        run: curl http://20.106.168.49/api/v1/refresh
