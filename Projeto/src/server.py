@@ -332,12 +332,31 @@ def line_journeys(linenumber):
 @app.route('/api/v1/prices', methods=['GET'])
 def price(ticketType, start, end):
     # TODO: Implement price getter (with ticket type, start and end stops)
-    pass
+    price = None
+    
+    for price in runSQLQuery(connection, './src/sql/queries/prices.sql', (ticketType, start, end)):
+        pass
 
 @app.route('/api/v1/tickets', methods=['GET'])
 def tickets():
     # TODO: Implement tickets getter with all items purchased (onlyValid options)
-    pass
+    result = []
+    
+    onlyValid = request.args.get('onlyValid')
+    if onlyValid:
+        onlyValid = onlyValid.lower() == 'true'
+    else:
+        onlyValid = False
+        
+    for ticket in runSQLQuery(connection, './src/sql/queries/tickets.sql', (onlyValid,)):
+        result.append({
+            'id': ticket[0],
+            'idItemTariff': ticket[1],
+            'idTransportTicket': ticket[2],
+            'date': ticket[3]
+        })
+        
+    return jsonify(result)
 
 @app.route('/api/v1/myTickets', methods=['GET'])
 @require_auth
@@ -348,10 +367,17 @@ def myTickets():
 @app.route('/api/v1/ticket/<int:ticketnumber>', methods=['GET'])
 def ticket(ticketnumber):
     # TODO: Implement ticket getter with all items purchased
-    pass
-
-
-
+    result = []
+    
+    for ticket in runSQLQuery(connection, './src/sql/queries/ticket.sql', (ticketnumber,)):
+        result.append({
+            'id': ticket[0],
+            'idItemTariff': ticket[1],
+            'idTransportTicket': ticket[2],
+            'date': ticket[3]
+        })
+        
+    return jsonify(result)
 
 # Module 3: Statistics and Registers
 ## GETTERS ##
