@@ -474,3 +474,12 @@ def preload():
         if file.endswith('.sql'):
             runSQLFile(connection.getConnection(), f'./src/sql/preloadData/{file}')
 
+
+
+########## RESERVED AREA ##########
+### NOT WRITE CODE IN THIS AREA ###
+
+
+######## END RESERVED AREA ########
+
+
