@@ -1,0 +1,1 @@
+INSERT INTO [UrbanBus.zone] (designation) VALUES ('Centro');

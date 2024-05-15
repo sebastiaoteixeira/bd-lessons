@@ -46,7 +46,7 @@ GO
 
 CREATE TABLE [UrbanBus.zone] (
   [id] integer IDENTITY(1,1) PRIMARY KEY,
-  [designation] integer
+  [designation] nvarchar(255)
 )
 GO
 
@@ -79,14 +79,16 @@ GO
 
 CREATE TABLE [UrbanBus.itemTariff] (
   [id] integer IDENTITY(1,1) PRIMARY KEY,
-  [value] integer
+  [zoneNumber] integer,
+  [value] DECIMAL(5,2)
 )
 GO
 
 CREATE TABLE [UrbanBus.purchasedItem] (
   [id] integer IDENTITY(1,1) PRIMARY KEY,
   [idItemPreco] integer,
-  [idTransportTicket] integer
+  [idTransportTicket] integer,
+  [date] date
 )
 GO
 
@@ -186,7 +188,7 @@ GO
 ALTER TABLE [UrbanBus.tripsTicket] ADD FOREIGN KEY ([ticketNumber]) REFERENCES [UrbanBus.transportTicket] ([number])
 GO
 
-ALTER TABLE [UrbanBus.itemTariff] ADD FOREIGN KEY ([id]) REFERENCES [UrbanBus.zone] ([id])
+ALTER TABLE [UrbanBus.itemTariff] ADD FOREIGN KEY ([zoneNumber]) REFERENCES [UrbanBus.zone] ([id])
 GO
 
 ALTER TABLE [UrbanBus.subscription] ADD FOREIGN KEY ([itemId]) REFERENCES [UrbanBus.itemTariff] ([id])
