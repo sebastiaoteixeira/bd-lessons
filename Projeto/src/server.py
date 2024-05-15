@@ -1,6 +1,6 @@
 from flask import jsonify, request
 from .app import App
-from .utils.runSQL import runSQLQuery, dbconnect
+from .utils.runSQL import runSQLQuery, dbconnect, runSQLFile
 import time
 
 app = App(__name__)
@@ -463,3 +463,14 @@ def line_journeyInstances(linenumber):
 @app.route('/api/v1/stats', methods=['GET'])
 def stats():
     return jsonify(app.get_stats())
+
+
+## PRELOAD DATA ##
+import os
+
+@app.route('/api/v1/preload', methods=['GET'])
+def preload():
+    for file in os.listdir('./src/sql/preloadData'):
+        if file.endswith('.sql'):
+            runSQLFile(connection.getConnection(), f'./src/sql/preloadData/{file}')
+
