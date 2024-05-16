@@ -18,7 +18,20 @@ END;
 ### *b)* 
 
 ```
-... Write here your answer ...
+CREATE OR ALTER PROCEDURE gestores (
+    @fname VARCHAR(255) OUTPUT,
+    @lname VARCHAR(255) OUTPUT,
+    @ssn CHAR(11) OUTPUT,
+    @anos_gestor INT OUTPUT
+)
+AS
+BEGIN
+    SELECT @fname = e.fname, @lname = e.lname, @ssn = e.ssn, @anos_gestor = DATEDIFF(YEAR, d.mgrstartdate, GETDATE())
+    FROM Company_employee AS e
+    JOIN Company_department AS d
+    ON e.ssn = d.mgrssn
+    
+END
 ```
 
 ### *c)* 
@@ -39,7 +52,21 @@ END;
 ### *d)* 
 
 ```
-... Write here your answer ...
+CREATE OR ALTER FUNCTION funcionarios_acima_media (
+    @dno INT
+) RETURNS Table
+AS
+    RETURN (
+        SELECT e.fname, e.lname, e.salary
+        FROM Company_employee AS e
+        JOIN Company_department AS d
+        ON e.dno = d.dnumber
+        WHERE e.salary > (
+            SELECT AVG(e.salary)
+            FROM Company_employee AS e
+            WHERE e.dno = @dno
+        )
+    )
 ```
 
 ### *e)* 
@@ -61,7 +88,21 @@ END;
 ### *f)* 
 
 ```
-... Write here your answer ...
+CREATE OR ALTER FUNCTION funcionarios_acima_media (
+    @dno INT
+) RETURNS Table
+AS
+    RETURN (
+        SELECT e.fname, e.lname, e.salary
+        FROM Company_employee AS e
+        JOIN Company_department AS d
+        ON e.dno = d.dnumber
+        WHERE e.salary > (
+            SELECT AVG(e.salary)
+            FROM Company_employee AS e
+            WHERE e.dno = @dno
+        )
+    )
 ```
 
 ### *g)* 
@@ -73,7 +114,57 @@ END;
 ### *h)* 
 
 ```
-... Write here your answer ...
+CREATE OR ALTER TRIGGER eliminar_departamento_after
+ON Company_department
+AFTER DELETE
+AS
+BEGIN
+    IF (EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES
+        WHERE TABLE_SCHEMA = 'myschema' AND TABLE_NAME = 'mytable'))
+        INSERT INTO department_deleted (dname, dnumber, mgrssn, mgrstartdate)
+        SELECT dname, dnumber, mgrssn, mgrstartdate
+        FROM deleted
+    ELSE
+    BEGIN
+        CREATE TABLE department_deleted (
+            dname VARCHAR(255) NOT NULL,
+            dnumber INT NOT NULL PRIMARY KEY,
+            mgrssn CHAR(11),
+            mgrstartdate DATE
+        );
+        INSERT INTO department_deleted (dname, dnumber, mgrssn, mgrstartdate)
+        SELECT dname, dnumber, mgrssn, mgrstartdate
+        FROM deleted
+    END
+END
+
+CREATE OR ALTER TRIGGER eliminar_departamento_instead_of
+ON Company_department
+INSTEAD OF DELETE
+AS
+BEGIN
+    IF (EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES
+        WHERE TABLE_SCHEMA = 'myschema' AND TABLE_NAME = 'mytable'))
+        INSERT INTO department_deleted (dname, dnumber, mgrssn, mgrstartdate)
+        SELECT dname, dnumber, mgrssn, mgrstartdate
+        FROM deleted
+    ELSE
+    BEGIN
+        CREATE TABLE department_deleted (
+            dname VARCHAR(255) NOT NULL,
+            dnumber INT NOT NULL PRIMARY KEY,
+            mgrssn CHAR(11),
+            mgrstartdate DATE
+        );
+        INSERT INTO department_deleted (dname, dnumber, mgrssn, mgrstartdate)
+        SELECT dname, dnumber, mgrssn, mgrstartdate
+        FROM deleted
+    END
+END
+
+
+
+
 ```
 
 ### *i)* 
