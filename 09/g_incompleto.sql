@@ -11,10 +11,10 @@ CREATE OR ALTER FUNCTION dbo.employeeDeptHighAverage(@dno INT)
 RETURNS TABLE
 AS
 RETURN (
-    SELECT p.pname, p.pnumber, p.plocation, p.dnum, SUM(e.salary / 4) AS budget, SUM(SUM(e.salary / 4)) OVER (PARTITION BY p.dnum) AS totalbudget
+    SELECT p.pname, p.pnumber, p.plocation, p.dnum, SUM(e.salary) AS budget, SUM(SUM(e.salary / 4)) AS totalbudget
     FROM Company_project p
     JOIN Company_works_on w ON p.pnumber = w.pno
     JOIN Company_employee e ON w.essn = e.ssn
     WHERE p.dnum = @dno
-    GROUP BY p.pnumber, p.plocation, p.dnum
+    GROUP BY p.pname, p.pnumber, p.plocation, p.dnum
 );

@@ -1,4 +1,4 @@
-ALTER PROCEDURE insertItemTariff (@zone INTEGER, @value DECIMAL(5,2), @tripsCount INTEGER = NULL, @days INTEGER = NULL)
+CREATE OR ALTER PROCEDURE insertItemTariff (@zone INTEGER, @value DECIMAL(5,2), @tripsCount INTEGER = NULL, @days INTEGER = NULL)
 AS
 
 -- Check if tripsCount is not null or days is not null
