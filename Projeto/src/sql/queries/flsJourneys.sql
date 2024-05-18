@@ -3,10 +3,11 @@ DECLARE @firstStop INT = ?;
 DECLARE @lastStop INT = ?;
 
 IF @line IS NULL
-		-- Select searchJourneysByStops
-		SELECT s.[id], s.[idLine], s.[idFirstStop], s.[idLastStop], s.[startTime], s.[outbound]
-		FROM searchJourneysByStops(@stops) as s
+	-- CALL searchJourneysWithSLStop
+	SELECT s.[id], s.[idLine], s.[idFirstStop], s.[idLastStop], s.[startTime], s.[outbound]
+	FROM searchJourneysWithSLStop(@firstStop, @lastStop) AS s;
 ELSE
-		-- Select searchJourneysByStops and filter by line
-		SELECT s.[id], s.[idLine], s.[idFirstStop], s.[idLastStop], s.[startTime], s.[outbound]
-		FROM searchJourneysByStops(@stops) as s WHERE s.[idLine] = @line;
+	-- CALL searchJourneysWithSLStop and filter by line
+	SELECT s.[id], s.[idLine], s.[idFirstStop], s.[idLastStop], s.[startTime], s.[outbound]
+	FROM searchJourneysWithSLStop(@firstStop, @lastStop) AS s
+	WHERE s.[idLine] = @line;

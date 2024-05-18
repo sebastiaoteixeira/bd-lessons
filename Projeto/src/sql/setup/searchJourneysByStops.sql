@@ -15,11 +15,6 @@ RETURN
 		SELECT CAST(value AS INT) AS id
 		FROM STRING_SPLIT(@includedStops, ',')
 	)
-	, StopCount AS
-	(
-		SELECT COUNT(*) AS count
-		FROM SplitStops
-	)
 
 	SELECT j.[id], j.[idLine], j.[idFirstStop], j.[idLastStop], j.[startTime], j.[outbound]
 	FROM [UrbanBus].[journey] AS j
@@ -34,6 +29,8 @@ RETURN
 		SELECT COUNT(*)
 		FROM [UrbanBus].[line_stop] AS ls
 		WHERE ls.idLine = j.idLine
+		AND ls.outbound = j.outbound
 		AND ls.idStop IN (SELECT id FROM SplitStops)
-	) = (SELECT count FROM StopCount)
+	) = (SELECT COUNT(*) FROM SplitStops)
 );
+

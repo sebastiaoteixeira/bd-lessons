@@ -135,22 +135,6 @@ def line(linenumber):
         })
 
 
-def computeStopsOrder(raw_result, firstStop, lastStop):
-    result = []
-    result.append(firstStop)
-    while result[-1] != lastStop:
-        found = False
-        for stop in raw_result:
-            app.logger.info(stop)
-            if stop['id'] == result[-1]:
-                result.append(stop['idNextStop'])
-                found = True
-                break
-        if not found:
-            return None
-    return result
-
-
 def getDirection(stop):
     return 'outbound' if stop[2] else 'inbound'
 
@@ -240,6 +224,8 @@ def journeys():
 
     line = request.args.get('line')
     includeStops = request.args.get('includeStops')
+    start = request.args.get('start')
+    end = request.args.get('end')
     limit = request.args.get('limit')
     if not limit:
         limit = 1000
@@ -247,16 +233,26 @@ def journeys():
     if not offset:
         offset = 0
 
-
-    for journey in runSQLQuery(connection, './src/sql/queries/journeys.sql', (line, includeStops), limit=limit, offset=offset):
-        result.append({
-            'id': journey[0],
-            'idLine': journey[1],
-            'idFirstStop': journey[2],
-            'idLastStop': journey[3],
-            'time': str(journey[4]),
-            'direction': 'outbound' if journey[5] else 'inbound'
-        })
+    if start and end:
+        for journey in runSQLQuery(connection, './src/sql/queries/flsJourneys.sql', (line, start, end), limit=limit, offset=offset):
+            result.append({
+                'id': journey[0],
+                'idLine': journey[1],
+                'idFirstStop': journey[2],
+                'idLastStop': journey[3],
+                'time': str(journey[4]),
+                'direction': 'outbound' if journey[5] else 'inbound'
+            })
+    else:
+        for journey in runSQLQuery(connection, './src/sql/queries/journeys.sql', (line, includeStops), limit=limit, offset=offset):
+            result.append({
+                'id': journey[0],
+                'idLine': journey[1],
+                'idFirstStop': journey[2],
+                'idLastStop': journey[3],
+                'time': str(journey[4]),
+                'direction': 'outbound' if journey[5] else 'inbound'
+            })
 
     return jsonify(result)
 

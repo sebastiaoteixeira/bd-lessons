@@ -19,8 +19,10 @@ BEGIN
 	DECLARE @lastStop INT;
 	DECLARE @lineNumber INT;
 	DECLARE @time TIME;
+	DECLARE @outbound BIT;
 
-	SELECT @lineNumber = idLine, @firstStop = idFirstStop, @lastStop = idLastStop, @time = startTime	FROM [UrbanBus].[journey]
+	SELECT @lineNumber = idLine, @firstStop = idFirstStop, @lastStop = idLastStop, @time = startTime, @outbound = outbound
+	FROM [UrbanBus].[journey]
 	WHERE [id] = @journeyNumber;
 
 	-- Get the firstStop
@@ -30,7 +32,8 @@ BEGIN
 	JOIN [UrbanBus].[line_stop] AS ls
 	ON s.id = ls.idStop
 	WHERE ls.idLine = @lineNumber
-	AND ls.idStop = @firstStop;
+	AND ls.idStop = @firstStop
+	AND ls.outbound = @outbound;
 
 	-- Get the rest of the stops
 	WHILE @firstStop != @lastStop
@@ -48,6 +51,7 @@ BEGIN
 				FROM [UrbanBus].[line_stop]
 				WHERE idLine = @lineNumber
 				AND idStop = @firstStop
+				AND outbound = @outbound;
 
 				INSERT INTO @result
 				SELECT s.[id], s.[name], s.[location], s.[longitude], s.[latitude], @time
@@ -55,7 +59,8 @@ BEGIN
 				JOIN [UrbanBus].[line_stop] AS ls
 				ON s.id = ls.idStop
 				WHERE ls.idLine = @lineNumber
-				AND ls.idStop = @firstStop;
+				AND ls.idStop = @firstStop
+				AND ls.outbound = @outbound;
 			END
 			ELSE
 				-- Add timeModification to time
