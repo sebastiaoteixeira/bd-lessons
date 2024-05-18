@@ -18,50 +18,46 @@ BEGIN
 	DECLARE @firstStop INT;
 	DECLARE @lastStop INT;
 
-	SELECT @firstStop = idFirstStop, @lastStop = idLastStop
-	FROM [UrbanBus].[line]
-	WHERE [number] = @lineNumber;
+	IF @outbound = 0
+		SELECT @firstStop = idFirstStop, @lastStop = idLastStop
+		FROM [UrbanBus].[line]
+		WHERE [number] = @lineNumber;
+	ELSE
+		SELECT @firstStop = idLastStop, @lastStop = idFirstStop
+		FROM [UrbanBus].[line]
+		WHERE [number] = @lineNumber;
 
 	-- Get the firstStop
-	IF @outbound = 0
-		INSERT INTO @result
-		SELECT s.[id], s.[name], s.[location], s.[longitude], s.[latitude]
-		FROM [UrbanBus].[stop] AS s
-		JOIN [UrbanBus].[line_stop] AS ls
-		ON s.id = ls.idStop
-		WHERE ls.idLine = @lineNumber
-		AND ls.outbound = @outbound
-		AND ls.idStop = @firstStop;
-	ELSE
-		INSERT INTO @result
-		SELECT s.[id], s.[name], s.[location], s.[longitude], s.[latitude]
-		FROM [UrbanBus].[stop] AS s
-		JOIN [UrbanBus].[line_stop] AS ls
-		ON s.id = ls.idStop
-		WHERE ls.idLine = @lineNumber
-		AND ls.outbound = @outbound
-		AND ls.idStop = @lastStop;
+	INSERT INTO @result
+	SELECT s.[id], s.[name], s.[location], s.[longitude], s.[latitude]
+	FROM [UrbanBus].[stop] AS s
+	JOIN [UrbanBus].[line_stop] AS ls
+	ON s.id = ls.idStop
+	WHERE ls.idLine = @lineNumber
+	AND ls.outbound = @outbound
+	AND ls.idStop = @firstStop;
 
 
-		-- Get the rest of the stops
-		WHILE @firstStop != @lastStop
-			BEGIN
-				SELECT @firstStop = idNextStop
-				FROM [UrbanBus].[line_stop]
-				WHERE idLine = @lineNumber
-				AND idStop = @firstStop
-				AND outbound = @outbound;
 
-				INSERT INTO @result
-				SELECT s.[id], s.[name], s.[location], s.[longitude], s.[latitude]
-				FROM [UrbanBus].[stop] AS s
-				JOIN [UrbanBus].[line_stop] AS ls
-				ON s.id = ls.idStop
-				WHERE ls.idLine = @lineNumber
-				AND ls.outbound = @outbound
-				AND ls.idStop = @firstStop;
+	-- Get the rest of the stops
+	WHILE @firstStop != @lastStop
+		BEGIN
+			SELECT @firstStop = idNextStop
+			FROM [UrbanBus].[line_stop]
+			WHERE idLine = @lineNumber
+			AND idStop = @firstStop
+			AND outbound = @outbound;
 
-			END;
+			INSERT INTO @result
+			SELECT s.[id], s.[name], s.[location], s.[longitude], s.[latitude]
+			FROM [UrbanBus].[stop] AS s
+			JOIN [UrbanBus].[line_stop] AS ls
+			ON s.id = ls.idStop
+			WHERE ls.idLine = @lineNumber
+			AND ls.outbound = @outbound
+			AND ls.idStop = @firstStop;
+
+		END;
 	RETURN;
 END;
 
