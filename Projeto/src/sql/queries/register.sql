@@ -8,13 +8,13 @@ DECLARE @passwordSalt CHAR(16);
 
 EXEC [passwordConstructor] @password, @passwordHash OUTPUT, @passwordSalt OUTPUT;
 
-INSERT INTO [UrbanBus.client] ([name], [email], [nif], [pHash], [salt])
+INSERT INTO [UrbanBus].[client] ([name], [email], [nif], [pHash], [salt])
 VALUES (@name, @email, @nif, @passwordHash, @passwordSalt);
 
 
 DECLARE @clientID INT;
 SET @clientID = (
-	SELECT [UrbanBus.client].[number] FROM [UrbanBus.client] WHERE [UrbanBus.client].[email] = @email
+	SELECT [UrbanBus].[client].[number] FROM [UrbanBus].[client] WHERE [UrbanBus].[client].[email] = @email
 );
 
 EXEC [createSession] @clientID;

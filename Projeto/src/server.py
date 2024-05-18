@@ -243,13 +243,13 @@ def getJourneyWhereClause(journey=None, line=None, time=None, stops=None):
 
     if stops:
         # All stops must be in the line of the journey
-        where_clause += f' AND {len(stops)} = ALL (SELECT count(*) FROM [UrbanBus.line_stop] WHERE [UrbanBus.journey].[outbound] = [UrbanBus.line_stop].[outbound] AND idLine = {line} AND ('
+        where_clause += f' AND {len(stops)} = ALL (SELECT count(*) FROM [UrbanBus].[line_stop] WHERE [UrbanBus].[journey].[outbound] = [UrbanBus].[line_stop].[outbound] AND idLine = {line} AND ('
         for i, stop in enumerate(stops):
             where_clause += f' OR idStop = {stop}'
         where_clause += '))'
         
         # Stops should not be in the exceptions table
-        where_clause += f' AND id <> ALL (SELECT idJourney FROM [UrbanBus.exceptions] WHERE '
+        where_clause += f' AND id <> ALL (SELECT idJourney FROM [UrbanBus].[exceptions] WHERE '
         for stop in stops:
             where_clause += f' OR idStop = {stop}'
         where_clause += ')'

@@ -1,2 +1,2 @@
-INSERT INTO [UrbanBus.stop] ([name], [location], [longitude], [latitude])
+INSERT INTO [UrbanBus].[stop] ([name], [location], [longitude], [latitude])
 VALUES (?, ?, ?, ?);

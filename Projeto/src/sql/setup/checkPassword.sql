@@ -11,14 +11,14 @@ AS BEGIN
 	DECLARE @tempPassword VARCHAR(255);
 	
 	SET @salt = (
-		SELECT [UrbanBus.client].[salt] FROM [UrbanBus.client] WHERE [UrbanBus.client].[number] = @clientID
+		SELECT [UrbanBus].[client].[salt] FROM [UrbanBus].[client] WHERE [UrbanBus].[client].[number] = @clientID
 	);
 	
 	SET @tempPassword = @password + @salt;
 	
 	SET @tempHash = HASHBYTES('SHA2_512', @tempPassword);
 	SET @hash = (
-		SELECT [UrbanBus.client].[pHash] FROM [UrbanBus.client] WHERE [UrbanBus.client].[number] = @clientID
+		SELECT [UrbanBus].[client].[pHash] FROM [UrbanBus].[client] WHERE [UrbanBus].[client].[number] = @clientID
 	);
 	
 	IF @tempHash = @hash

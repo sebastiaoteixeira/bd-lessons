@@ -1,4 +1,4 @@
 SELECT COUNT(*)
-FROM [UrbanBus.client]
+FROM [UrbanBus].[client]
 WHERE [token] = ? AND [expiration] > GETDATE();
 

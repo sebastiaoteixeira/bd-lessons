@@ -1,4 +1,4 @@
-INSERT INTO [UrbanBus.stop] ([name], [location], [longitude], [latitude])
+INSERT INTO [UrbanBus].[stop] ([name], [location], [longitude], [latitude])
 VALUES
 --Z1
 ('Estação de Aveiro', 'R. Cmte. Rocha e Cunha 156, 3800-179 Aveiro', 40.643450, -8.641420),

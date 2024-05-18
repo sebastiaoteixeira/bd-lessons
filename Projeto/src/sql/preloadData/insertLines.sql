@@ -1,8 +1,8 @@
-INSERT INTO [UrbanBus.line] ([number], [designation], [idFirstStop], [idLastStop], [color])
+INSERT INTO [UrbanBus].[line] ([number], [designation], [idFirstStop], [idLastStop], [color])
 VALUES ('1', 'L1', 1, 6, 1000000);
 GO
 
-INSERT INTO [UrbanBus.line_stop] ([idLine], [idStop], [idNextStop], [timeToNext], [outbound])
+INSERT INTO [UrbanBus].[line_stop] ([idLine], [idStop], [idNextStop], [timeToNext], [outbound])
 VALUES 
 	-- L1
 	--ida

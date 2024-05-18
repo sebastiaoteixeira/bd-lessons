@@ -1,1 +1,1 @@
-SELECT * FROM [UrbanBus.purchasedItem];
+SELECT * FROM [UrbanBus].[purchasedItem];

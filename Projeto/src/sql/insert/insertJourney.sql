@@ -1,2 +1,2 @@
-INSERT INTO [UrbanBus.journey] ([idLine], [idFirstStop], [idLastStop], [startTime], [outbound])
+INSERT INTO [UrbanBus].[journey] ([idLine], [idFirstStop], [idLastStop], [startTime], [outbound])
 VALUES (?, ?, ?, ?, ?);

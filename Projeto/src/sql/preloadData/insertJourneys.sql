@@ -1,4 +1,4 @@
-INSERT INTO [UrbanBus.journey] ([idLine], [idFirstStop], [idLastStop], [startTime], [outbound])
+INSERT INTO [UrbanBus].[journey] ([idLine], [idFirstStop], [idLastStop], [startTime], [outbound])
 VALUES (1, 1, 6, '06:00:00', 1),
 (1, 6, 1, '06:30:00', 0),
 (1, 1, 6, '07:00:00', 1),
@@ -33,5 +33,5 @@ VALUES (1, 1, 6, '06:00:00', 1),
 (1, 6, 1, '21:30:00', 0),
 (1, 1, 6, '22:00:00', 1);
 
-INSERT INTO [UrbanBus.exceptions] ([idJourney], [idStop], [timeModification])
+INSERT INTO [UrbanBus].[exceptions] ([idJourney], [idStop], [timeModification])
 VALUES (5, 3, '00:00:00');

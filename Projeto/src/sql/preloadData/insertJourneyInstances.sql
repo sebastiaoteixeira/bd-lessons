@@ -1,4 +1,4 @@
-INSERT INTO [UrbanBus.journeyInstance] ([idJourney], [startTime])
+INSERT INTO [UrbanBus].[journeyInstance] ([idJourney], [startTime])
 VALUES (6, '2019-01-01 09:00:00'),
 	(6, '2019-01-02 09:01:03'),
 	(6, '2019-01-03 09:00:33'),

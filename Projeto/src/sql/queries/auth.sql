@@ -1,6 +1,6 @@
 DECLARE @clientID INT;
 SET @clientID = (
-	SELECT [UrbanBus.client].[number] FROM [UrbanBus.client] WHERE [UrbanBus.client].[email] = ?
+	SELECT [UrbanBus].[client].[number] FROM [UrbanBus].[client] WHERE [UrbanBus].[client].[email] = ?
 );
 
 DECLARE @result BIT;

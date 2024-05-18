@@ -1,1 +1,1 @@
-SELECT * FROM [UrbanBus.purchasedItem] WHERE [idTransportTicket] = @ticketNumber;
+SELECT * FROM [UrbanBus].[purchasedItem] WHERE [idTransportTicket] = @ticketNumber;

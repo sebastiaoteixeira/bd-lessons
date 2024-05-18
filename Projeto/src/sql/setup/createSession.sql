@@ -20,14 +20,14 @@ AS BEGIN
 
 	SET @token = @tempToken;
 
-	UPDATE [UrbanBus.client]
+	UPDATE [UrbanBus].[client]
 		SET [token] = @token
 		WHERE [number] = @clientID;
 
 	DECLARE @validityDate DATE;
 	SET @validityDate = DATEADD(DAY, 30, GETDATE());
 
-	UPDATE [UrbanBus.client]
+	UPDATE [UrbanBus].[client]
 		SET [expiration] = @validityDate
 		WHERE [number] = @clientID;
 	

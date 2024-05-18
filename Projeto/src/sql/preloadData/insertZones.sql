@@ -1,1 +1,1 @@
-INSERT INTO [UrbanBus.zone] (designation) VALUES ('Centro');
+INSERT INTO [UrbanBus].[zone] (designation) VALUES ('Centro');
