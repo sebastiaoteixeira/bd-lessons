@@ -157,15 +157,37 @@ def getDirection(stop):
 @app.route('/api/v1/line/<int:linenumber>/stops', methods=['GET'])
 def line_stops(linenumber):
     direction = request.args.get('direction')
-    result = []
-    for stop in runSQLQuery(connection, './src/sql/queries/lineStopsList.sql', (linenumber, direction == 'outbound')):
-        result.append({
-            'id': stop[0],
-            'name': stop[1],
-            'location': stop[2],
-            'longitude': stop[3],
-            'latitude': stop[4]
-        })
+    if not direction:
+        result = {'inbound': [], 'outbound': []}
+
+        for stop in runSQLQuery(connection, './src/sql/queries/lineStopsList.sql', (linenumber, False)):
+            result['inbound'].append({
+                'id': stop[0],
+                'name': stop[1],
+                'location': stop[2],
+                'longitude': stop[3],
+                'latitude': stop[4]
+            })
+
+        for stop in runSQLQuery(connection, './src/sql/queries/lineStopsList.sql', (linenumber, True)):
+            result['outbound'].append({
+                'id': stop[0],
+                'name': stop[1],
+                'location': stop[2],
+                'longitude': stop[3],
+                'latitude': stop[4]
+            })
+
+    else:
+        result = []
+        for stop in runSQLQuery(connection, './src/sql/queries/lineStopsList.sql', (linenumber, direction == 'outbound')):
+            result.append({
+                'id': stop[0],
+                'name': stop[1],
+                'location': stop[2],
+                'longitude': stop[3],
+                'latitude': stop[4]
+            })
 
     return jsonify(result)
 
@@ -194,7 +216,7 @@ def line_stop(linenumber, stopnumber):
 
     direction = request.args.get('direction')
 
-    for stop in runSQLQuery(connection, './src/sql/queries/uniDir_line_stop.sql', (linenumber, stopnumber, direction == 'outbound')) if direction else runSQLQuery(connection, './src/sql/queries/line_stop.sql', (linenumber, stopnumber)):
+    for stop in runSQLQuery(connection, *(('./src/sql/queries/uniDir_line_stop.sql', (linenumber, stopnumber, direction == 'outbound')) if direction else ('./src/sql/queries/line_stop.sql', (linenumber, stopnumber)))):
         result.append(getLineStop(stopnumber, stop))
 
     return jsonify(result)
@@ -251,7 +273,20 @@ def journey(journeynumber):
             'time': str(journey[3]),
             'direction': 'outbound' if journey[4] else 'inbound'
         })
-    pass
+
+@app.route('/api/v1/journey/<int:journeynumber>/stops', methods=['GET'])
+def journey_stops(journeynumber):
+    result = []
+    for stop in runSQLQuery(connection, './src/sql/queries/journeyStopsList.sql', (journeynumber,)):
+        result.append({
+            'id': stop[0],
+            'name': stop[1],
+            'location': stop[2],
+            'longitude': stop[3],
+            'latitude': stop[4],
+            'time': str(stop[5])
+        })
+    return jsonify(result)
 
 @app.route('/api/v1/line/<int:linenumber>/journeys', methods=['GET'])
 def line_journeys(linenumber):
