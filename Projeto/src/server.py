@@ -157,34 +157,15 @@ def getDirection(stop):
 @app.route('/api/v1/line/<int:linenumber>/stops', methods=['GET'])
 def line_stops(linenumber):
     direction = request.args.get('direction')
-    if direction:
-        directions = [direction]
-        if direction not in ['inbound', 'outbound']:
-            return jsonify({'error': 'Invalid direction'}), 400
-    else:
-        directions = ['inbound', 'outbound']
-
-    raw_result = {d: [] for d in directions}
-    app.logger.info(raw_result)
-    firstAndLastStop = []
-
-    for line in runSQLQuery(connection, './src/sql/queries/line.sql', (linenumber,)):
-        firstAndLastStop.extend(line[1:3])
-        break
-
-    for stop in runSQLQuery(connection, './src/sql/queries/uniDir_line_stops.sql', (linenumber, direction == 'outbound')) if direction else runSQLQuery(connection, './src/sql/queries/line_stops.sql', (linenumber,)):
-        raw_result[getDirection(stop)].append({
+    result = []
+    for stop in runSQLQuery(connection, './src/sql/queries/lineStopsList.sql', (linenumber, direction == 'outbound')):
+        result.append({
             'id': stop[0],
-            'idNextStop': stop[1]
-            })
-
-    app.logger.info(raw_result)
-    result = {d: [] for d in directions}
-    for key in result:
-        result[key] = computeStopsOrder(raw_result[key], firstAndLastStop[0 if key == 'inbound' else 1], firstAndLastStop[0 if key == 'outbound' else 1])
-
-    if None in result.values():
-        return jsonify({'error': 'Invalid stops order'}), 500
+            'name': stop[1],
+            'location': stop[2],
+            'longitude': stop[3],
+            'latitude': stop[4]
+        })
 
     return jsonify(result)
 

@@ -1,5 +1,5 @@
 INSERT INTO [UrbanBus].[line] ([number], [designation], [idFirstStop], [idLastStop], [color])
-VALUES ('1', 'L1', 1, 6, 1000000);
+VALUES ('1', 'L1', 49, 18, 1000000);
 GO
 
 INSERT INTO [UrbanBus].[line_stop] ([idLine], [idStop], [idNextStop], [timeToNext], [outbound])
@@ -21,6 +21,7 @@ VALUES
 		(1, 5, 9, '00:05:00', 0),
 		(1, 9, 12, '00:05:00', 0),
 		(1, 12, 18, '00:05:00', 0),
+		(1, 18, null, '00:00:00', 0),
 	-- volta
 		(1, 18, 19, '00:05:00', 1),
 		(1, 19, 11, '00:05:00', 1),
