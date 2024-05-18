@@ -163,12 +163,15 @@ BEGIN
 END
 
 
-
-
+A escolha entre AFTER DELETE e INSTEAD OF DELETE depende dos requisitos específicos do sistema. Se for necessária uma solução simples e direta, AFTER DELETE pode ser mais apropriado. No entanto, se for necessário mais controle sobre a operação de exclusão e validações adicionais, INSTEAD OF DELETE seria a melhor escolha.
 ```
 
 ### *i)* 
 
 ```
-... Write here your answer ...
+Stored Procedures são blocos de código SQL pré-compilados que podem modificar dados e suportam transações, loops e condições. Elas melhoram a performance, centralizam a lógica de negócios e reduzem o tráfego de rede. Usadas para operações de CRUD, processamento em massa e geração de relatórios. Exemplo: atualização de salário de um funcionário.
+
+UDFs retornam um valor escalar ou uma tabela, são determinísticas e não podem modificar dados. Elas simplificam consultas complexas e encapsulam lógica repetitiva. Usadas para cálculos e transformações de dados. Exemplo: cálculo de imposto sobre salário em uma consulta.
+
+Comparando as vantagens entre si, Stored Procedures podem modificar dados, enquanto UDFs não podem. Stored Procedures suportam transações e lógica complexa, enquanto UDFs são mais simples e focadas em cálculos e transformações. UDFs podem ser usadas diretamente em consultas SQL, oferecendo flexibilidade, enquanto Stored Procedures não podem ser invocadas diretamente em uma consulta. Stored Procedures melhoram a performance e oferecem maior segurança ao encapsular a lógica de negócios e reduzir o tráfego de rede.
 ```
