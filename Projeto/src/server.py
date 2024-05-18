@@ -230,34 +230,6 @@ def next_stop(linenumber, stopnumber):
     for stop in runSQLQuery(connection, './src/sql/queries/next_stop.sql', (linenumber, stopnumber, direction == 'outbound')):
         return jsonify(getLineStop(stop[0], stop[1:]))
 
-# Base function for journey getters
-def getJourneyWhereClause(journey=None, line=None, time=None, stops=None):
-    args = [journey, line, time]
-    where_clause = ''
-
-    if any(args) or stops:
-        where_clause = ' WHERE '
-
-    if any(args):
-        where_clause += ' AND '.join([f'{arg[0]} = {arg[1]}' for arg in zip(['number', 'idLine', 'time'], args) if arg[1]])
-
-    if stops:
-        # All stops must be in the line of the journey
-        where_clause += f' AND {len(stops)} = ALL (SELECT count(*) FROM [UrbanBus].[line_stop] WHERE [UrbanBus].[journey].[outbound] = [UrbanBus].[line_stop].[outbound] AND idLine = {line} AND ('
-        for i, stop in enumerate(stops):
-            where_clause += f' OR idStop = {stop}'
-        where_clause += '))'
-        
-        # Stops should not be in the exceptions table
-        where_clause += f' AND id <> ALL (SELECT idJourney FROM [UrbanBus].[exceptions] WHERE '
-        for stop in stops:
-            where_clause += f' OR idStop = {stop}'
-        where_clause += ')'
-    
-    where_clause = where_clause.replace('WHERE  AND', 'WHERE').replace('WHERE  OR', 'WHERE').replace('( OR ', '(')
-
-    app.logger.info('WHERE CLAUSE: ' + where_clause)
-    return where_clause
 
 @app.route('/api/v1/journeys', methods=['GET'])
 def journeys():
@@ -265,8 +237,6 @@ def journeys():
 
     line = request.args.get('line')
     includeStops = request.args.get('includeStops')
-    if includeStops:
-        includeStops = includeStops.split(',')
     limit = request.args.get('limit')
     if not limit:
         limit = 1000
@@ -274,9 +244,8 @@ def journeys():
     if not offset:
         offset = 0
 
-    where_clause = getJourneyWhereClause(line=line, stops=includeStops)
 
-    for journey in runSQLQuery(connection, './src/sql/queries/journeys.sql', limit=limit, offset=offset, append=where_clause):
+    for journey in runSQLQuery(connection, './src/sql/queries/journeys.sql', (line, includeStops), limit=limit, offset=offset):
         result.append({
             'id': journey[0],
             'idLine': journey[1],

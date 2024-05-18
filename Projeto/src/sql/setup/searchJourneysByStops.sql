@@ -11,7 +11,8 @@ RETURN
 (
 	WITH SplitStops AS 
 	(
-		SELECT value AS id
+		-- Split lines by ',' and convert to int
+		SELECT CAST(value AS INT) AS id
 		FROM STRING_SPLIT(@includedStops, ',')
 	)
 	, StopCount AS
