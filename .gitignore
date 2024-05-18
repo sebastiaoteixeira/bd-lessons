@@ -9,6 +9,7 @@
 *.cache
 
 env.list
+*.pem
 
 # Created by https://www.toptal.com/developers/gitignore/api/python,flask,visualstudiocode,vim
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,flask,visualstudiocode,vim
