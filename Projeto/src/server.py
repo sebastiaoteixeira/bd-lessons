@@ -241,7 +241,9 @@ def journeys():
                 'idFirstStop': journey[2],
                 'idLastStop': journey[3],
                 'time': str(journey[4]),
-                'direction': 'outbound' if journey[5] else 'inbound'
+                'firstStopTime': str(journey[5]),
+                'lastStopTime': str(journey[6]),
+                'direction': 'outbound' if journey[7] else 'inbound'
             })
     else:
         for journey in runSQLQuery(connection, './src/sql/queries/journeys.sql', (line, includeStops), limit=limit, offset=offset):

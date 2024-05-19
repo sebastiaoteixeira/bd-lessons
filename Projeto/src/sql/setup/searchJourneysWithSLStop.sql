@@ -12,6 +12,8 @@ RETURNS @result TABLE
 	[idFirstStop] INT,
 	[idLastStop] INT,
 	[startTime] TIME,
+	[firstStopTime] TIME,
+	[lastStopTime] TIME,
 	[outbound] BIT
 )
 AS
@@ -20,7 +22,7 @@ BEGIN
 
 	-- Verify if both stops are in the same line calling the function searchJourneysByStops
 	INSERT INTO @result
-	SELECT s.[id], s.[idLine], s.[idFirstStop], s.[idLastStop], s.[startTime], s.[outbound]
+	SELECT s.[id], s.[idLine], s.[idFirstStop], s.[idLastStop], s.[startTime], null, null, s.[outbound]
 	FROM searchJourneysByStops(@stopsString) AS s;
 
 	-- If @result is empty, return empty		
@@ -46,13 +48,23 @@ BEGIN
 	
 	WHILE @@FETCH_STATUS = 0
 		BEGIN
-			SET @stop = @firstStop;
+			SET @stop = @firstS;
 			WHILE @stop != @lastS
 				BEGIN
+					IF @stop = @firstStop
+						UPDATE @result
+						SET [firstStopTime] = @time
+						WHERE [id] = @journey;
+
 					SELECT @nextStop = idNextStop, @time = DATEADD(SECOND, DATEDIFF(SECOND, 0, @time) + DATEDIFF(SECOND, 0, timeToNext), 0)
 					FROM [UrbanBus].[line_stop]
 					WHERE idLine = @line
 					AND idStop = @stop;
+
+					IF @nextStop = @lastStop
+						UPDATE @result
+						SET [lastStopTime] = @time
+						WHERE [id] = @journey;
 
 					IF @nextStop = @lastStop
 						BREAK;
