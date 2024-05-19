@@ -45,13 +45,17 @@ BEGIN
 
 	OPEN journeyCursor;
 	FETCH NEXT FROM journeyCursor INTO @journey, @line, @firstS, @lastS, @time, @outbound;
+
+	DECLARE @firstStopFound BIT;
 	
 	WHILE @@FETCH_STATUS = 0
 		BEGIN
+			SELECT @firstStopFound = 0;
 			SET @stop = @firstS;
-			WHILE @stop != @lastS
+			WHILE 1 = 1
 				BEGIN
 					IF @stop = @firstStop
+						SET @firstStopFound = 1;
 						UPDATE @result
 						SET [firstStopTime] = @time
 						WHERE [id] = @journey;
@@ -66,7 +70,7 @@ BEGIN
 						SET [lastStopTime] = @time
 						WHERE [id] = @journey;
 
-					IF @nextStop = @lastStop
+					IF @nextStop = @lastStop AND @firstStopFound = 1
 						BREAK;
 					IF @nextStop IS NULL
 						BEGIN

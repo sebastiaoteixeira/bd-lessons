@@ -238,21 +238,67 @@ def journeys():
         for journey in runSQLQuery(connection, './src/sql/queries/flsJourneys.sql', (line, start, end), limit=limit, offset=offset):
             result.append({
                 'id': journey[0],
-                'idLine': journey[1],
-                'idFirstStop': journey[2],
-                'idLastStop': journey[3],
+                'line': {
+                    'number': journey[1],
+                    'designation': journey[16],
+                    'color': "#{:0>6}".format(hex(journey[17])[2:])
+                },
+                'firstStop': {
+                    'id': journey[2],
+                    'name': journey[8],
+                    'location': journey[9],
+                    'longitude': journey[10],
+                    'latitude': journey[11],
+                },
+                'lastStop': {
+                    'id': journey[3],
+                    'name': journey[12],
+                    'location': journey[13],
+                    'longitude': journey[14],
+                    'latitude': journey[15],
+                },
+                'firstSelectedStop': {
+                    'id': start,
+                    'name': journey[18],
+                    'location': journey[19],
+                    'longitude': journey[20],
+                    'latitude': journey[21],
+                    'time': str(journey[5])
+                },
+                'lastSelectedStop': {
+                    'id': end,
+                    'name': journey[22],
+                    'location': journey[23],
+                    'longitude': journey[24],
+                    'latitude': journey[25],
+                    'time': str(journey[6])
+                },
                 'time': str(journey[4]),
-                'firstStopTime': str(journey[5]),
-                'lastStopTime': str(journey[6]),
                 'direction': 'outbound' if journey[7] else 'inbound'
             })
     else:
         for journey in runSQLQuery(connection, './src/sql/queries/journeys.sql', (line, includeStops), limit=limit, offset=offset):
             result.append({
                 'id': journey[0],
-                'idLine': journey[1],
-                'idFirstStop': journey[2],
-                'idLastStop': journey[3],
+                'line': {
+                    'number': journey[1],
+                    'designation': journey[14],
+                    'color': "#{:0>6}".format(hex(journey[15])[2:])
+                },
+                'firstStop': {
+                    'id': journey[2],
+                    'name': journey[6],
+                    'location': journey[7],
+                    'longitude': journey[8],
+                    'latitude': journey[9]
+                },
+                'lastStop': {
+                    'id': journey[3],
+                    'name': journey[10],
+                    'location': journey[11],
+                    'longitude': journey[12],
+                    'latitude': journey[13]
+                },
                 'time': str(journey[4]),
                 'direction': 'outbound' if journey[5] else 'inbound'
             })
@@ -265,13 +311,29 @@ def journey(journeynumber):
     # TODO: Implement journey getter
     for journey in runSQLQuery(connection, './src/sql/queries/journey.sql', (journeynumber,)):
         return jsonify({
-            'id': journeynumber,
-            'idLine': journey[0],
-            'idFirstStop': journey[1],
-            'idLastStop': journey[2],
-            'time': str(journey[3]),
-            'direction': 'outbound' if journey[4] else 'inbound'
-        })
+            'id': journey[0],
+            'line': {
+                'number': journey[1],
+                'designation': journey[14],
+                'color': "#{:0>6}".format(hex(journey[15])[2:])
+                },
+            'firstStop': {
+                'id': journey[2],
+                'name': journey[6],
+                'location': journey[7],
+                'longitude': journey[8],
+                'latitude': journey[9]
+                },
+            'lastStop': {
+                'id': journey[3],
+                'name': journey[10],
+                'location': journey[11],
+                'longitude': journey[12],
+                'latitude': journey[13]
+                },
+            'time': str(journey[4]),
+            'direction': 'outbound' if journey[5] else 'inbound'
+            })
 
 @app.route('/api/v1/journey/<int:journeynumber>/stops', methods=['GET'])
 def journey_stops(journeynumber):
@@ -284,7 +346,7 @@ def journey_stops(journeynumber):
             'longitude': stop[3],
             'latitude': stop[4],
             'time': str(stop[5])
-        })
+            })
     return jsonify(result)
 
 @app.route('/api/v1/line/<int:linenumber>/journeys', methods=['GET'])
@@ -306,7 +368,7 @@ def line_journeys(linenumber):
             'idFirstStop': journey[2],
             'idLastStop': journey[3],
             'time': str(journey[4]),
-        })
+            })
 
     return jsonify(result)
 
@@ -317,7 +379,7 @@ def line_journeys(linenumber):
 def price(ticketType, start, end):
     # TODO: Implement price getter (with ticket type, start and end stops)
     price = None
-    
+
     for price in runSQLQuery(connection, './src/sql/queries/prices.sql', (ticketType, start, end)):
         pass
 
@@ -325,21 +387,21 @@ def price(ticketType, start, end):
 def tickets():
     # TODO: Implement tickets getter with all items purchased (onlyValid options)
     result = []
-    
+
     onlyValid = request.args.get('onlyValid')
     if onlyValid:
         onlyValid = onlyValid.lower() == 'true'
     else:
         onlyValid = False
-        
+
     for ticket in runSQLQuery(connection, './src/sql/queries/tickets.sql', (onlyValid,)):
         result.append({
             'id': ticket[0],
             'idItemTariff': ticket[1],
             'idTransportTicket': ticket[2],
             'date': ticket[3]
-        })
-        
+            })
+
     return jsonify(result)
 
 @app.route('/api/v1/myTickets', methods=['GET'])
@@ -352,15 +414,15 @@ def myTickets():
 def ticket(ticketnumber):
     # TODO: Implement ticket getter with all items purchased
     result = []
-    
+
     for ticket in runSQLQuery(connection, './src/sql/queries/ticket.sql', (ticketnumber,)):
         result.append({
             'id': ticket[0],
             'idItemTariff': ticket[1],
             'idTransportTicket': ticket[2],
             'date': ticket[3]
-        })
-        
+            })
+
     return jsonify(result)
 
 # Module 3: Statistics and Registers
@@ -393,8 +455,8 @@ def journeyInstances():
                 'idFirstStop': journeyInstance[4],
                 'idLastStop': journeyInstance[5],
                 'time': str(journeyInstance[6])
-            }
-        })
+                }
+            })
 
     return jsonify(result)
 
@@ -411,8 +473,8 @@ def journeyInstance(journeyInstanceNumber):
                 'idFirstStop': journeyInstance[3],
                 'idLastStop': journeyInstance[4],
                 'time': str(journeyInstance[5])
-            }
-        })
+                }
+            })
     pass
 
 @app.route('/api/v1/journeyInstance/<int:journeyInstanceNumber>/stops', methods=['GET'])
