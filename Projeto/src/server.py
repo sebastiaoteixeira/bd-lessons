@@ -1,10 +1,11 @@
 from flask import jsonify, request
+from flask_cors import CORS
 from .app import App
 from .utils.runSQL import runSQLQuery, dbconnect, runSQLFile
 import time
 
 app = App(__name__)
-
+CORS(app)
 
 # Connect to the database
 connection = dbconnect()
@@ -117,7 +118,7 @@ def lines():
             'designation': line[1],
             'idFirstStop': line[2],
             'idLastStop': line[3],
-            'color': "{:0>6}".format(hex(line[4])[2:]).capitalize()
+            'color': "#{:0>6}".format(hex(line[4])[2:])
         })
 
     return jsonify(result)
@@ -131,7 +132,7 @@ def line(linenumber):
             'designation': line[0],
             'idFirstStop': line[1],
             'idLastStop': line[2],
-            'color': "{:0>6}".format(hex(line[3])[2:]).capitalize()
+            'color': "#{:0>6}".format(hex(line[3])[2:])
         })
 
 

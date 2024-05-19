@@ -3,7 +3,7 @@ import os
 
 class dbconnect():
     def __init__(self):
-        self.conn = None
+        self.conn = []
 
         SERVER = os.environ.get('SQL_SERVER')
         DATABASE = os.environ.get('SQL_DATABASE')
@@ -14,14 +14,15 @@ class dbconnect():
         print(self.connectionString)
 
     def getConnection(self):
-        if self.conn is None:
-            self.conn = pyodbc.connect(self.connectionString)
-        return self.conn
+        self.conn.append(pyodbc.connect(self.connectionString))
+        return self.conn[-1]
 
     def closeConnection(self):
-        if self.conn:
-            self.conn.close()
-            self.conn = None
+        for conn in self.conn:
+            try:
+                conn.close()
+            except:
+                pass
 
 def runSQL(connection, query, args=None, limit=1000, offset=0, logger=None):
     conn = connection.getConnection()
@@ -48,8 +49,10 @@ def runSQL(connection, query, args=None, limit=1000, offset=0, logger=None):
             conn.commit()
             return ('Query executed successfully',)
         else:
-            conn.closeConnection()
             raise e
+    finally:
+        cursor.close()
+        conn.close()
 
 def runSQLQuery(connection, queryFile, args=None, *, limit=1000, offset=0, append='', logger=None):
     limit = min(int(limit), 1000)
