@@ -27,6 +27,7 @@ def run():
                         'src/sql/preloadData/insertStops.sql',
                         'src/sql/preloadData/insertLines.sql',
                         'src/sql/preloadData/insertJourneys.sql'
+                        'src/sql/preloadData/insertJourneyInstances.sql'
                         ]
             connection = runSQL.dbconnect()
             for file in sqlFiles:

@@ -333,7 +333,7 @@ def journey(journeynumber):
                 },
             'time': str(journey[4]),
             'direction': 'outbound' if journey[5] else 'inbound'
-            })
+        })
 
 @app.route('/api/v1/journey/<int:journeynumber>/stops', methods=['GET'])
 def journey_stops(journeynumber):
@@ -346,7 +346,7 @@ def journey_stops(journeynumber):
             'longitude': stop[3],
             'latitude': stop[4],
             'time': str(stop[5])
-            })
+        })
     return jsonify(result)
 
 @app.route('/api/v1/line/<int:linenumber>/journeys', methods=['GET'])
@@ -356,19 +356,15 @@ def line_journeys(linenumber):
     result = []
 
     includeStops = request.args.get('includeStops')
-    if includeStops:
-        includeStops = includeStops.split(',')
 
-    where_clause = getJourneyWhereClause(line=linenumber, stops=includeStops)
-
-    for journey in runSQLQuery(connection, './src/sql/queries/journeys.sql', append=where_clause):
+    for journey in runSQLQuery(connection, './src/sql/queries/journeys.sql' ,(linenumber, includeStops)):
         result.append({
             'id': journey[0],
             'idLine': journey[1],
             'idFirstStop': journey[2],
             'idLastStop': journey[3],
             'time': str(journey[4]),
-            })
+        })
 
     return jsonify(result)
 
@@ -400,7 +396,7 @@ def tickets():
             'idItemTariff': ticket[1],
             'idTransportTicket': ticket[2],
             'date': ticket[3]
-            })
+        })
 
     return jsonify(result)
 
@@ -408,7 +404,25 @@ def tickets():
 @require_auth
 def myTickets():
     # TODO: Implement tickets getter with all items purchased (onlyValid options)
-    pass
+    result = []
+    
+    token = request.headers.get('Authorization')
+    
+    onlyValid = request.args.get('onlyValid')
+    if onlyValid:
+        onlyValid = onlyValid.lower() == 'true'
+    else:
+        onlyValid = False
+    
+    for ticket in runSQLQuery(connection, './src/sql/queries/myTickets.sql', (token,onlyValid)):
+        result.append({
+            'id': ticket[0],
+            'idItemTariff': ticket[1],
+            'idTransportTicket': ticket[2],
+            'date': ticket[3]
+        })
+        
+    return jsonify(result)
 
 @app.route('/api/v1/ticket/<int:ticketnumber>', methods=['GET'])
 def ticket(ticketnumber):
@@ -421,7 +435,7 @@ def ticket(ticketnumber):
             'idItemTariff': ticket[1],
             'idTransportTicket': ticket[2],
             'date': ticket[3]
-            })
+        })
 
     return jsonify(result)
 
@@ -429,11 +443,11 @@ def ticket(ticketnumber):
 ## GETTERS ##
 @app.route('/api/v1/journeyInstances', methods=['GET'])
 def journeyInstances():
-    # TODO: Implement journey instance getter (with mintime, maxtime, journey and/or line options)
+    # TODO: Implement journey instance getter (with mintime, maxtime, journey or line options)
     result = []
 
-    mintime = request.args.get('mintime')
-    maxtime = request.args.get('maxtime')
+    #mintime = request.args.get('mintime')
+    #maxtime = request.args.get('maxtime')
     journey = request.args.get('journey')
     line = request.args.get('line')
     limit = request.args.get('limit')
@@ -443,9 +457,10 @@ def journeyInstances():
     if not offset:
         offset = 0
 
-    where_clause = getJourneyWhereClause(line=line, journey=journey, time=mintime)
-
-    for journeyInstance in runSQLQuery(connection, './src/sql/queries/journeyInstances.sql', limit=limit, offset=offset, append=where_clause):
+    if journey and line:
+        return jsonify({'error': 'Invalid parameters'}), 400
+    
+    for journeyInstance in runSQLQuery(connection, './src/sql/queries/journeyInstances.sql', limit=limit, offset=offset, args=(journey, line)):
         result.append({
             'id': journeyInstance[0],
             'idJourney': journeyInstance[1],
@@ -455,16 +470,18 @@ def journeyInstances():
                 'idFirstStop': journeyInstance[4],
                 'idLastStop': journeyInstance[5],
                 'time': str(journeyInstance[6])
-                }
-            })
+            }
+        })
 
     return jsonify(result)
 
 @app.route('/api/v1/journeyInstance/<int:journeyInstanceNumber>', methods=['GET'])
 def journeyInstance(journeyInstanceNumber):
     # TODO: Implement journey instance getter
+    result = []
+    
     for journeyInstance in runSQLQuery(connection, './src/sql/queries/journeyInstance.sql', (journeyInstanceNumber,), logger=app.logger):
-        return jsonify({
+        result.append({
             'id': journeyInstanceNumber,
             'dateTime': str(journeyInstance[0]),
             'journey': {
@@ -475,12 +492,23 @@ def journeyInstance(journeyInstanceNumber):
                 'time': str(journeyInstance[5])
                 }
             })
-    pass
+    return jsonify
 
 @app.route('/api/v1/journeyInstance/<int:journeyInstanceNumber>/stops', methods=['GET'])
 def journeyInstanceStops(journeyInstanceNumber):
     # TODO: Implement journey instance stops getter
-    pass
+    result = []
+    
+    for stop in runSQLQuery(connection, './src/sql/queries/journeyInstance.sql', (journeyInstanceNumber,), logger=app.logger):
+        result.append({
+            'id': stop[0],
+            'name': stop[1],
+            'location': stop[2],
+            'longitude': stop[3],
+            'latitude': stop[4],
+            'time': str(stop[5])       
+        })
+    return jsonify
 
 @app.route('/api/v1/journeyInstance/<int:journeyInstanceNumber>/validations', methods=['GET'])
 def journeyInstanceValidations(journeyInstanceNumber):
