@@ -1,6 +1,7 @@
 -- FUNCTION to get journeys that have a 2 stops and the is in the direction of the stops
 
-CREATE OR ALTER FUNCTION searchJourneysWithSLStop
+
+CREATE OR ALTER FUNCTION searchJourneysWithFLStop
 (
 	@firstStop INT,
 	@lastStop INT

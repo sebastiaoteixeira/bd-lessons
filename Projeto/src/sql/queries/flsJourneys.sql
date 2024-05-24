@@ -3,9 +3,9 @@ DECLARE @firstStop INT = ?;
 DECLARE @lastStop INT = ?;
 
 IF @line IS NULL
-	-- CALL searchJourneysWithSLStop
+	-- CALL searchJourneysWithFLStop
 	SELECT s.[id], s.[idLine], s.[idFirstStop], s.[idLastStop], s.[startTime], s.[firstStopTime], s.[lastStopTime], s.[outbound], fst.[name], fst.[location], fst.[longitude], fst.[latitude], lst.[name], lst.[location], lst.[longitude], lst.[latitude], l.[designation], l.[color], fs.[name], fs.[location], fs.[longitude], fs.[latitude], ls.[name], ls.[location], ls.[longitude], ls.[latitude]
-	FROM searchJourneysWithSLStop(@firstStop, @lastStop) AS s
+	FROM searchJourneysWithFLStop(@firstStop, @lastStop) AS s
 	JOIN [UrbanBus].[stop] AS fst
 	ON s.[idFirstStop] = fst.[id]
 	JOIN [UrbanBus].[stop] AS lst
@@ -17,9 +17,9 @@ IF @line IS NULL
 	JOIN [UrbanBus].[stop] AS ls
 	ON ls.[id] = @lastStop;
 ELSE
-	-- CALL searchJourneysWithSLStop and filter by line
+	-- CALL searchJourneysWithFLStop and filter by line
 	SELECT s.[id], s.[idLine], s.[idFirstStop], s.[idLastStop], s.[startTime], s.[firstStopTime], s.[lastStopTime], s.[outbound], fst.[name], fst.[location], fst.[longitude], fst.[latitude], lst.[name], lst.[location], lst.[longitude], lst.[latitude], l.[designation], l.[color], fs.[name], fs.[location], fs.[longitude], fs.[latitude], ls.[name], ls.[location], ls.[longitude], ls.[latitude]
-	FROM searchJourneysWithSLStop(@firstStop, @lastStop) AS s
+	FROM searchJourneysWithFLStop(@firstStop, @lastStop) AS s
 	JOIN [UrbanBus].[stop] AS fst
 	ON s.[idFirstStop] = fst.[id]
 	JOIN [UrbanBus].[stop] AS lst

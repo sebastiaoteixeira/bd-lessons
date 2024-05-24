@@ -20,7 +20,6 @@ def hello():
 ## AUTHENTICATION ##
 @app.route('/api/v1/register', methods=['POST'])
 def register():
-    # TODO: Implement registration
     name = request.json['name']
     email = request.json['email']
     nif = request.json['nif']

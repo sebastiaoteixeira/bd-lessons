@@ -23,6 +23,7 @@ RETURN
 		SELECT 1
 		FROM [UrbanBus].[exceptions] AS e
 		WHERE e.idJourney = j.id
+		AND e.idStop IN (SELECT id FROM SplitStops)
 	)
 	AND 
 	(
