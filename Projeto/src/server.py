@@ -523,7 +523,21 @@ def journeyInstanceStopValidations(journeyInstanceNumber, stopnumber):
 @app.route('/api/v1/line/<int:linenumber>/journeyInstances', methods=['GET'])
 def line_journeyInstances(linenumber):
     # TODO: Implement journey instances getter for a line
-    pass
+    result = []
+    
+    for journeyInstance in runSQLQuery(connection, './src/sql/queries/journeyInstances.sql', (linenumber,), logger=app.logger):
+        result.append({
+            'id': journeyInstance[0],
+            'dateTime': str(journeyInstance[1]),
+            'journey': {
+                'id': journeyInstance[2],
+                'idLine': journeyInstance[3],
+                'idFirstStop': journeyInstance[4],
+                'idLastStop': journeyInstance[5],
+                'time': str(journeyInstance[6])
+            }
+        })
+    return jsonify(result)
 
 
 
