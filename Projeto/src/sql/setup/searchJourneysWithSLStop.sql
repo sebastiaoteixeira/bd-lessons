@@ -63,6 +63,7 @@ BEGIN
 					SELECT @nextStop = idNextStop, @time = DATEADD(SECOND, DATEDIFF(SECOND, 0, @time) + DATEDIFF(SECOND, 0, timeToNext), 0)
 					FROM [UrbanBus].[line_stop]
 					WHERE idLine = @line
+					AND outbound = @outbound
 					AND idStop = @stop;
 
 					IF @nextStop = @lastStop AND @firstStopFound = 1
