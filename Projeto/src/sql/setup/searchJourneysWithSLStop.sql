@@ -65,12 +65,10 @@ BEGIN
 					WHERE idLine = @line
 					AND idStop = @stop;
 
-					IF @nextStop = @lastStop
+					IF @nextStop = @lastStop AND @firstStopFound = 1
 						UPDATE @result
 						SET [lastStopTime] = @time
 						WHERE [id] = @journey;
-
-					IF @nextStop = @lastStop AND @firstStopFound = 1
 						BREAK;
 					IF @nextStop IS NULL
 						BEGIN

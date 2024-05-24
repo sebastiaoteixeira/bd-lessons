@@ -371,13 +371,25 @@ def line_journeys(linenumber):
 
 # Module 2: Tickets and Prices
 ## GETTERS ##
-@app.route('/api/v1/prices', methods=['GET'])
-def price(ticketType, start, end):
+@app.route('/api/v1/prices')
+def price():
     # TODO: Implement price getter (with ticket type, start and end stops)
-    price = None
+    start = request.args.get('start')
+    end = request.args.get('end')
+    
+    res = []
 
-    for price in runSQLQuery(connection, './src/sql/queries/prices.sql', (ticketType, start, end)):
-        pass
+    for price in runSQLQuery(connection, './src/sql/queries/prices.sql', (start, end)):
+        res.append({
+            'start': start,
+            'end': end,
+            'zone': price[1],
+            'price': price[0]
+            })
+    
+    return jsonify(res)
+    
+    
 
 @app.route('/api/v1/tickets', methods=['GET'])
 def tickets():
