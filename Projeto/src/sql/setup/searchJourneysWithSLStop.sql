@@ -60,10 +60,15 @@ BEGIN
 						SET [firstStopTime] = @time
 						WHERE [id] = @journey;
 
-					SELECT @nextStop = idNextStop, @time = DATEADD(SECOND, DATEDIFF(SECOND, 0, @time) + DATEDIFF(SECOND, 0, timeToNext), 0)
-					FROM [UrbanBus].[line_stop]
-					WHERE idLine = @line
-					AND outbound = @outbound
+					SELECT @nextStop = ls.[idNextStop], @time = DATEADD(SECOND, DATEDIFF(SECOND, 0, @time) + DATEDIFF(SECOND, 0, ls.[timeToNext]), 0)
+					FROM [UrbanBus].[line_stop] AS ls
+					WHERE ls.[idLine] = @line
+					AND ls.[idStop] = @stop;
+					
+					-- If stop is in exceptions, add timeModifier to @time
+					SELECT @time = DATEADD(SECOND, DATEDIFF(SECOND, 0, @time) + DATEDIFF(SECOND, 0, timeModification), 0)
+					FROM [UrbanBus].[exceptions]
+					WHERE idJourney = @journey
 					AND idStop = @stop;
 
 					IF @nextStop = @lastStop AND @firstStopFound = 1
