@@ -1,4 +1,5 @@
 INSERT INTO [UrbanBus].[zone] (designation) VALUES ('1');
+GO
 
 INSERT INTO [UrbanBus].[zone_stop] (idStop1, idStop2, idZone)
 VALUES 
@@ -785,6 +786,7 @@ VALUES
 
 -- Zone 2
 INSERT INTO [UrbanBus].[zone] (designation) VALUES ('2');
+GO
 
 INSERT INTO [UrbanBus].[zone_stop] (idStop1, idStop2, idZone)
 VALUES
@@ -1629,6 +1631,7 @@ VALUES
 (29, 67, 2),
 (29, 68, 2),
 (29, 69, 2);
+GO
 
 INSERT INTO [UrbanBus].[zone_stop] (idStop1, idStop2, idZone)
 VALUES

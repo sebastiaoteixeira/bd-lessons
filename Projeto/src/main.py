@@ -26,8 +26,10 @@ def run():
                         'src/sql/setup/createTables.sql',
                         'src/sql/preloadData/insertStops.sql',
                         'src/sql/preloadData/insertLines.sql',
-                        'src/sql/preloadData/insertJourneys.sql'
-                        'src/sql/preloadData/insertJourneyInstances.sql'
+                        'src/sql/preloadData/insertJourneys.sql',
+                        'src/sql/preloadData/insertJourneyInstances.sql',
+                        'src/sql/preloadData/insertZones.sql',
+                        'src/sql/preloadData/insertTariffs.sql',
                         ]
             connection = runSQL.dbconnect()
             for file in sqlFiles:

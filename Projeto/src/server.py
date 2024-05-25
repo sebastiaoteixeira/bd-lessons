@@ -48,9 +48,6 @@ def auth():
 # Decorator: Only authenticated users can access these routes
 def require_auth(func):
     def wrapper():
-        # Check for the header 'Authorization'
-        # If not, return 401 Unauthorized
-        # If valid, call the function
         token = request.headers.get('Authorization')
         if not token:
             return jsonify({'error': 'Unauthorized'}), 401
@@ -64,10 +61,24 @@ def require_auth(func):
     return wrapper
 
 # Authentication checker
-@app.route('/api/v1/auth/check', methods=['GET'])
+@app.route('/api/v1/auth/check', methods=['POST'])
 @require_auth
 def check_auth():
     return jsonify({'message': 'Authenticated', 'token': request.headers.get('Authorization')})
+
+
+# Get user information
+@app.route('/api/v1/user', methods=['POST'])
+@require_auth
+def user():
+    token = request.headers.get('Authorization')
+    for user in runSQLQuery(connection, './src/sql/queries/getUser.sql', (token,), logger=app.logger):
+        return jsonify({
+            'number': user[0],
+            'name': user[1],
+            'email': user[2],
+            'nif': user[3]
+        })
 
 
 # Module 1: Stops, Lines and Journeys

@@ -2,7 +2,7 @@
 -- Args: clientID INT
 -- Returns: sessionID INT
 
-ALTER PROCEDURE [createSession]
+CREATE OR ALTER PROCEDURE [createSession]
 	@clientID INT
 AS BEGIN
   	DECLARE @CharPool VARCHAR(96) = 'abcdefghijkmnopqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ0123456789.,-_!$@#%^&*';

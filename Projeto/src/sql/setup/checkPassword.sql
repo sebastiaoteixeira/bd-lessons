@@ -2,7 +2,7 @@
 -- Args: clientID INT, password CHAR(64)
 -- Returns: BOOLEAN
 
-CREATE PROCEDURE [checkPassword]
+CREATE OR ALTER PROCEDURE [checkPassword]
 	@clientID INT, @password VARCHAR(255), @result BIT OUTPUT
 AS BEGIN
 	DECLARE @salt CHAR(16);
