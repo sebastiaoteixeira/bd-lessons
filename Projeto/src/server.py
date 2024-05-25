@@ -422,7 +422,7 @@ def tickets():
 
     return jsonify(result)
 
-@app.route('/api/v1/myTickets', methods=['GET'])
+@app.route('/api/v1/myTickets', methods=['POST'])
 @require_auth
 def myTickets():
     # TODO: Implement tickets getter with all items purchased (onlyValid options)
@@ -460,6 +460,28 @@ def ticket(ticketnumber):
         })
 
     return jsonify(result)
+
+## SETTERS ##
+@app.route('/api/v1/tickets/create', methods=['POST'])
+@require_auth
+def createTicket():
+    # Get the type of ticket
+    ticketType = request.json.get('ticketType')
+    # Get the zone of the ticket
+    zone = request.json.get('zone')
+    # Get the token
+    token = request.headers.get('Authorization')
+    
+    if not ticketType or not zone:
+        return jsonify({'error': 'ticketType and zone are required'}), 400
+    
+    for token in runSQLQuery(connection, './src/sql/queries/createTicket.sql', (ticketType, zone, token)):
+        pass
+    
+    return jsonify({'message': 'Ticket created'}), 201
+            
+
+
 
 # Module 3: Statistics and Registers
 ## GETTERS ##

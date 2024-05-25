@@ -1,4 +1,4 @@
-CREATE TRIGGER [UrbanBus].[trips_itemTariff] ON [UrbanBus].[trips]
+CREATE OR ALTER TRIGGER [UrbanBus].[trips_itemTariff] ON [UrbanBus].[trips]
 INSTEAD OF INSERT
 AS
 BEGIN

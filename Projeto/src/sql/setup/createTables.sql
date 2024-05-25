@@ -62,21 +62,19 @@ CREATE TABLE [UrbanBus].[zone_stop] (
 GO
 
 CREATE TABLE [UrbanBus].[transportTicket] (
-  [number] integer PRIMARY KEY,
+  [number] integer PRIMARY KEY IDENTITY(10000,1),
   [clientNumber] integer,
   [zoneNumber] integer
 )
 GO
 
 CREATE TABLE [UrbanBus].[tripsTicket] (
-  [ticketNumber] integer PRIMARY KEY,
-  [tripsCount] integer
+  [ticketNumber] integer PRIMARY KEY
 )
 GO
 
 CREATE TABLE [UrbanBus].[subscriptionTicket] (
-  [ticketNumber] integer PRIMARY KEY,
-  [expirationDate] date
+  [ticketNumber] integer PRIMARY KEY
 )
 GO
 
