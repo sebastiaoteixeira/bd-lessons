@@ -381,13 +381,27 @@ def line_journeys(linenumber):
 
 # Module 2: Tickets and Prices
 ## GETTERS ##
-@app.route('/api/v1/prices')
+@app.route('/api/v1/prices', methods=['GET'])
 def price():
     # TODO: Implement price getter (with ticket type, start and end stops)
     start = request.args.get('start')
     end = request.args.get('end')
     
     res = []
+    
+    if not start and not end:
+        for price in runSQLQuery(connection, './src/sql/queries/tariffs.sql'):
+            res.append({
+                'id': price[0],
+                'zone': price[2],
+                'price': price[1],
+                'days': price[3],
+                'trips': price[4],
+            })
+        return jsonify(res)
+
+    if not start or not end:
+        return jsonify({'error': 'start and end stops are required'}), 400
 
     for price in runSQLQuery(connection, './src/sql/queries/prices.sql', (start, end)):
         res.append({
@@ -398,7 +412,6 @@ def price():
             })
     
     return jsonify(res)
-    
     
 
 @app.route('/api/v1/tickets', methods=['GET'])
@@ -416,8 +429,8 @@ def tickets():
         result.append({
             'id': ticket[0],
             'idItemTariff': ticket[1],
-            'idTransportTicket': ticket[2],
-            'date': ticket[3]
+            'expiration': ticket[2],
+            'trips': ticket[3]
         })
 
     return jsonify(result)
@@ -432,16 +445,16 @@ def myTickets():
     
     onlyValid = request.args.get('onlyValid')
     if onlyValid:
-        onlyValid = onlyValid.lower() == 'true'
+        onlyValid = 1 if onlyValid.lower() == 'true' else 0
     else:
-        onlyValid = False
+        onlyValid = 0
     
     for ticket in runSQLQuery(connection, './src/sql/queries/myTickets.sql', (token,onlyValid)):
         result.append({
             'id': ticket[0],
-            'idItemTariff': ticket[1],
-            'idTransportTicket': ticket[2],
-            'date': ticket[3]
+            'zone': ticket[1],
+            'expiration': ticket[2],
+            'trips': ticket[3]
         })
         
     return jsonify(result)
@@ -454,9 +467,9 @@ def ticket(ticketnumber):
     for ticket in runSQLQuery(connection, './src/sql/queries/ticket.sql', (ticketnumber,)):
         result.append({
             'id': ticket[0],
-            'idItemTariff': ticket[1],
-            'idTransportTicket': ticket[2],
-            'date': ticket[3]
+            'zone': ticket[1],
+            'expiration': ticket[2],
+            'trips': ticket[3]
         })
 
     return jsonify(result)
@@ -466,20 +479,32 @@ def ticket(ticketnumber):
 @require_auth
 def createTicket():
     # Get the type of ticket
-    ticketType = request.json.get('ticketType')
+    ticketType = request.json.get('type')
     # Get the zone of the ticket
     zone = request.json.get('zone')
     # Get the token
     token = request.headers.get('Authorization')
     
     if not ticketType or not zone:
-        return jsonify({'error': 'ticketType and zone are required'}), 400
+        return jsonify({'error': 'type and zone are required'}), 400
     
-    for token in runSQLQuery(connection, './src/sql/queries/createTicket.sql', (ticketType, zone, token)):
+    for token in runSQLQuery(connection, './src/sql/insert/createTicket.sql', (ticketType, zone, token)):
         pass
     
     return jsonify({'message': 'Ticket created'}), 201
-            
+
+@app.route('/api/v1/ticket/<int:ticketnumber>/charge', methods=['GET'])
+def chargeTicket(ticketnumber):
+    # Get the amount to charge
+    item = request.args.get('item')
+    
+    if not item:
+        return jsonify({'error': 'item is required'}), 400
+    
+    for _ in runSQLQuery(connection, './src/sql/insert/chargeTicket.sql', (ticketnumber, item)):
+        pass
+    
+    return jsonify({'message': 'Ticket charged'}), 201
 
 
 
