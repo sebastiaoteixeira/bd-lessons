@@ -379,6 +379,24 @@ def line_journeys(linenumber):
     return jsonify(result)
 
 ## SETTERS ##
+@app.route('/api/v1/stops/create', methods=['POST'])
+def createStop():
+    # Get the name of the stop
+    name = request.json.get('name')
+    # Get the location of the stop
+    location = request.json.get('location')
+    # Get the longitude of the stop
+    longitude = request.json.get('longitude')
+    # Get the latitude of the stop
+    latitude = request.json.get('latitude')
+    
+    if not name or not location or not longitude or not latitude:
+        return jsonify({'error': 'name, location, longitude and latitude are required'}), 400
+    
+    for _ in runSQLQuery(connection, './src/sql/insert/createStop.sql', (name, location, longitude, latitude)):
+        pass
+    
+
 @app.route('/api/v1/lines/create', methods=['POST'])
 def createLine():
     # Get the number of the line
@@ -637,11 +655,19 @@ def line_journeyInstances(linenumber):
         })
     return jsonify(result)
 
-
-
-
-
-
+## SETTERS ##
+@app.route('/api/v1/journeyInstances/create', methods=['POST'])
+def createJourneyInstance():
+    # Get the id of the journey
+    journey = request.json.get('journey')
+    
+    if not journey:
+        return jsonify({'error': 'journey and dateTime are required'}), 400
+    
+    for _ in runSQLQuery(connection, './src/sql/insert/createJourneyInstance.sql', (journey)):
+        pass
+    
+    return jsonify({'message': 'Journey instance created'}), 201
 
 
 
