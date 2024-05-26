@@ -670,19 +670,16 @@ def createJourneyInstance():
     return jsonify({'message': 'Journey instance created'}), 201
 
 @app.route('/api/v1/journeyInstance/<int:journeyInstanceNumber>/validate', methods=['POST'])
-@require_auth
-def validateJourneyInstance(journeyInstanceNumber):
+def validate(journeyInstanceNumber):
     # Get the id of the journey instance
     journeyInstance = journeyInstanceNumber
-    # Get the id of the stop
-    stop = request.json.get('journey')
-    # Get the token
-    token = request.headers.get('Authorization')
+    # Get the id of the ticket
+    ticketId = request.json.get('ticketId')
     
     if not stop:
         return jsonify({'error': 'stop is required'}), 400
     
-    for _ in runSQLQuery(connection, './src/sql/insert/validateJourneyInstance.sql', (journeyInstance, stop, token)):
+    for _ in runSQLQuery(connection, './src/sql/insert/validateJourneyInstance.sql', (journeyInstance, ticketId)):
         pass
     
     return jsonify({'message': 'Journey instance validated'}), 201

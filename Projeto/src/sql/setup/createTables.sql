@@ -127,7 +127,7 @@ CREATE TABLE [UrbanBus].[validation] (
   [idJourneyInstance] integer,
   [idStop] integer,
   [time] datetime,
-  PRIMARY KEY ([numberTransportTicket], [idJourneyInstance], [idStop])
+  PRIMARY KEY ([numberTransportTicket], [idJourneyInstance])
 )
 GO
 
