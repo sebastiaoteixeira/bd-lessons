@@ -378,6 +378,40 @@ def line_journeys(linenumber):
 
     return jsonify(result)
 
+## SETTERS ##
+@app.route('/api/v1/lines/create', methods=['POST'])
+def createLine():
+    # Get the number of the line
+    number = request.json.get('number')
+    # Get the designation of the line
+    designation = request.json.get('designation')
+    # Get the color of the line
+    color = request.json.get('color')
+    ## Convert color from hex to int
+    color = int(color[1:], 16)
+    
+    # Get the outbound path of the line (it's like [{stop: 1, time: 10}, {stop: 2, time: 20}])
+    outbound = request.json.get('outbound')
+    
+    # Get the inbound path of the line (it's like [{stop: 1, time: 10}, {stop: 2, time: 20}])
+    inbound = request.json.get('inbound')    
+
+    if not designation or not color or not outbound or not inbound:
+        return jsonify({'error': 'designation, color, outbound and inbound are required'}), 400
+    
+    # convert outbound to pass it to the query in the form of two strings (stops and times) separated by commas
+    outboundStops = ','.join([str(stop['stop']) for stop in outbound])
+    outboundTimes = ','.join([str(stop['time']) for stop in outbound])
+    # convert inbound to pass it to the query in the form of two strings (stops and times) separated by commas
+    inboundStops = ','.join([str(stop['stop']) for stop in inbound])
+    inboundTimes = ','.join([str(stop['time']) for stop in inbound])
+    
+    for _ in runSQLQuery(connection, './src/sql/insert/createLine.sql', (number, designation, color, outboundStops, outboundTimes, inboundStops, inboundTimes)):
+        pass
+    
+    return jsonify({'message': 'Line created'}), 201
+
+
 
 # Module 2: Tickets and Prices
 ## GETTERS ##

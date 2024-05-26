@@ -33,5 +33,3 @@ DROP TABLE IF EXISTS [UrbanBus].[line_stop];
 DROP TABLE IF EXISTS [UrbanBus].[line];
 
 DROP TABLE IF EXISTS [UrbanBus].[stop];
-
-DROP SCHEMA IF EXISTS [UrbanBus];

@@ -1,4 +1,8 @@
-CREATE SCHEMA [UrbanBus];
+-- Create schema UrbanBus if it does not exist
+IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = N'UrbanBus')
+BEGIN
+    EXEC('CREATE SCHEMA [UrbanBus]')
+END
 GO
 
 CREATE TABLE [UrbanBus].[stop] (
