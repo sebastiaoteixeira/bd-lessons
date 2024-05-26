@@ -45,7 +45,7 @@ BEGIN
 
     -- Insert line
     BEGIN TRANSACTION;
-    --BEGIN TRY
+    BEGIN TRY
         INSERT INTO [UrbanBus].[line] ([number], [designation], [idFirstStop], [idLastStop], [color])
         VALUES (@number, @designation, (SELECT TOP 1 idStop FROM @inboundStopsTable), (SELECT TOP 1 idStop FROM @outboundStopsTable), @color);
 
@@ -124,11 +124,11 @@ BEGIN
         DEALLOCATE outboundCursor;
 
         COMMIT TRANSACTION;
-    --END TRY
-    --BEGIN CATCH
-    --    ROLLBACK TRANSACTION;
-    --    RAISERROR ('An error occurred while creating the line.', 16, 1);
-    --END CATCH;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        RAISERROR ('An error occurred while creating the line.', 16, 1);
+    END CATCH;
 END;    
 
 
