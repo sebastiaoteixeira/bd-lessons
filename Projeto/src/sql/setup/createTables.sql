@@ -106,7 +106,7 @@ CREATE TABLE [UrbanBus].[trips] (
 GO
 
 CREATE TABLE [UrbanBus].[client] (
-  [number] integer IDENTITY(10000,1),
+  [number] integer IDENTITY(1200,1),
   [name] nvarchar(255),
   [email] nvarchar(255) UNIQUE,
   [nif] integer,

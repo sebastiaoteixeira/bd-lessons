@@ -419,18 +419,12 @@ def tickets():
     # TODO: Implement tickets getter with all items purchased (onlyValid options)
     result = []
 
-    onlyValid = request.args.get('onlyValid')
-    if onlyValid:
-        onlyValid = onlyValid.lower() == 'true'
-    else:
-        onlyValid = False
-
-    for ticket in runSQLQuery(connection, './src/sql/queries/tickets.sql', (onlyValid,)):
+    for ticket in runSQLQuery(connection, './src/sql/queries/tickets.sql'):
         result.append({
             'id': ticket[0],
-            'idItemTariff': ticket[1],
-            'expiration': ticket[2],
-            'trips': ticket[3]
+            'zone': ticket[1],
+            'client': ticket[2],
+            'type': 'trips' if ticket[4] else ('subscription' if ticket[5] else ''),
         })
 
     return jsonify(result)
@@ -469,7 +463,8 @@ def ticket(ticketnumber):
             'id': ticket[0],
             'zone': ticket[1],
             'expiration': ticket[2],
-            'trips': ticket[3]
+            'trips': ticket[3],
+            'clientNumber': ticket[4],
         })
 
     return jsonify(result)
