@@ -396,6 +396,8 @@ def createStop():
     for _ in runSQLQuery(connection, './src/sql/insert/createStop.sql', (name, location, longitude, latitude)):
         pass
     
+    return jsonify({'message': 'Stop created'}), 201
+    
 
 @app.route('/api/v1/lines/create', methods=['POST'])
 def createLine():
