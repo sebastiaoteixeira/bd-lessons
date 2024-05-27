@@ -678,13 +678,23 @@ def validate(journeyInstanceNumber):
     # Get the id of the ticket
     ticketId = request.json.get('ticketId')
     
-    if not stop:
-        return jsonify({'error': 'stop is required'}), 400
+    if not ticketId:
+        return jsonify({'error': 'ticketId is required'}), 400
     
-    for _ in runSQLQuery(connection, './src/sql/insert/validateJourneyInstance.sql', (journeyInstance, ticketId)):
+    for _ in runSQLQuery(connection, './src/sql/insert/validateTicket.sql', (journeyInstance, ticketId)):
         pass
     
     return jsonify({'message': 'Journey instance validated'}), 201
+
+@app.route('/api/v1/journeyInstance/<int:journeyInstanceNumber>/step', methods=['POST'])
+def stepJourneyInstance(journeyInstanceNumber):
+    # Get the id of the journey instance
+    journeyInstance = journeyInstanceNumber
+        
+    for _ in runSQLQuery(connection, './src/sql/insert/stepJourneyInstance.sql', (journeyInstance,)):
+        pass
+    
+    return jsonify({'message': 'Journey instance stepped'}), 201
 
 
 ## STATS ##
