@@ -672,12 +672,18 @@ def journeyInstanceStops(journeyInstanceNumber):
 @app.route('/api/v1/journeyInstance/<int:journeyInstanceNumber>/validations', methods=['GET'])
 def journeyInstanceValidations(journeyInstanceNumber):
     # TODO: Implement journey instance validations getter (with mintime and/or maxtime options)
-    pass
-
-@app.route('/api/v1/journeyInstance/<int:journeyInstanceNumber>/stop/<int:stopnumber>/validations', methods=['GET'])
-def journeyInstanceStopValidations(journeyInstanceNumber, stopnumber):
-    # TODO: Implement journey instance stop getter
-    pass
+    # Call validationsByJourneyInstance
+    result = []
+    
+    for validation in runSQLQuery(connection, './src/sql/queries/validationsByJourneyInstance.sql', (journeyInstanceNumber,), logger=app.logger):
+        result.append({
+            'ticketId': validation[0],
+            'journeyInstanceId': validation[1],
+            'stopId': validation[2],
+            'dateTime': str(validation[3])
+        })
+    
+    return jsonify(result)
 
 @app.route('/api/v1/line/<int:linenumber>/journeyInstances', methods=['GET'])
 def line_journeyInstances(linenumber):
