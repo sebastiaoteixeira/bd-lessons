@@ -345,28 +345,28 @@ def journey(journeynumber):
     # TODO: Implement journey getter
     for journey in runSQLQuery(connection, './src/sql/queries/journey.sql', (journeynumber,)):
         return jsonify({
-            'id': journey[0],
+            'id': journeynumber,
             'line': {
-                'number': journey[1],
-                'designation': journey[14],
-                'color': "#{:0>6}".format(hex(journey[15])[2:])
+                'number': journey[0],
+                'designation': journey[13],
+                'color': "#{:0>6}".format(hex(journey[14])[2:])
                 },
             'firstStop': {
-                'id': journey[2],
-                'name': journey[6],
-                'location': journey[7],
-                'longitude': journey[8],
-                'latitude': journey[9]
+                'id': journey[1],
+                'name': journey[5],
+                'location': journey[6],
+                'longitude': journey[7],
+                'latitude': journey[8]
                 },
             'lastStop': {
-                'id': journey[3],
-                'name': journey[10],
-                'location': journey[11],
-                'longitude': journey[12],
-                'latitude': journey[13]
+                'id': journey[2],
+                'name': journey[9],
+                'location': journey[10],
+                'longitude': journey[11],
+                'latitude': journey[12]
                 },
-            'time': str(journey[4]),
-            'direction': 'outbound' if journey[5] else 'inbound'
+            'time': str(journey[3]),
+            'direction': 'outbound' if journey[4] else 'inbound'
         })
 
 @app.route('/api/v1/journey/<int:journeynumber>/stops', methods=['GET'])
@@ -458,7 +458,7 @@ def createLine():
     inbound = request.json.get('inbound')    
 
     if not number or not name or not color or not outbound or not inbound:
-        return jsonify({'error': 'number, name, color, outbound and inbound are required'}), 400
+        return jsonify({'error': 'number, name, color, outbound and to are required'}), 400
     
     # convert outbound to pass it to the query in the form of two strings (stops and times) separated by commas
     outboundStops = ','.join([str(stop['stop']) for stop in outbound])
@@ -704,6 +704,43 @@ def line_journeyInstances(linenumber):
         })
     return jsonify(result)
 
+@app.route('/api/v1/nextBuses', methods=['GET'])
+def nextBuses():
+    # Get the id of the stop
+    stop = request.args.get('stop')
+    
+    if not stop:
+        return jsonify({'error': 'stop is required'}), 400
+    
+    result = []
+    
+    for bus in runSQLQuery(connection, './src/sql/queries/nextBuses.sql', (stop,)):
+        result.append({
+            'id': bus[0],
+            'line': bus[1],
+            'idJourney': bus[2],
+            'selectedStop': {
+                'id': stop,
+                'name': bus[3],
+                'location': bus[4],
+                'longitude': bus[5],
+                'latitude': bus[6],
+                'time': str(bus[7]),
+                'delay': bus[8]
+            },
+            'lastStop': {
+                'id': bus[7],
+                'name': bus[8],
+                'location': bus[9],
+                'longitude': bus[10],
+                'latitude': bus[11],
+                'time': str(bus[12])
+            },
+            'direction': getDirection(bus[13])
+        })
+    
+    return jsonify(result)
+
 ## SETTERS ##
 @app.route('/api/v1/journeyInstances/create', methods=['POST'])
 def createJourneyInstance():
@@ -742,6 +779,10 @@ def stepJourneyInstance(journeyInstanceNumber):
         pass
     
     return jsonify({'message': 'Journey instance stepped'}), 201
+
+
+
+
 
 
 ## STATS ##
