@@ -392,7 +392,7 @@ def line_journeys(linenumber):
     includeStops = request.args.get('includeStops')
 
     for journey in runSQLQuery(connection, './src/sql/queries/journeys.sql' ,(linenumber, includeStops)):
-        result.append(
+        result.append({
                 'id': journey[0],
                 'line': {
                     'number': journey[1],
