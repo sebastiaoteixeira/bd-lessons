@@ -467,7 +467,7 @@ def createLine():
     inboundStops = ','.join([str(stop['stop']) for stop in inbound])
     inboundTimes = ','.join([str(stop['time']) for stop in inbound])
     
-    for _ in runSQLQuery(connection, './src/sql/insert/createLine.sql', (number, designation, color, outboundStops, outboundTimes, inboundStops, inboundTimes)):
+    for _ in runSQLQuery(connection, './src/sql/insert/createLine.sql', (number, name, color, outboundStops, outboundTimes, inboundStops, inboundTimes)):
         pass
     
     return jsonify({'message': 'Line created'}), 201
