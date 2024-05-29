@@ -80,6 +80,20 @@ def user():
             'nif': user[3]
         })
 
+@app.route('/api/v1/users', methods=['GET'])
+def users():
+    result = []
+
+    for user in runSQLQuery(connection, './src/sql/queries/users.sql'):
+        result.append({
+            'number': user[0],
+            'name': user[1],
+            'email': user[2],
+            'nif': user[3]
+        })
+
+    return jsonify(result)
+
 
 # Module 1: Stops, Lines and Journeys
 ## GETTERS ##
