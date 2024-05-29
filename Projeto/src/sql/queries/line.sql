@@ -1,6 +1,6 @@
 SELECT l.[designation], l.[idFirstStop], l.[idLastStop], l.[color],
-    fs.[designation], fs.[location], fs.[longitude], fs.[latitude],
-    ls.[designation], ls.[location], ls.[longitude], ls.[latitude]
+    fs.[name], fs.[location], fs.[longitude], fs.[latitude],
+    ls.[name], ls.[location], ls.[longitude], ls.[latitude]
 FROM [UrbanBus].[line] AS l
 JOIN [UrbanBus].[stop] AS fs
 ON l.[idFirstStop] = fs.[id]

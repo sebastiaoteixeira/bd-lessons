@@ -444,8 +444,8 @@ def createStop():
 def createLine():
     # Get the number of the line
     number = request.json.get('number')
-    # Get the designation of the line
-    designation = request.json.get('designation')
+    # Get the name of the line
+    name = request.json.get('name')
     # Get the color of the line
     color = request.json.get('color')
     ## Convert color from hex to int
