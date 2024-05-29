@@ -125,9 +125,21 @@ def lines():
     for line in runSQLQuery(connection, './src/sql/queries/lines.sql'):
         result.append({
             'number': line[0],
-            'designation': line[1],
-            'idFirstStop': line[2],
-            'idLastStop': line[3],
+            'name': line[1],
+            'firstStop': {
+                'id': line[2],
+                'name': line[5],
+                'location': line[6],
+                'longitude': line[7],
+                'latitude': line[8]
+            },
+            'lastStop': {
+                'id': line[3],
+                'name': line[9],
+                'location': line[10],
+                'longitude': line[11],
+                'latitude': line[12]
+            },
             'color': "#{:0>6}".format(hex(line[4])[2:])
         })
 
@@ -139,9 +151,21 @@ def line(linenumber):
     for line in runSQLQuery(connection, './src/sql/queries/line.sql', (linenumber,)):
         return jsonify({
             'number': linenumber,
-            'designation': line[0],
-            'idFirstStop': line[1],
-            'idLastStop': line[2],
+            'name': line[0],
+            'firstStop': {
+                'id': line[1],
+                'name': line[4],
+                'location': line[5],
+                'longitude': line[6],
+                'latitude': line[7]
+            },
+            'lastStop': {
+                'id': line[2],
+                'name': line[8],
+                'location': line[9],
+                'longitude': line[10],
+                'latitude': line[11]
+            },
             'color': "#{:0>6}".format(hex(line[3])[2:])
         })
 
@@ -368,13 +392,30 @@ def line_journeys(linenumber):
     includeStops = request.args.get('includeStops')
 
     for journey in runSQLQuery(connection, './src/sql/queries/journeys.sql' ,(linenumber, includeStops)):
-        result.append({
-            'id': journey[0],
-            'idLine': journey[1],
-            'idFirstStop': journey[2],
-            'idLastStop': journey[3],
-            'time': str(journey[4]),
-        })
+        result.append(
+                'id': journey[0],
+                'line': {
+                    'number': journey[1],
+                    'designation': journey[14],
+                    'color': "#{:0>6}".format(hex(journey[15])[2:])
+                },
+                'firstStop': {
+                    'id': journey[2],
+                    'name': journey[6],
+                    'location': journey[7],
+                    'longitude': journey[8],
+                    'latitude': journey[9]
+                },
+                'lastStop': {
+                    'id': journey[3],
+                    'name': journey[10],
+                    'location': journey[11],
+                    'longitude': journey[12],
+                    'latitude': journey[13]
+                },
+                'time': str(journey[4]),
+                'direction': 'outbound' if journey[5] else 'inbound'
+            })
 
     return jsonify(result)
 

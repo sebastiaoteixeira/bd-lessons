@@ -1,4 +1,10 @@
-SELECT [designation], [idFirstStop], [idLastStop], [color]
-FROM [UrbanBus].[line]
-WHERE [number] = ?;
+SELECT l.[designation], l.[idFirstStop], l.[idLastStop], l.[color],
+    fs.[designation], fs.[location], fs.[longitude], fs.[latitude],
+    ls.[designation], ls.[location], ls.[longitude], ls.[latitude]
+FROM [UrbanBus].[line] AS l
+JOIN [UrbanBus].[stop] AS fs
+ON l.[idFirstStop] = fs.[id]
+JOIN [UrbanBus].[stop] AS ls
+ON l.[idLastStop] = ls.[id]
+WHERE l.[number] = ?;
 
