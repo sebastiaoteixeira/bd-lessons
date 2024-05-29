@@ -457,8 +457,8 @@ def createLine():
     # Get the inbound path of the line (it's like [{stop: 1, time: 10}, {stop: 2, time: 20}])
     inbound = request.json.get('inbound')    
 
-    if not designation or not color or not outbound or not inbound:
-        return jsonify({'error': 'designation, color, outbound and inbound are required'}), 400
+    if not name or not color or not outbound or not inbound:
+        return jsonify({'error': 'name, color, outbound and inbound are required'}), 400
     
     # convert outbound to pass it to the query in the form of two strings (stops and times) separated by commas
     outboundStops = ','.join([str(stop['stop']) for stop in outbound])
