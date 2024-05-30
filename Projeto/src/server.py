@@ -613,17 +613,17 @@ def chargeTicket(ticketnumber):
 @app.route('/api/v1/journeys/create', methods=['POST'])
 def createJourney():
     line = request.json.get('line')
-    firstStop = request.json.get('firstStop')
-    lastStop = request.json.get('lastStop')
     exceptions = request.json.get('exceptions')
+    startTime = request.json.get('startTime')
+    outbound = request.json.get('outbound')
     
-    if not line or not firstStop or not lastStop:
+    if not line or not startTime or not outbound:
         return jsonify({'error': 'line, firstStop and lastStop are required'}), 400
     
     exceptionsStops = ','.join([str(stop['stop']) for stop in exceptions])
     exceptionsTimes = ','.join([str(stop['time']) for stop in exceptions])
     
-    for _ in runSQLQuery(connection, './src/sql/insert/createJourney.sql', (line, firstStop, lastStop, exceptionsStops, exceptionsTimes)):
+    for _ in runSQLQuery(connection, './src/sql/insert/createJourney.sql', (line, exceptionsStops, exceptionsTimes, startTime, outbound)):
         break
     
     return jsonify({'message': 'Journey created'}), 201

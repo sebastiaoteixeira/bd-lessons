@@ -7,4 +7,4 @@ FROM
     UrbanBus.stop AS s
     LEFT JOIN UrbanBus.validation AS v ON s.id = v.idStop
 GROUP BY
-    s.name;
+    s.id, s.name, s.location, s.longitude, s.latitude
