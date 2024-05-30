@@ -288,7 +288,7 @@ def journeys():
                 'id': journey[0],
                 'line': {
                     'number': journey[1],
-                    'designation': journey[16],
+                    'name': journey[16],
                     'color': "#{:0>6}".format(hex(journey[17])[2:])
                 },
                 'firstStop': {
@@ -330,7 +330,7 @@ def journeys():
                 'id': journey[0],
                 'line': {
                     'number': journey[1],
-                    'designation': journey[14],
+                    'name': journey[14],
                     'color': "#{:0>6}".format(hex(journey[15])[2:])
                 },
                 'firstStop': {
@@ -362,7 +362,7 @@ def journey(journeynumber):
             'id': journeynumber,
             'line': {
                 'number': journey[0],
-                'designation': journey[13],
+                'name': journey[13],
                 'color': "#{:0>6}".format(hex(journey[14])[2:])
                 },
             'firstStop': {
@@ -410,7 +410,7 @@ def line_journeys(linenumber):
                 'id': journey[0],
                 'line': {
                     'number': journey[1],
-                    'designation': journey[14],
+                    'name': journey[14],
                     'color': "#{:0>6}".format(hex(journey[15])[2:])
                 },
                 'firstStop': {
