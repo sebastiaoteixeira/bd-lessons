@@ -449,7 +449,7 @@ def createStop():
         return jsonify({'error': 'name, location, longitude and latitude are required'}), 400
     
     for _ in runSQLQuery(connection, './src/sql/insert/createStop.sql', (name, location, longitude, latitude)):
-        pass
+        break
     
     return jsonify({'message': 'Stop created'}), 201
     
@@ -482,7 +482,7 @@ def createLine():
     inboundTimes = ','.join([str(stop['time']) for stop in inbound])
     
     for _ in runSQLQuery(connection, './src/sql/insert/createLine.sql', (number, name, color, outboundStops, outboundTimes, inboundStops, inboundTimes)):
-        pass
+        break
     
     return jsonify({'message': 'Line created'}), 201
 
@@ -593,7 +593,7 @@ def createTicket():
         return jsonify({'error': 'type and zone are required'}), 400
     
     for token in runSQLQuery(connection, './src/sql/insert/createTicket.sql', (ticketType, zone, token)):
-        pass
+        break
     
     return jsonify({'message': 'Ticket created'}), 201
 
@@ -782,7 +782,7 @@ def createJourneyInstance():
         return jsonify({'error': 'journey and dateTime are required'}), 400
     
     for _ in runSQLQuery(connection, './src/sql/insert/createJourneyInstance.sql', (journey)):
-        pass
+        break
     
     return jsonify({'message': 'Journey instance created'}), 201
 
