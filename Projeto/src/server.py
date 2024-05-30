@@ -533,7 +533,7 @@ def tickets():
             'id': ticket[0],
             'zone': ticket[1],
             'client': ticket[2],
-            'type': 'trips' if ticket[4] else ('subscription' if ticket[5] else ''),
+            'type': 'trips' if ticket[3] else ('subscription' if ticket[4] else ''),
         })
 
     return jsonify(result)
