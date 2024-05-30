@@ -2,6 +2,7 @@ import sys
 import getopt
 from .utils import runSQL
 from .server import app
+from .busService import BusService
 
 def run():
     try:
@@ -38,6 +39,8 @@ def run():
             connection.closeConnection()
             return
         
+    BusService().start()
+    
     print("Starting api server...")
     app.run(host="0.0.0.0", port=5000, debug=True)
 
