@@ -22,131 +22,68 @@ BEGIN
     FROM [UrbanBus].[journeyInstance]
     WHERE [id] = @idJourneyInstance;
 
-    SELECT @line = [idLine], @firstS = [idFirstStop], @lastS = [idLastStop]
+    SELECT @line = [idLine], @firstS = [idFirstStop], @lastS = [idLastStop], @outbound = [outbound]
     FROM [UrbanBus].[journey]
     WHERE [id] = @journey;
-
-    SELECT @outbound = [outbound]
-    FROM [UrbanBus].[line_stop]
-    WHERE [idLine] = @line AND [idStop] = @lastS;
 
     -- Declare variables to iterate over stops
     DECLARE @idStop INT;
     DECLARE @idNextStop INT;
     DECLARE @timeToNext TIME;
 
-    IF @outbound = 0
-    BEGIN
     
-        -- Iterate over stops in line_stop to get the last stop
-        SELECT @idStop = [idStop], @idNextStop = [idNextStop], @timeToNext = [timeToNext]
-        FROM [UrbanBus].[line_stop]
-        WHERE [idLine] = @line
-        AND [idStop] = @firstS
-        AND [outbound] = 0;
-
-        WHILE @idNextStop IS NOT NULL
-        BEGIN
-            -- Verify if the stop is not in exceptions
-            IF NOT EXISTS (
-                SELECT *
-                FROM [UrbanBus].[exceptions]
-                WHERE [idJourney] = @journey
-                AND [idStop] = @idStop
-            )
-            BEGIN
-                -- Verify if the stop is in stop_journeyInstance
-                IF NOT EXISTS (
-                    SELECT *
-                    FROM [UrbanBus].[stop_journeyInstance]
-                    WHERE [idJourneyInstance] = @idJourneyInstance
-                    AND [idStop] = @idStop
-                ) RETURN 0;
-            END;
-
-            -- Get next stop
-            SELECT @idStop = [idStop], @idNextStop = [idNextStop], @timeToNext = [timeToNext]
-            FROM [UrbanBus].[line_stop]
-            WHERE [idLine] = @line
-            AND [idStop] = @idNextStop
-            AND [outbound] = 0;
-        END;
-        
-        -- Verify last stop
-        IF NOT EXISTS (
-            SELECT *
-            FROM [UrbanBus].[exceptions]
-            WHERE [idJourney] = @journey
-            AND [idStop] = @idStop
-        )
-            IF NOT EXISTS (
-                SELECT *
-                FROM [UrbanBus].[stop_journeyInstance]
-                WHERE [idJourneyInstance] = @idJourneyInstance
-                AND [idStop] = @idStop
-            ) RETURN 0;
-            ELSE
-                RETURN 1;
-        ELSE
-            RETURN 1;
-
-    END
-    ELSE
+    -- Iterate over stops in line_stop to get the last stop
+    SELECT @idStop = [idStop], @idNextStop = [idNextStop], @timeToNext = [timeToNext]
+    FROM [UrbanBus].[line_stop]
+    WHERE [idLine] = @line
+    AND [idStop] = @firstS
+    AND [outbound] = @outbound;
+    
+    WHILE @idNextStop IS NOT NULL AND @idNextStop <> @lastS
     BEGIN
-
-        -- Iterate over stops in line_stop to get the last stop
-        SELECT @idStop = [idStop], @idNextStop = [idNextStop], @timeToNext = [timeToNext]
-        FROM [UrbanBus].[line_stop]
-        WHERE [idLine] = @line
-        AND [idStop] = @lastS
-        AND [outbound] = 1;
-
-        WHILE @idNextStop IS NOT NULL
-        BEGIN
-            -- Verify if the stop is not in exceptions
-            IF NOT EXISTS (
-                SELECT *
-                FROM [UrbanBus].[exceptions]
-                WHERE [idJourney] = @journey
-                AND [idStop] = @idStop
-            )
-            BEGIN
-                -- Verify if the stop is in stop_journeyInstance
-                IF NOT EXISTS (
-                    SELECT *
-                    FROM [UrbanBus].[stop_journeyInstance]
-                    WHERE [idJourneyInstance] = @idJourneyInstance
-                    AND [idStop] = @idStop
-                ) RETURN 0;
-            END;
-
-            -- Get next stop
-            SELECT @idStop = [idStop], @idNextStop = [idNextStop], @timeToNext = [timeToNext]
-            FROM [UrbanBus].[line_stop]
-            WHERE [idLine] = @line
-            AND [idStop] = @idNextStop
-            AND [outbound] = 1;
-        END;
-
-        -- Verify last stop
+        -- Verify if the stop is not in exceptions
         IF NOT EXISTS (
             SELECT *
             FROM [UrbanBus].[exceptions]
             WHERE [idJourney] = @journey
             AND [idStop] = @idStop
         )
+        BEGIN
+            -- Verify if the stop is in stop_journeyInstance
             IF NOT EXISTS (
                 SELECT *
                 FROM [UrbanBus].[stop_journeyInstance]
                 WHERE [idJourneyInstance] = @idJourneyInstance
                 AND [idStop] = @idStop
             ) RETURN 0;
-            ELSE
-                RETURN 1;
+        END;
+
+        -- Get next stop
+        SELECT @idStop = [idStop], @idNextStop = [idNextStop], @timeToNext = [timeToNext]
+        FROM [UrbanBus].[line_stop]
+        WHERE [idLine] = @line
+        AND [idStop] = @idNextStop
+        AND [outbound] = @outbound;
+    END;
+    
+    -- Verify last stop
+    IF NOT EXISTS (
+        SELECT *
+        FROM [UrbanBus].[exceptions]
+        WHERE [idJourney] = @journey
+        AND [idStop] = @idStop
+    )
+        IF NOT EXISTS (
+            SELECT *
+            FROM [UrbanBus].[stop_journeyInstance]
+            WHERE [idJourneyInstance] = @idJourneyInstance
+            AND [idStop] = @idStop
+        ) RETURN 0;
         ELSE
             RETURN 1;
+    ELSE
+        RETURN 1;
 
-    END;
 
     RETURN NULL;
 END;

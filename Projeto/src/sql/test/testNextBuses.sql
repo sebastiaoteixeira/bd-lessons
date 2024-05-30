@@ -1,19 +1,9 @@
--- UDF: next buses
--- Parameter: myStop
--- Returns: idJourneyInstance, idLastStopOfJourney, timeToMyStop, timeToLastStopOfJourney, delay
+-- Call nextBuses
 
--- myStop should be a stop in the line
--- myStop should not be in exceptions of the journey
--- myStop should not be in the stops_journeyInstance of the journeyInstance
--- myStop should not be the last stop of the journey
--- the delay should be the difference between the expected time to the next stop
--- and the actual time, 0 if it's negative
+DECLARE @myStop INT = 13;
 
-CREATE OR ALTER FUNCTION nextBuses
-(
-    @myStop INT
-)
-RETURNS @result TABLE
+-- DECLARE table @result
+DECLARE @result TABLE
 (
     [idJourneyInstance] INT,
     [idJourney] INT,
@@ -21,10 +11,9 @@ RETURNS @result TABLE
     [timeToMyStop] TIME,
     [timeToLastStopOfJourney] TIME,
     [delay] TIME
-)
-AS
-BEGIN
-    -- Call searchJourneysByStops
+);
+
+-- Call searchJourneysByStops
     DECLARE @myStopString VARCHAR(1000);
     SET @myStopString = CAST(@myStop AS VARCHAR(1000));
 
@@ -117,8 +106,8 @@ BEGIN
                 WHERE e.[idJourney] = @idJourney
                 AND e.[idStop] = @idStop;
             END
-            ELSE
-            BEGIN
+            --ELSE
+            --BEGIN
                 IF @idStop = @myStop
                 BEGIN
                     SET @timeToMyStop = @time;
@@ -149,9 +138,14 @@ BEGIN
                         SET @delay = '00:00:00';
                     ELSE
                         -- Cast the difference to time to prevent overflow
-                        SET @delay = CAST(DATEADD(SECOND, DATEDIFF(SECOND, @previousStopDateTime, @stopTime), '00:00:00') AS TIME);
+                        BEGIN TRY
+                            SET @delay = CAST(DATEADD(SECOND, DATEDIFF(SECOND, @previousStopDateTime, @stopTime), '00:00:00') AS TIME);
+                        END TRY
+                        BEGIN CATCH
+                            SET @delay = NULL;
+                        END CATCH;
                 END
-            END;
+            --END;
 
 
             SET @previousStop = @idStop;
@@ -175,8 +169,17 @@ BEGIN
         FETCH NEXT FROM journeyCursor INTO @idJourneyInstance, @idFirstStop, @idLastStop, @startTime, @idJourney, @idLine, @outbound;
     END;
 
-    RETURN;
-END;
 
-    
+SELECT nb.[idJourneyInstance], j.[idLine], nb.[idJourney],
+    s.[name], s.[location], s.[longitude], s.[latitude],
+    nb.[timeToMyStop], nb.[delay],
+    ls.[id], ls.[name], ls.[location], ls.[longitude], ls.[latitude], nb.[timeToLastStopOfJourney],
+    j.[outbound]
+FROM @result AS nb
+JOIN [UrbanBus].[stop] AS s
+ON s.[id] = @myStop
+JOIN [UrbanBus].[stop] AS ls
+ON ls.[id] = nb.[idLastStopOfJourney]
+JOIN [UrbanBus].[journey] AS j
+ON j.[id] = nb.[idJourney];
 

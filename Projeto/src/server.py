@@ -184,8 +184,8 @@ def line(linenumber):
         })
 
 
-def getDirection(stop):
-    return 'outbound' if stop[2] else 'inbound'
+def getDirection(boolean):
+    return 'outbound' if boolean else 'inbound'
 
 @app.route('/api/v1/line/<int:linenumber>/stops', methods=['GET'])
 def line_stops(linenumber):
@@ -659,29 +659,46 @@ def journeyInstance(journeyInstanceNumber):
             'dateTime': str(journeyInstance[0]),
             'journey': {
                 'id': journeyInstance[1],
-                'idLine': journeyInstance[2],
-                'idFirstStop': journeyInstance[3],
-                'idLastStop': journeyInstance[4],
+                'line': {
+                    'id': journeyInstance[2],
+                    'name': journeyInstance[14],
+                    'color': "#{:0>6}".format(hex(journeyInstance[15])[2:])
+                },
+                'firstStop': {
+                    'id': journeyInstance[3],
+                    'name': journeyInstance[6],
+                    'location': journeyInstance[7],
+                    'longitude': journeyInstance[8],
+                    'latitude': journeyInstance[9]
+                },
+                'lastStop': {
+                    'id': journeyInstance[4],
+                    'name': journeyInstance[10],
+                    'location': journeyInstance[11],
+                    'longitude': journeyInstance[12],
+                    'latitude': journeyInstance[13]
+                },
                 'time': str(journeyInstance[5])
                 }
             })
-    return jsonify
+        
+    return jsonify(result)
 
 @app.route('/api/v1/journeyInstance/<int:journeyInstanceNumber>/stops', methods=['GET'])
 def journeyInstanceStops(journeyInstanceNumber):
     # TODO: Implement journey instance stops getter
     result = []
     
-    for stop in runSQLQuery(connection, './src/sql/queries/journeyInstance.sql', (journeyInstanceNumber,), logger=app.logger):
+    for stop in runSQLQuery(connection, './src/sql/queries/journeyInstanceStops.sql', (journeyInstanceNumber,), logger=app.logger):
         result.append({
             'id': stop[0],
-            'name': stop[1],
-            'location': stop[2],
-            'longitude': stop[3],
-            'latitude': stop[4],
-            'time': str(stop[5])       
+            'name': stop[2],
+            'location': stop[3],
+            'longitude': stop[4],
+            'latitude': stop[5],
+            'time': str(stop[1])       
         })
-    return jsonify
+    return jsonify(result)
 
 @app.route('/api/v1/journeyInstance/<int:journeyInstanceNumber>/validations', methods=['GET'])
 def journeyInstanceValidations(journeyInstanceNumber):
@@ -740,17 +757,17 @@ def nextBuses():
                 'longitude': bus[5],
                 'latitude': bus[6],
                 'time': str(bus[7]),
-                'delay': bus[8]
+                'delay': str(bus[8]) if bus[8] else None
             },
             'lastStop': {
-                'id': bus[7],
-                'name': bus[8],
-                'location': bus[9],
-                'longitude': bus[10],
-                'latitude': bus[11],
-                'time': str(bus[12])
+                'id': bus[9],
+                'name': bus[10],
+                'location': bus[11],
+                'longitude': bus[12],
+                'latitude': bus[13],
+                'time': str(bus[14])
             },
-            'direction': getDirection(bus[13])
+            'direction': getDirection(bus[15])
         })
     
     return jsonify(result)
@@ -794,8 +811,17 @@ def stepJourneyInstance(journeyInstanceNumber):
     
     return jsonify({'message': 'Journey instance stepped'}), 201
 
-
-
+@app.route('/api/v1/journeyInstance/<int:journeyInstanceNumber>/currentStop', methods=['GET'])
+def journeyInstanceCurrentStop(journeyInstanceNumber):
+    for stop in runSQLQuery(connection, './src/sql/queries/journeyInstanceCurrentStop.sql', (journeyInstanceNumber,)):
+        return jsonify({
+            'id': stop[0],
+            'name': stop[1],
+            'location': stop[2],
+            'longitude': stop[3],
+            'latitude': stop[4],
+            'time': str(stop[5])
+        })
 
 
 

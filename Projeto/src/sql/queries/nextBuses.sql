@@ -13,5 +13,5 @@ ON s.[id] = @myStop
 JOIN [UrbanBus].[stop] AS ls
 ON ls.[id] = nb.[idLastStopOfJourney]
 JOIN [UrbanBus].[journey] AS j
-ON j.[id] = nb.[idJourney]
+ON j.[id] = nb.[idJourney];
 
