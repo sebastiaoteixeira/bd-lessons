@@ -69,7 +69,7 @@ BEGIN
     ELSE IF EXISTS (SELECT * FROM @ticketTypeTable WHERE idTrips IS NOT NULL)
     BEGIN
         -- Get the number of trips left
-        DECLARE @totalTrips INT;
+        DECLARE @totalTrips INT = 0;
 
         -- Get the sum of all trips bought
         SELECT @totalTrips = SUM([UrbanBus].[trips].[tripsCount])
@@ -79,7 +79,7 @@ BEGIN
         WHERE [UrbanBus].[purchasedItem].[idTransportTicket] = @ticketNumber;
 
         -- Get the sum of all trips used in validations table
-        DECLARE @usedTrips INT;
+        DECLARE @usedTrips INT = 0;
         SELECT @usedTrips = COUNT(*)
         FROM [UrbanBus].[validation]
         WHERE [UrbanBus].[validation].[numberTransportTicket] = @ticketNumber;

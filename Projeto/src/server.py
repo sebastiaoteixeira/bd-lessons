@@ -610,7 +610,24 @@ def chargeTicket(ticketnumber):
     
     return jsonify({'message': 'Ticket charged'}), 201
 
-
+@app.route('/api/v1/journeys/create', methods=['POST'])
+def createJourney():
+    line = request.json.get('line')
+    firstStop = request.json.get('firstStop')
+    lastStop = request.json.get('lastStop')
+    exceptions = request.json.get('exceptions')
+    
+    if not line or not firstStop or not lastStop:
+        return jsonify({'error': 'line, firstStop and lastStop are required'}), 400
+    
+    exceptionsStops = ','.join([str(stop['stop']) for stop in exceptions])
+    exceptionsTimes = ','.join([str(stop['time']) for stop in exceptions])
+    
+    for _ in runSQLQuery(connection, './src/sql/insert/createJourney.sql', (line, firstStop, lastStop, exceptionsStops, exceptionsTimes)):
+        break
+    
+    return jsonify({'message': 'Journey created'}), 201
+    
 
 # Module 3: Statistics and Registers
 ## GETTERS ##
@@ -772,6 +789,26 @@ def nextBuses():
     
     return jsonify(result)
 
+@app.route('/api/v1/validations', methods=['GET'])
+def validations():
+    result = []
+    
+    for stop in runSQLQuery(connection, './src/sql/queries/validations.sql', (journey)):
+        result.append({
+            'stop': {
+                'id': stop[0],
+                'name': stop[1],
+                'location': stop[2],
+                'longitude': stop[3],
+                'latitude': stop[4]
+            },
+            'validations': stop[5]
+        })
+        
+    return jsonify(result)
+    
+
+
 ## SETTERS ##
 @app.route('/api/v1/journeyInstances/create', methods=['POST'])
 def createJourneyInstance():
@@ -781,7 +818,7 @@ def createJourneyInstance():
     if not journey:
         return jsonify({'error': 'journey and dateTime are required'}), 400
     
-    for _ in runSQLQuery(connection, './src/sql/insert/createJourneyInstance.sql', (journey)):
+    for _ in runSQLQuery(connection, './src/sql/insert/createJourneyInstance.sql', (journey,)):
         break
     
     return jsonify({'message': 'Journey instance created'}), 201
