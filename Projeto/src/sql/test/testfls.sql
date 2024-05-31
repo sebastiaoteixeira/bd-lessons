@@ -1,14 +1,8 @@
--- FUNCTION to get journeys that have a 2 stops and the is in the direction of the stops
 
-
-CREATE OR ALTER FUNCTION searchJourneysWithFLStop
-(
-	@firstStop INT,
-	@lastStop INT
-)
-RETURNS @result TABLE
-(
-	[id] INT,
+DECLARE @firstStop INT = 49;
+DECLARE @lastStop INT = 16;
+DECLARE @result TABLE (
+    [id] INT,
 	[idLine] INT,
 	[idFirstStop] INT,
 	[idLastStop] INT,
@@ -16,10 +10,9 @@ RETURNS @result TABLE
 	[firstStopTime] TIME,
 	[lastStopTime] TIME,
 	[outbound] BIT
-)
-AS
-BEGIN
-	DECLARE @stopsString VARCHAR(1000) = CAST(@firstStop AS VARCHAR(10)) + ',' + CAST(@lastStop AS VARCHAR(10));
+);
+
+    DECLARE @stopsString VARCHAR(1000) = CAST(@firstStop AS VARCHAR(10)) + ',' + CAST(@lastStop AS VARCHAR(10));
 
 	-- Verify if both stops are in the same line calling the function searchJourneysByStops
 	INSERT INTO @result
@@ -98,6 +91,4 @@ BEGIN
 	CLOSE journeyCursor;
 	DEALLOCATE journeyCursor;
 
-	RETURN;
-END;
-
+SELECT * FROM @result;
