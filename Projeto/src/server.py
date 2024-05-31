@@ -644,8 +644,12 @@ def createJourney():
     exceptions = request.json.get('exceptions')
     startTime = request.json.get('startTime')
     outbound = request.json.get('outbound')
+    if not outbound:
+        outbound = 1
+    else:
+        outbound = 0
     
-    if not line or not startTime or not outbound:
+    if not line or not startTime:
         return jsonify({'error': 'line, firstStop and lastStop are required'}), 400
     
     exceptionsStops = ','.join([str(stop['stop']) for stop in exceptions])

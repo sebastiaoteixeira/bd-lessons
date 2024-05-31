@@ -1,14 +1,11 @@
--- SP: create a new journey
--- Parameters: idLine, exceptions, startTime, outbound
+    DECLARE @idLine INT = 1;
+   DECLARE @exceptions VARCHAR(1000) = '';
+   DECLARE @timeModifiers VARCHAR(1000) = '';
+   DECLARE @startTime TIME = '12:41:00';
+   DECLARE @outbound BIT = 0;
 
-CREATE OR ALTER PROCEDURE createJourney
-    @idLine INT,
-    @exceptions VARCHAR(1000),
-    @timeModifiers VARCHAR(1000),
-    @startTime TIME,
-    @outbound BIT
-AS
-BEGIN
+
+
     -- convert exceptions varchar into table
     DECLARE @exceptionsTable TABLE (id integer IDENTITY(1,1), idStop integer);
     INSERT INTO @exceptionsTable
@@ -95,6 +92,3 @@ BEGIN
     FROM @exceptionsTable as e
     JOIN @timeModifiersTable as t
     ON e.id = t.id;
-
-
-END;
