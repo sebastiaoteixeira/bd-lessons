@@ -723,7 +723,8 @@ def journeyInstance(journeyInstanceNumber):
                     'longitude': journeyInstance[12],
                     'latitude': journeyInstance[13]
                 },
-                'time': str(journeyInstance[5])
+                'direction': 'outbound' if journeyInstance[5] else 'inbound',
+                'time': str(journeyInstance[16])
                 }
             })
         

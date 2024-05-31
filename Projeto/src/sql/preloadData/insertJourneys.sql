@@ -1,6 +1,7 @@
 INSERT INTO [UrbanBus].[journey] ([idLine], [idFirstStop], [idLastStop], [startTime], [outbound])
 VALUES
 	-- L1 IDA
+	(1, 49, 18, '02:25:00', 0),
 	(1, 49, 18, '06:43:00', 0),
 	(1, 49, 18, '07:30:00', 0),
 	(1, 49, 18, '07:45:00', 0),

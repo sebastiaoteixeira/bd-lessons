@@ -20,7 +20,7 @@ class BusService(threading.Thread):
     
     def run(self):
         while True:
-            sleep(40)
+            sleep(30)
             
             
             # VERIFY IF THERE IS A JOURNEY TO BE INSTANTIATED
@@ -61,12 +61,12 @@ class BusService(threading.Thread):
             for journey in journeys:
                 # convert journeyTime from datetime to seconds
                 journeyTime = journey['time']
-                logging.info('Journey time: ', journeyTime)
+                print('Journey time: ', journeyTime)
                 journeyTime = journeyTime.hour * 3600 + journeyTime.minute * 60 + journeyTime.second
                 
                 currentTime = datetime.now(pytz.timezone('Europe/Lisbon'))
                 
-                logging.info("Current time: ", currentTime)
+                print("Current time: ", currentTime)
                 currentTime = currentTime.hour * 3600 + currentTime.minute * 60 + currentTime.second
                 if journeyTime - currentTime < 3600 and journeyTime - currentTime > 0:
                     # Verify if journeyInstance already exists
@@ -79,15 +79,20 @@ class BusService(threading.Thread):
                             break
                     
                     if alreadyExists:
-                        logging.info('Journey already instantiated')
+                        print('Journey already instantiated')
                         continue
-                    logging.info('Journey to be instantiated')
-                    logging.info(journey)
-                    logging.info('time difference: ', journeyTime - currentTime)
 
+                    
                     # Create a new journeyInstance
-                    for _ in runSQLQuery(connection, './src/sql/insert/createJourneyInstance.sql', (journey['id'],)):
-                        break
+                    try:
+                        for _ in runSQLQuery(connection, './src/sql/insert/createJourneyInstance.sql', (journey['id'],)):
+                            break
+                        print('Journey to be instantiated')
+                        print(journey)
+                        print('time difference: ', journeyTime - currentTime)
+                    except Exception as e:
+                        logging.error(e)
+                    sleep(2)
                 
                     
             # UPDATE JOURNEY INSTANCES
@@ -154,7 +159,7 @@ class BusService(threading.Thread):
                         expectedTime = expectedTime.hour * 3600 + expectedTime.minute * 60 + expectedTime.second
                         if expectedTime < currentTime:
                             # There is 50% chance of updating the status
-                            if random.randint(0, 1):
+                            if random.randint(0, 2):
                                 print('Updating status')
                                 for _ in runSQLQuery(connection, './src/sql/insert/stepJourneyInstance.sql', (journeyInstance['id'],)):
                                     break
