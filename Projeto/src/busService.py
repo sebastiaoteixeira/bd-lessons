@@ -20,7 +20,7 @@ class BusService(threading.Thread):
     
     def run(self):
         while True:
-            sleep(30)
+            sleep(45)
             
             
             # VERIFY IF THERE IS A JOURNEY TO BE INSTANTIATED
