@@ -1,7 +1,7 @@
     DECLARE @idLine INT = 1;
-   DECLARE @exceptions VARCHAR(1000) = '';
-   DECLARE @timeModifiers VARCHAR(1000) = '';
-   DECLARE @startTime TIME = '12:41:00';
+   DECLARE @exceptions VARCHAR(1000) = '18';
+   DECLARE @timeModifiers VARCHAR(1000) = '-2';
+   DECLARE @startTime TIME = '12:42:00';
    DECLARE @outbound BIT = 0;
 
 
@@ -9,14 +9,14 @@
     -- convert exceptions varchar into table
     DECLARE @exceptionsTable TABLE (id integer IDENTITY(1,1), idStop integer);
     INSERT INTO @exceptionsTable
-    SELECT value
+    SELECT CAST(value AS INT)
     FROM STRING_SPLIT(@exceptions, ',')
     WHERE value <> '';
 
     -- convert timeModifiers varchar into table
-    DECLARE @timeModifiersTable TABLE (id integer IDENTITY(1,1), [value] time);
+    DECLARE @timeModifiersTable TABLE (id integer IDENTITY(1,1), [value] integer);
     INSERT INTO @timeModifiersTable
-    SELECT value
+    SELECT CAST(value AS INT)
     FROM STRING_SPLIT(@timeModifiers, ',')
     WHERE value <> '';
 
@@ -40,7 +40,7 @@
     END
 
     -- verify if the first stop is an exception
-    IF NOT EXISTS (SELECT * FROM @exceptionsTable WHERE idStop = @idStop)
+    IF NOT EXISTS (SELECT * FROM @exceptionsTable as e WHERE e.idStop = @idStop)
     BEGIN
         SET @idFirstStop = @idStop;
 
@@ -58,7 +58,7 @@
     BEGIN
 
         -- check if the stop is an exception
-        IF NOT EXISTS (SELECT * FROM @exceptionsTable WHERE idStop = @idNextStop)
+        IF NOT EXISTS (SELECT * FROM @exceptionsTable as e WHERE e.idStop = @idNextStop)
         BEGIN
             IF @firstStopFound = 0
             BEGIN

@@ -2,24 +2,24 @@
 -- Parameters: idLine, exceptions, startTime, outbound
 
 CREATE OR ALTER PROCEDURE createJourney
-    @idLine INT,
-    @exceptions VARCHAR(1000),
-    @timeModifiers VARCHAR(1000),
-    @startTime TIME,
-    @outbound BIT
+    @idLine INT = 1,
+    @exceptions VARCHAR(1000) = '',
+    @timeModifiers VARCHAR(1000) = '',
+    @startTime TIME = '12:41:00',
+    @outbound BIT = 0
 AS
 BEGIN
     -- convert exceptions varchar into table
     DECLARE @exceptionsTable TABLE (id integer IDENTITY(1,1), idStop integer);
     INSERT INTO @exceptionsTable
-    SELECT value
+    SELECT CAST(value AS INT)
     FROM STRING_SPLIT(@exceptions, ',')
     WHERE value <> '';
 
     -- convert timeModifiers varchar into table
-    DECLARE @timeModifiersTable TABLE (id integer IDENTITY(1,1), [value] time);
+    DECLARE @timeModifiersTable TABLE (id integer IDENTITY(1,1), [value] integer);
     INSERT INTO @timeModifiersTable
-    SELECT value
+    SELECT CAST(value AS INT)
     FROM STRING_SPLIT(@timeModifiers, ',')
     WHERE value <> '';
 
@@ -43,7 +43,7 @@ BEGIN
     END
 
     -- verify if the first stop is an exception
-    IF NOT EXISTS (SELECT * FROM @exceptionsTable WHERE idStop = @idStop)
+    IF NOT EXISTS (SELECT * FROM @exceptionsTable as e WHERE e.idStop = @idStop)
     BEGIN
         SET @idFirstStop = @idStop;
 
@@ -61,7 +61,7 @@ BEGIN
     BEGIN
 
         -- check if the stop is an exception
-        IF NOT EXISTS (SELECT * FROM @exceptionsTable WHERE idStop = @idNextStop)
+        IF NOT EXISTS (SELECT * FROM @exceptionsTable as e WHERE e.idStop = @idNextStop)
         BEGIN
             IF @firstStopFound = 0
             BEGIN

@@ -652,10 +652,15 @@ def createJourney():
         outbound = 0
     
     if not line or not startTime:
-        return jsonify({'error': 'line, firstStop and lastStop are required'}), 400
+        return jsonify({'error': 'line and startTime are required'}), 400
     
-    exceptionsStops = ','.join([str(stop['stop']) for stop in exceptions])
-    exceptionsTimes = ','.join([str(stop['time']) for stop in exceptions])
+    if exceptions:
+        exceptionsStops = ','.join([str(stop['stop']) for stop in exceptions])
+        exceptionsTimes = ','.join([str(stop['time']) for stop in exceptions])
+    else:
+        exceptionsStops = ''
+        exceptionsTimes = ''
+    
     
     for _ in runSQLQuery(connection, './src/sql/insert/createJourney.sql', (line, exceptionsStops, exceptionsTimes, startTime, outbound)):
         break

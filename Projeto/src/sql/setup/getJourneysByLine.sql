@@ -34,7 +34,7 @@ BEGIN
     DECLARE @idStop INT;
     DECLARE @idNextStop INT;
     DECLARE @timeToNext TIME;
-    DECLARE @timeModification TIME;
+    DECLARE @timeModification INT;
 
     -- iterate over the result
     DECLARE CURSOR1 CURSOR FOR
@@ -82,7 +82,8 @@ BEGIN
                 FROM [UrbanBus].[exceptions]
                 WHERE [idJourney] = @id
                 AND [idStop] = @idStop;
-                SET @lastStopTime = DATEADD(SECOND, DATEDIFF(SECOND, '00:00:00', @lastStopTime) + DATEDIFF(SECOND, '00:00:00', @timeModification), '00:00:00');
+                -- time modification is in minutes
+                SET @lastStopTime = DATEADD(MINUTE, @timeModification, @lastStopTime);
             END;
             
 

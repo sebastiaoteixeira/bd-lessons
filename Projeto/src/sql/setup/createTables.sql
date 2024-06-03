@@ -36,7 +36,7 @@ GO
 CREATE TABLE [UrbanBus].[exceptions] (
   [idJourney] integer,
   [idStop] integer,
-  [timeModification] time,
+  [timeModification] integer,
   PRIMARY KEY ([idJourney], [idStop])
 )
 GO

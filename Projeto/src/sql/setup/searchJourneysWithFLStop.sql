@@ -72,7 +72,7 @@ BEGIN
                     AND ls.[outbound] = @outbound;
 					
 					-- If stop is in exceptions, add timeModifier to @time
-					SELECT @time = DATEADD(SECOND, DATEDIFF(SECOND, 0, @time) + DATEDIFF(SECOND, 0, timeModification), 0)
+					SELECT @time = DATEADD(MINUTE, [timeModification], @time)
 					FROM [UrbanBus].[exceptions]
 					WHERE idJourney = @journey
 					AND idStop = @stop;

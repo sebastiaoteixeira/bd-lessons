@@ -64,7 +64,8 @@ BEGIN
 			END
 			ELSE
 				-- Add timeModification to time
-				SELECT @time = DATEADD(SECOND, DATEDIFF(SECOND, 0, @time) + DATEDIFF(SECOND, 0, timeModification), 0)
+				-- timeModification is in minutes
+				SELECT @time = DATEADD(MINUTE, [timeModification], @time)
 				FROM [UrbanBus].[exceptions]
 				WHERE idJourney = @journeyNumber
 				AND idStop = @firstStop;
