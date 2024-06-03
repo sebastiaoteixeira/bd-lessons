@@ -534,6 +534,7 @@ def price():
                 'price': price[1],
                 'days': price[3],
                 'trips': price[4],
+                'type': 'subscription' if price[3] else ('trips' if price[4] else ''),
             })
         return jsonify(res)
 
@@ -546,7 +547,7 @@ def price():
             'end': end,
             'zone': price[1],
             'price': price[0]
-            })
+        })
     
     return jsonify(res)
     
@@ -561,7 +562,7 @@ def tickets():
             'id': ticket[0],
             'zone': ticket[1],
             'client': ticket[2],
-            'type': 'trips' if ticket[3] else ('subscription' if ticket[4] else ''),
+            'type': 'subscription' if ticket[3] else ('trips' if ticket[4] else ''),
         })
 
     return jsonify(result)
@@ -585,7 +586,8 @@ def myTickets():
             'id': ticket[0],
             'zone': ticket[1],
             'expiration': ticket[2],
-            'trips': ticket[3]
+            'trips': ticket[3],
+            'type': 'subscription' if ticket[4] else ('trips' if ticket[5] else ''),
         })
         
     return jsonify(result)
