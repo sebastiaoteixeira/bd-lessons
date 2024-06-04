@@ -10,7 +10,7 @@ DECLARE @result TABLE
     [idLastStopOfJourney] INT,
     [timeToMyStop] TIME,
     [timeToLastStopOfJourney] TIME,
-    [delay] TIME
+    [delay] INT
 );
 
 -- Call searchJourneysByStops
@@ -41,8 +41,7 @@ DECLARE @result TABLE
     FROM searchJourneysByStops(@myStopString) AS j
     JOIN [UrbanBus].[journeyInstance] AS ji
     ON j.[id] = ji.[idJourney]
-    WHERE [idLastStop] <> @myStop
-    AND NOT EXISTS
+    WHERE NOT EXISTS
     (
         SELECT 1
         FROM [UrbanBus].[stop_journeyInstance] AS sji
@@ -57,7 +56,7 @@ DECLARE @result TABLE
     DECLARE @idFirstStop INT;
     DECLARE @idLastStop INT;
     DECLARE @timeToMyStop TIME;
-    DECLARE @delay TIME;
+    DECLARE @delay INT;
     DECLARE @time TIME;
     DECLARE @previousStopTime TIME;
     DECLARE @previousStopDateTime DATETIME;
@@ -83,11 +82,11 @@ DECLARE @result TABLE
         SET @idStop = @idFirstStop;
 
         -- Get the first stop
-            SELECT @idNextStop = [idNextStop], @time = DATEADD(SECOND, DATEDIFF(SECOND, 0, [timeToNext]), @time)
-            FROM [UrbanBus].[line_stop]
-            WHERE [idLine] = @idLine
-            AND [idStop] = @idStop
-            AND [outbound] = @outbound;
+        SELECT @idNextStop = [idNextStop], @time = DATEADD(SECOND, DATEDIFF(SECOND, 0, [timeToNext]), @time)
+        FROM [UrbanBus].[line_stop]
+        WHERE [idLine] = @idLine
+        AND [idStop] = @idStop
+        AND [outbound] = @outbound;
 
         WHILE @idNextStop IS NOT NULL AND @idNextStop <> @idLastStop
         BEGIN
@@ -106,8 +105,8 @@ DECLARE @result TABLE
                 WHERE e.[idJourney] = @idJourney
                 AND e.[idStop] = @idStop;
             END
-            --ELSE
-            --BEGIN
+            ELSE
+            BEGIN
                 IF @idStop = @myStop
                 BEGIN
                     SET @timeToMyStop = @time;
@@ -134,18 +133,20 @@ DECLARE @result TABLE
                     SET @previousStopDateTime = CAST(CAST(GETDATE() AS DATE) AS DATETIME) + CAST(@previousStopTime AS DATETIME);
 
                     -- Calculate delay
-                    IF @stopTime < @previousStopDateTime
-                        SET @delay = '00:00:00';
+                    IF DATEDIFF(MINUTE, @previousStopDateTime, @stopTime) <= 0
+                        SET @delay = 0;
                     ELSE
+                    BEGIN
                         -- Cast the difference to time to prevent overflow
                         BEGIN TRY
-                            SET @delay = CAST(DATEADD(SECOND, DATEDIFF(SECOND, @previousStopDateTime, @stopTime), '00:00:00') AS TIME);
+                            SET @delay = DATEDIFF(MINUTE, @previousStopDateTime, @stopTime);
                         END TRY
                         BEGIN CATCH
                             SET @delay = NULL;
                         END CATCH;
+                    END
                 END
-            --END;
+            END;
 
 
             SET @previousStop = @idStop;
@@ -162,12 +163,12 @@ DECLARE @result TABLE
 
         -- Insert the result
         --IF @ended = 0
-            INSERT INTO @result
-            VALUES (@idJourneyInstance, @idJourney, @idLastStop, @timeToMyStop, @time, @delay);
+        INSERT INTO @result
+        VALUES (@idJourneyInstance, @idJourney, @idLastStop, @timeToMyStop, @time, @delay);
 
 
         FETCH NEXT FROM journeyCursor INTO @idJourneyInstance, @idFirstStop, @idLastStop, @startTime, @idJourney, @idLine, @outbound;
-    END;
+    END
 
 
 SELECT nb.[idJourneyInstance], j.[idLine], nb.[idJourney],

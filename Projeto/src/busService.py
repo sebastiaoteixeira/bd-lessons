@@ -20,7 +20,7 @@ class BusService(threading.Thread):
     
     def run(self):
         while True:
-            sleep(45)
+            sleep(75)
             
             
             # VERIFY IF THERE IS A JOURNEY TO BE INSTANTIATED
@@ -159,7 +159,7 @@ class BusService(threading.Thread):
                         expectedTime = expectedTime.hour * 3600 + expectedTime.minute * 60 + expectedTime.second
                         if expectedTime < currentTime:
                             # There is 50% chance of updating the status
-                            if random.randint(0, 2):
+                            if random.randint(0, 1):
                                 print('Updating status')
                                 for _ in runSQLQuery(connection, './src/sql/insert/stepJourneyInstance.sql', (journeyInstance['id'],)):
                                     break

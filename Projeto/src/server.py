@@ -814,7 +814,7 @@ def nextBuses():
                 'longitude': bus[5],
                 'latitude': bus[6],
                 'time': str(bus[7]),
-                'delay': str(bus[8]) if bus[8] else None
+                'delay': bus[8]
             },
             'lastStop': {
                 'id': bus[9],
