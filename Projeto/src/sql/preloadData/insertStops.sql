@@ -72,7 +72,10 @@ VALUES
 ('Cruzeiro da Feira', 'N230-1 81, 3810-886 Oliveirinha', 40.609393, -8.589093),
 ('Taboeira', 'R. Dr. Lourenço Peixinho 191-155, 3800-043', 40.652367, -8.590169),
 ('Lavadouros de Sarrazola A', 'R. Ten-Cel. Afonso Lucas 3, Cacia', 40.687855, -8.600951),
-('Lavadouros de Sarrazola B', 'R. Ten-Cel. Afonso Lucas 3, Cacia', 40.688087, -8.601382);
+('Lavadouros de Sarrazola B', 'R. Ten-Cel. Afonso Lucas 3, Cacia', 40.688087, -8.601382),
+('Monte Cacia', '3800-634 Cacia', 40.672631, -8.604364),
+('R. Dr. Mário Sacramento B', 'R. Mário Sacramento 165-139, 3810-106 Aveiro', 40.62861, -8.64798),
+('Av. Dr. Mário Sacramento - Centro Saúde B', '3810-164 Aveiro', 40.631922, -8.648354);
 --('EB1 de Eixo', '', , ),
 --('R. Direita do Carregal', '', , ),
---('Monte Cacia', '', , ),
+

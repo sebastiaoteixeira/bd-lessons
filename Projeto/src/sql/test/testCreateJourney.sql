@@ -1,7 +1,7 @@
     DECLARE @idLine INT = 1;
-   DECLARE @exceptions VARCHAR(1000) = '18';
-   DECLARE @timeModifiers VARCHAR(1000) = '-2';
-   DECLARE @startTime TIME = '12:42:00';
+   DECLARE @exceptions VARCHAR(1000) = '';
+   DECLARE @timeModifiers VARCHAR(1000) = '';
+   DECLARE @startTime TIME = '17:42:00';
    DECLARE @outbound BIT = 0;
 
 

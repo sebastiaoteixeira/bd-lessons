@@ -5,7 +5,7 @@ from .utils.runSQL import runSQLQuery, dbconnect, runSQLFile
 import time
 
 app = App(__name__)
-CORS(app)
+CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 # Connect to the database
 connection = dbconnect()
